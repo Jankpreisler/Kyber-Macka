@@ -4,7 +4,7 @@ const c = canvas.getContext('2d');
 canvas.width = 800;
 canvas.height = 400;
 
-const gravity = 0.5;
+const gravitacia = 0.5;
 
 
 const platforms = [
@@ -12,13 +12,16 @@ const platforms = [
     { x: 0, y: 0, width: 800, height: 1 },  // hore border
     { x: 0, y: 0, width: 1, height: 400 }, // bariera
     { x: 800, y: 0, width: 1, height: 400 }, //bariera
-
     { x: 0, y: 335, width:300, height: 400 }, //spawn zone
-    
-
     { x: 100, y: 0, width: 100, height: 320 }, //1trupka
-    { x: 200, y: 230, width: 100, height: 90 },
-     
+    { x: 200, y: 230, width: 100, height: 90 }, //1.5 trupky hore
+    { x: 200, y: 150, width: 220, height: 20 },
+    { x: 450, y: 270, width: 250, height: 400 }, //2 kanal
+    { x: 430, y: 320, width: 20, height: 350 }, // 1vyko
+    { x: 550, y: 60, width: 150, height: 400 }, // veza 2casti kanalov
+    { x: 530, y: 200, width: 30, height: 200 },
+    { x: 450, y: 60, width: 420, height: 20 },
+    
 ];
 
 let player = {
@@ -29,7 +32,7 @@ let player = {
     dx: 9,
     dy: 9,
     speed: 3,
-    jumpForce: 12,
+    jumpForce: 10,
     grounded: false
 };
 
@@ -77,7 +80,7 @@ function animovanie() {
 
     player.x += player.dx;
 
-    player.dy += gravity;
+    player.dy += gravitacia;
     player.y += player.dy;
 
     player.grounded = false; 
