@@ -24,6 +24,14 @@ const platforms = [
     
 ];
 
+const obrazokcici = new Image();
+obrazokcici.src = 'asseti/cyber-cat.webp';
+
+let isobrazokciciNacitani = false;
+obrazokcici.onload = () => {
+    isobrazokciciNacitani = true; 
+};
+
 let player = {
     x: 0,
     y: 0,
@@ -66,6 +74,12 @@ function animovanie() {
 
     requestAnimationFrame(animovanie);
     c.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (!isobrazokciciNacitani) {
+        c.fillStyle = 'black';
+        c.fillText('Načítavam obrázky...', 10, 20);
+        return; 
+    }
 
     // farbenie platforiem
     c.fillStyle = '#45a049'; 
@@ -117,9 +131,13 @@ function animovanie() {
     }   }
     });
 
-    // Zobrazenie hraca
-    c.fillStyle = 'red';
-    c.fillRect(player.x, player.y, player.width, player.height);
+    c.drawImage(
+        obrazokcici,    
+        player.x,         
+        player.y,         
+        player.width,     
+        player.height     
+    );
 }
 
 animovanie();
