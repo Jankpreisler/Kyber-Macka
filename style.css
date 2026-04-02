@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    overflow: hidden; /* Aby ti stránka "neskákala" pri pohybe šípkami */
+    overflow: hidden; 
     background-color: #333;
     display: flex;
     justify-content: center;
@@ -9,7 +9,7 @@ body {
 }
 
 canvas {
-    background-color: lightblue; /* Obloha */
+    background-color: rgb(15, 99, 0); 
     border: 2px solid white;
 }
 
