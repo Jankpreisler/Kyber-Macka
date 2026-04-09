@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const c = canvas.getContext('2d');
 
-canvas.width = 1300;
+canvas.width = 1300; // na normal leevely
 canvas.height = 600;
 
 const gravitacia = 0.4;
@@ -17,26 +17,39 @@ const exitZone = {
 
 // === DEFINÍCIA PLATFORIEM ===
 const platforms = [
-    { x: 0, y: 580, width: 100, height: 20, color: '#050505', type: 'floor' },
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 600 },
-    { x: 1300, y: 0, width: 1, height: 600 }, 
-    { x: 0, y: 535, width: 800, height: 400, color: '#1a1a1a', type: 'wall' }, // spawn
-    { x: 130, y: 0, width: 150, height: 500, color: '#333', type: 'pipe_v' }, // vacsie hned vedla nej
-    { x: 280, y: 300, width: 150, height: 200, color: '#333', type: 'pipe_v' }, // mensia pipe hned na zaciatku
-    { x: 280, y: 200, width: 470, height: 20, color: '#555', type: 'pipe_h' }, // trupka vedla tych dvoch velkych
-    { x: 750, y: 350, width: 250, height: 400, color: '#1a1a1a', type: 'wall' }, // to druhe platformove cudo
-    { x: 700, y: 450, width: 50, height: 150, color: '#400', type: 'valve' }, // cervene vyko
-    { x: 450, y: 90, width: 920, height: 20, color: '#555', type: 'pipe_h' }, // final platform
-    { x: 900, y: 240, width: 100, height: 400, color: '#333', type: 'pipe_v' }, // platfor
-    { x: 1000, y: 70, width: 300, height: 900, color: '#1a1a1a', type: 'wall' }, // panel druhym
+    { x: 1300, y: 0, width: 1, height: 600 },
+    { x: 0, y: 535, width: 1300, height: 400, color: '#1a1a1a', type: 'wall' }, // spawn
+    { x: 130, y: 450, width: 150, height: 100, color: '#333', type: 'pipe_v' }, // 1 skok
+    { x: 400, y: 335, width: 150, height: 200, color: '#333', type: 'pipe_v' }, //2. skok
+    { x: 550, y: 520, width: 1000, height: 20, color: '#050505', type: 'floor' }, // kill virus
+    { x: 650, y: 250, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 500, range: 150, speed: 1.8, direction: -1, hasRope: true, }, // hybajuce sa plosinky
+    { x: 850, y: 250, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 800, range: 150, speed: 1.8, direction: 1, hasRope: true, }, // hybajuce sa plosinky
+
 ];
+
+function drawRopes(p) {
+    c.strokeStyle = '#555';
+    c.lineWidth = 2;
+    c.beginPath();
+    c.moveTo(p.x + 20, p.y); c.lineTo(p.x + 35, 0);
+    c.moveTo(p.x + p.width - 20, p.y); c.lineTo(p.x + p.width - 35, 0);
+    c.stroke();
+}
+
+
+
+
+
 // === NAČÍTANIE OBRÁZKOV ===
 const macky = {
     dolava: new Image(),
     doprava: new Image(),
     plazeniedoprava: new Image(),
 };
+
+
 
 macky.dolava.src = 'asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = 'asseti/Cybermacka druhy pohlad.png';
@@ -56,7 +69,7 @@ let player = {
     speed: 5,
     jumpForce: 10,
     grounded: false
-    
+
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -166,7 +179,7 @@ function mozeSaPostavit() {
     // Simulujeme pozíciu a výšku po postavení
     const buducaVyska = 50;
     const buduceY = player.y - 25;
-    
+
     // Skontrolujeme kolíziu s každou platformou pre túto novú polohu
     for (let platform of platforms) {
         if (
@@ -227,7 +240,7 @@ window.addEventListener('keyup', (e) => {
                 player.y -= 25;
                 actualnaakciacici = macky.doprava;
             } else {
-                player.chceSaPostavit = true; 
+                player.chceSaPostavit = true;
             }
         }
     }
@@ -279,10 +292,37 @@ function animovanie() {
             c.fillStyle = '#600';
             c.fillRect(p.x + 5, p.y + 20, 10, 10);
         }
+        else if(p.speed){
+                p.x += p.speed * p.direction;
+                if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
+                if (p.hasRope) drawRopes(p);
+              
+        }
         else {
             c.fillStyle = 'transparent';
             c.fillRect(p.x, p.y, p.width, p.height);
         }
+    });
+    // Funguje nedotykat sa nikdydw
+    platforms.forEach(p => {
+        if (p.speed) {
+
+            p.x += p.speed * p.direction;
+            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
+            if (p.hasRope) drawRopes(p);
+           
+
+        } else if (p.type === 'floor') {
+            c.fillRect(p.x, p.y, p.width, p.height);
+            let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
+            sliz.addColorStop(0, '#00ff41');
+            sliz.addColorStop(1, 'transparent');
+            c.fillStyle = sliz;
+            c.fillRect(p.x, p.y, p.width, 3); // Zelený vírusový sliz
+
+        } else {
+            
+        }  
     });
 
     // 3. Pohyb a fyzika
@@ -303,6 +343,9 @@ function animovanie() {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
+
+
+            
             // dopad zhora
             if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
                 player.y = platform.y - player.height;
@@ -322,22 +365,23 @@ function animovanie() {
                 player.y = platform.y + platform.height;
                 player.dy = 0;
             }
+            
 
-          
-        if (player.height === 25 && player.chceSaPostavit) {
-            if (mozeSaPostavit()) {
-                player.height = 50;
-                player.y -= 25;
-                player.actualnaakciacici = macky.doprava;
-                player.chceSaPostavit = false; 
-            }   
-}
+
+            if (player.height === 25 && player.chceSaPostavit) {
+                if (mozeSaPostavit()) {
+                    player.height = 50;
+                    player.y -= 25;
+                    player.actualnaakciacici = macky.doprava;
+                    player.chceSaPostavit = false;
+                }
+            }
         }
+        
     });
-
-    // 5. PRECHOD DO ĎALŠIEHO LEVELU
+x.//PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "testlvl.html";
+        window.location.href = "level2.html";
     }
 
     // 6. Vykreslenie postavy
