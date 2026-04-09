@@ -379,7 +379,7 @@ function animovanie() {
         }
         
     });
-x.//PRECHOD DO ĎALŠIEHO LEVELU
+//PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
         window.location.href = "level2.html";
     }
