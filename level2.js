@@ -9,7 +9,7 @@ const gravitacia = 0.4;
 // === EXIT ZÓNA  ===
 const exitZone = {
     x: 1210,
-    y: 20,
+    y: 180,
     width: 60,
     height: 60
 };
@@ -26,7 +26,8 @@ const platforms = [
     { x: 550, y: 520, width: 1000, height: 20, color: '#050505', type: 'floor' }, // kill virus
     { x: 650, y: 250, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 500, range: 150, speed: 1.8, direction: -1, hasRope: true, }, // hybajuce sa plosinky
     { x: 850, y: 250, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 800, range: 150, speed: 1.8, direction: 1, hasRope: true, }, // hybajuce sa plosinky
-
+    { x: 1150, y: 250, width: 150, height: 300, color: '#333', type: 'pipe_v' },
+    { x: 1150, y: 2, width: 150, height: 170, color: '#333', type: 'pipe_v' },
 ];
 
 function drawRopes(p) {
@@ -38,18 +39,12 @@ function drawRopes(p) {
     c.stroke();
 }
 
-
-
-
-
 // === NAČÍTANIE OBRÁZKOV ===
 const macky = {
     dolava: new Image(),
     doprava: new Image(),
     plazeniedoprava: new Image(),
 };
-
-
 
 macky.dolava.src = 'asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = 'asseti/Cybermacka druhy pohlad.png';
@@ -233,7 +228,7 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
 
     if (e.key === 'ArrowDown' || e.key === 's') {
-        // Tu je zmena: Postaví sa len ak je nad ním voľno
+        
         if (player.height === 25) {
             if (mozeSaPostavit()) {
                 player.height = 50;
@@ -306,23 +301,10 @@ function animovanie() {
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
-
             p.x += p.speed * p.direction;
             if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
             if (p.hasRope) drawRopes(p);
-           
-
-        } else if (p.type === 'floor') {
-            c.fillRect(p.x, p.y, p.width, p.height);
-            let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
-            sliz.addColorStop(0, '#00ff41');
-            sliz.addColorStop(1, 'transparent');
-            c.fillStyle = sliz;
-            c.fillRect(p.x, p.y, p.width, 3); // Zelený vírusový sliz
-
-        } else {
-            
-        }  
+        } 
     });
 
     // 3. Pohyb a fyzika
@@ -343,9 +325,6 @@ function animovanie() {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-
-
-            
             // dopad zhora
             if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
                 player.y = platform.y - player.height;
@@ -379,9 +358,10 @@ function animovanie() {
         }
         
     });
+
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "level2.html";
+        window.location.href = "level3.html";
     }
 
     // 6. Vykreslenie postavy
