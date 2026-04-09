@@ -337,7 +337,7 @@ function animovanie() {
 
     // 5. PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "testlvl.html";
+        window.location.href = "level2.html";
     }
 
     // 6. Vykreslenie postavy
