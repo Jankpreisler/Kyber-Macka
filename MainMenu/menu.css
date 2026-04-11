@@ -1,0 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    background: black;
+    
+}
+.bckgrnd {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated;
+    filter: contrast(120%) saturate(120%);
+}
+.divButtons, .textContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.logo {
+    width: 400px;
+    margin-bottom: 20px;
+    image-rendering: pixelated;
+    filter: 
+        drop-shadow(4px 4px 0px black)
+        contrast(110%);
+    transition: transform 0.1s linear;
+}
+/* Animácia pre náhodné rezanie textu */
+@keyframes glitchAnim {
+    0% { clip: rect(20px, 9999px, 40px, 0); }
+    20% { clip: rect(60px, 9999px, 10px, 0); }
+    40% { clip: rect(10px, 9999px, 70px, 0); }
+    60% { clip: rect(80px, 9999px, 30px, 0); }
+    80% { clip: rect(40px, 9999px, 90px, 0); }
+    100% { clip: rect(10px, 9999px, 50px, 0); }
+}
+.button {
+    width: 260px;
+    padding: 15px;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    color: white;
+    background: #222;
+    border: 4px solid #555;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000, inset -4px -4px 0px #111, inset 4px 4px 0px #444;
+    position: relative; /* Dôležité pre glitch */
+    transition: background 0.1s;
+    text-transform: uppercase;
+}
+
+/* Glitch vrstvy, ktoré sa objavia pri hoveri */
+.button::before, .button::after {
+    content: "CYBER-CAT"; /* Tu musí byť rovnaký text ako na tlačidle, alebo viď tip nižšie */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #222;
+    display: none;
+}
+
+.button:hover::before {
+    display: block;
+    left: 3px;
+    text-shadow: -2px 0 #ff00c1; /* Ružový tieň */
+    animation: glitchAnim 0.3s infinite linear alternate-reverse;
+}
+
+.button:hover::after {
+    display: block;
+    left: -3px;
+    text-shadow: -2px 0 #00fff9; /* Tyrkysový tieň */
+    animation: glitchAnim 0.2s infinite linear alternate;
+}
+
+.button:hover {
+    background: #333;
+    animation: glitchMove 0.2s infinite; /* Celé tlačidlo sa bude triasť */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Aby nám nič neutekalo mimo obrazovku */
+}
+
+.bckgrnd {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    z-index: -1;
+}
+
+.menu-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1px; /* Bod v strede */
+    height: 1px;
+}
+
+.menu-overlay a {
+    position: absolute;
+    transform: translate(-50%, -50%); /* Centrovanie samotného tlačidla */
+    text-decoration: none;
+}
+
+
+.playbutton {
+    top: -350px; 
+}
+
+.Aboutus {
+    left: -650px; /* Posun doľava od stredu */
+    top: 0px;   /* Mierny posun hore */
+}
+
+.settings {
+    left: 650px;  /* Posun doprava od stredu */
+    top: 0;
+}
+
+.quit {
+    top: 350px;    /* Pozícia v strede kruhu */
+}
+
+.title{
+    position: absolute;
+    top: -175px;
+    left: -175px;
+    width: 700px;
+    font-size: 50px;
+}
