@@ -5,51 +5,53 @@ canvas.width = 1300;
 canvas.height = 600;
 
 const gravitacia = 0.4;
-const keys = { right: false, left: false };
+const keys = { right: false, left: false, interact: false };
 let time = 0;
 
 // === NAČÍTANIE OBRÁZKOV ===
 const macky = {
     dolava: new Image(),
     doprava: new Image(),
-    plazeniedoprava: new Image()
+    plazeniedoprava: new Image(),
+    npc: new Image() // Miesto pre obrázok NPC
 };
 macky.dolava.src = 'asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = 'asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = 'asseti/Plaziaca_macka.png';
+macky.npc.src = 'asseti/npc_robot.png'; // Ak nemáš obrázok, vykreslí sa farebný štvorec
 
 // === DEFINÍCIA LEVELU ===
 const currentLevel = {
     playerStart: { x: 50, y: 400 },
-    exitZone: { x: 1180, y: 40, width: 100, height: 120 }, // Oranžový cieľ vpravo hore
-    platforms: [
-        // 1. Štart a rúry (začiatok)
-        { x: 0, y: 500, width: 150, height: 100, type: 'wall', color: '#222' },
-        { x: 200, y: 420, width: 60, height: 20, type: 'pipe_h', color: '#333' },
-        { x: 300, y: 340, width: 60, height: 20, type: 'pipe_h', color: '#333' },
-        { x: 400, y: 260, width: 60, height: 20, type: 'pipe_h', color: '#333' },
+    exitZone: { x: 1180, y: 40, width: 100, height: 120 },
+    
+    // NOVÉ: Definícia NPC
+    npc: {
+        x: 250,
+        y: 450,
+        width: 50,
+        height: 50,
+        color: '#ff00ff',
+        name: "PROTO-TYPE 01",
+        dialog: "Mňau... Teda, PÍP! Pozor na tú kyselinu dole!",
+        showDialog: false
+    },
 
-        // 2. Hojdačky na lanách (stred)
-        { 
-            x: 550, y: 260, width: 120, height: 20, type: 'moving', 
+    platforms: [
+        { x: 0, y: 500, width: 300, height: 100, type: 'wall', color: '#222' },
+        { x: 350, y: 420, width: 60, height: 20, type: 'pipe_h', color: '#333' },
+        { x: 450, y: 340, width: 60, height: 20, type: 'pipe_h', color: '#333' },
+        { x: 550, y: 260, width: 120, height: 20, type: 'moving', 
             startX: 520, range: 150, speed: 2, direction: 1, hasRope: true, color: '#444' 
         },
-        { 
-            x: 800, y: 260, width: 120, height: 20, type: 'moving', 
+        { x: 800, y: 260, width: 120, height: 20, type: 'moving', 
             startX: 750, range: 150, speed: 1.8, direction: -1, hasRope: true, color: '#444' 
         },
-
-        // 3. ČERVENÝ VÝŤAH (na konci pred cieľom) - hýbe sa hore/dole
-        { 
-            x: 1050, y: 300, width: 100, height: 20, type: 'moving_v', 
+        { x: 1050, y: 300, width: 100, height: 20, type: 'moving_v', 
             startY: 150, range: 300, speed: 2.5, direction: 1, color: 'red' 
         },
-
-        // 4. MODRÝ ŠTVOREC (hore pri cieli)
         { x: 1180, y: 160, width: 100, height: 40, type: 'wall', color: 'blue' },
-
-        // Kyselina na dne
-        { x: 150, y: 585, width: 1150, height: 15, type: 'acid', color: '#00ff41' }
+        { x: 300, y: 585, width: 1000, height: 15, type: 'acid', color: '#00ff41' }
     ]
 };
 
@@ -97,20 +99,14 @@ let player = {
                 if (p.type === 'acid') {
                     this.reset();
                 } else {
-                    // Dopad zhora
                     if (this.dy > 0 && (this.y + this.height - this.dy) <= p.y) {
                         this.y = p.y - this.height;
                         this.dy = 0;
                         this.grounded = true;
-                        
-                        // Fixácia na pohyblivé plošiny
                         if (p.type === 'moving') this.x += p.speed * p.direction;
-                        if (p.type === 'moving_v') this.y = p.y - this.height;
                     } 
-                    // Kolízie so stenami
                     else if (this.dx > 0 && (this.x + this.width - this.dx) <= p.x) this.x = p.x - this.width;
                     else if (this.dx < 0 && (this.x - this.dx) >= p.x + p.width) this.x = p.x + p.width;
-                    // Náraz zdola
                     else if (this.dy < 0 && (this.y - this.dy) >= p.y + p.height) { this.y = p.y + p.height; this.dy = 0; }
                 }
             }
@@ -121,6 +117,11 @@ let player = {
             this.y -= 25;
             this.chceSaPostavit = false;
         }
+
+        // Interakcia s NPC (kontrola vzdialenosti)
+        const npc = currentLevel.npc;
+        let dist = Math.abs(this.x - npc.x);
+        npc.showDialog = (dist < 100); 
     },
 
     draw() {
@@ -133,7 +134,6 @@ let player = {
     }
 };
 
-// === POMOCNÉ FUNKCIE ===
 function drawRopes(p) {
     c.strokeStyle = '#555';
     c.lineWidth = 2;
@@ -181,10 +181,36 @@ function animovanie() {
             p.y += p.speed * p.direction;
             if (p.y > p.startY + p.range || p.y < p.startY) p.direction *= -1;
         }
-
         c.fillStyle = p.color;
         c.fillRect(p.x, p.y, p.width, p.height);
     });
+
+    // === VYKRESLENIE NPC ===
+    const n = currentLevel.npc;
+    if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
+        c.drawImage(macky.npc, n.x, n.y, n.width, n.height);
+    } else {
+        c.fillStyle = n.color;
+        c.fillRect(n.x, n.y, n.width, n.height);
+    }
+
+    // Bublina s dialógom
+    if (n.showDialog) {
+        c.fillStyle = "rgba(0, 0, 0, 0.8)";
+        c.strokeStyle = "#00ffff";
+        c.lineWidth = 2;
+        c.beginPath();
+        c.roundRect(n.x - 50, n.y - 70, 300, 50, 10);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = "#00ffff";
+        c.font = "bold 12px Arial";
+        c.fillText(n.name, n.x - 40, n.y - 55);
+        c.fillStyle = "white";
+        c.font = "14px Arial";
+        c.fillText(n.dialog, n.x - 40, n.y - 35);
+    }
 
     // Oranžový cieľ
     c.fillStyle = 'orange';
