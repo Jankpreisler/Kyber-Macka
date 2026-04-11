@@ -1,8 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+
 body {
     font-family: 'Courier New', monospace;
     overflow: hidden;
@@ -17,26 +13,7 @@ body {
     image-rendering: pixelated;
     filter: contrast(120%) saturate(120%);
 }
-.divButtons, .textContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-.logo {
-    width: 400px;
-    margin-bottom: 20px;
-    image-rendering: pixelated;
-    filter: 
-        drop-shadow(4px 4px 0px black)
-        contrast(110%);
-    transition: transform 0.1s linear;
-}
-/* Animácia pre náhodné rezanie textu */
+
 @keyframes glitchAnim {
     0% { clip: rect(20px, 9999px, 40px, 0); }
     20% { clip: rect(60px, 9999px, 10px, 0); }
@@ -45,50 +22,50 @@ body {
     80% { clip: rect(40px, 9999px, 90px, 0); }
     100% { clip: rect(10px, 9999px, 50px, 0); }
 }
+
 .button {
     width: 260px;
     padding: 15px;
     font-size: 16px;
     font-family: 'Courier New', monospace;
     color: white;
-    background: #222;
-    border: 4px solid #555;
+    background: #5d00ff;
+    border: 4px solid #0d00fd;
     cursor: pointer;
-    box-shadow: 4px 4px 0px #000, inset -4px -4px 0px #111, inset 4px 4px 0px #444;
-    position: relative; /* Dôležité pre glitch */
+    box-shadow: 4px 4px 0px #83dde9, inset -4px -4px 0px #305486, inset 4px 4px 0px #00eaff;
+    position: relative; 
     transition: background 0.1s;
     text-transform: uppercase;
 }
 
-/* Glitch vrstvy, ktoré sa objavia pri hoveri */
 .button::before, .button::after {
-    content: "CYBER-CAT"; /* Tu musí byť rovnaký text ako na tlačidle, alebo viď tip nižšie */
+    content: "CYBER-CAT"; 
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #222;
+    background: #ad710a;
     display: none;
 }
 
 .button:hover::before {
     display: block;
     left: 3px;
-    text-shadow: -2px 0 #ff00c1; /* Ružový tieň */
+    background:  #5e9b38; 
     animation: glitchAnim 0.3s infinite linear alternate-reverse;
 }
 
 .button:hover::after {
     display: block;
     left: -3px;
-    text-shadow: -2px 0 #00fff9; /* Tyrkysový tieň */
+    background: -2px 0 #00fff9; 
     animation: glitchAnim 0.2s infinite linear alternate;
 }
 
 .button:hover {
-    background: #333;
-    animation: glitchMove 0.2s infinite; /* Celé tlačidlo sa bude triasť */
+    background: #fc14d5;
+    animation: glitchMove 0.2s infinite;
 }
 
 body, html {
@@ -96,7 +73,7 @@ body, html {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Aby nám nič neutekalo mimo obrazovku */
+    overflow: hidden
 }
 
 .bckgrnd {
@@ -114,13 +91,13 @@ body, html {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 1px; /* Bod v strede */
+    width: 1px; 
     height: 1px;
 }
 
 .menu-overlay a {
     position: absolute;
-    transform: translate(-50%, -50%); /* Centrovanie samotného tlačidla */
+    transform: translate(-50%, -50%); 
     text-decoration: none;
 }
 
@@ -130,17 +107,16 @@ body, html {
 }
 
 .Aboutus {
-    left: -650px; /* Posun doľava od stredu */
-    top: 0px;   /* Mierny posun hore */
+    left: -650px; 
+    top: 0px;  
 }
-
 .settings {
-    left: 650px;  /* Posun doprava od stredu */
+    left: 650px;  
     top: 0;
 }
 
 .quit {
-    top: 350px;    /* Pozícia v strede kruhu */
+    top: 350px;   
 }
 
 .title{
@@ -149,4 +125,36 @@ body, html {
     left: -175px;
     width: 700px;
     font-size: 50px;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(-1.9) ;
+    transition: all 0.7s ease-in-out;
+    pointer-events: none; 
+}
+.Nastaveneittile{
+    position: absolute;
+    font-size: 90px;
+    top: -300px;
+}
+.Volume{
+    position: absolute;
+    font-size: 55px;
+    top: -100px;
+}
+.volumeBar{
+    position: absolute;
+    font-size: 55px;
+    
+    size: 10px;
+    top: 30px;
+}
+.backcudo{
+    position: absolute;
+    font-size: 55px;
+    size: 10px;
+    top: 330px;
+    right: -440px;
+    text-decoration: none;
 }
