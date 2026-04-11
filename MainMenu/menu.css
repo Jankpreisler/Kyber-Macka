@@ -3,6 +3,9 @@ body {
     font-family: 'Courier New', monospace;
     overflow: hidden;
     background: black;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     
 }
 .bckgrnd {
@@ -156,5 +159,83 @@ body, html {
     size: 10px;
     top: 330px;
     right: -440px;
+    text-decoration: none;
+}
+
+.Credits{
+    position: absolute;
+    top: -600px;
+    left: -400px;
+    font-size: 100px;
+}
+
+.programatoros{
+    position: absolute;
+    top: -400px;
+    left: -380px;
+    font-size: 50px;
+   
+}
+
+.asd{
+    position: absolute;
+    top: -320px;
+    left: -480px;
+    width: 2000px;
+    font-size: 25px;
+}
+
+.dizajneros{
+     position: absolute;
+    top: -250px;
+    left: -280px;
+    font-size: 50px;
+}
+
+.matheeeeeeeeeeeeew{
+    position: absolute;
+    top: -180px;
+    left: -328px;
+    width: 2000px;
+    font-size: 25px;
+}
+
+.muzikos{
+    position: absolute;
+    top: -115px;
+    left: -345px;
+    font-size: 50px;
+}
+
+.dzenkoooooouuuuuuuuuuuu{
+     position: absolute;
+    top: -40px;
+    left: -360px;
+    width: 2000px;
+    font-size: 25px;
+}
+
+.testeros{
+    position: absolute;
+    top: 40px;
+    left: -305px;
+    font-size: 50px;
+}
+
+.testeri{
+     position: absolute;
+    top: 120px;
+    left: -360px;
+    width: 2000px;
+    font-size: 25px;
+}
+
+.backcudos{
+     position: absolute;
+    font-size: 55px;
+    size: 10px;
+    top: 330px;
+    right: -1140px;
+    width: 1000px;
     text-decoration: none;
 }
