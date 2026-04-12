@@ -30,6 +30,27 @@ const platforms = [
     
 ];
 
+const npc   = {
+        x: 1050,
+        y: 315,
+        width: 50,
+        height: 50,
+        color: '#ff00ff',
+        name: "Robo mouse",
+        
+        dialogues: [
+            { hovori: "Robo mouse", text: "PÍP! Detekujem organickú formu života. Kto si?" },
+            { hovori: "MAČKA", text: "Mňau! Som kyber-mačka a hľadám cestu von." },
+            { hovori: "Robo mouse", text: "Cesta von vedie cez kyselinové jazero. Je to nebezpečné." },
+            { hovori: "MAČKA", text: "Neboj sa, viem dobre skákať. Máš nejakú radu?" },
+            { hovori: "Robo mouse", text: "Použi pohyblivé plošiny a hlavne nespadni do zelenej vody!" },
+            { hovori: "MAČKA", text: "Rozumiem. Idem na to!" }
+        ],
+        currentLine: 0,
+        isTalking: false,
+        canInteract: false
+    };
+
 function drawRopes(p) {
     c.strokeStyle = '#555';
     c.lineWidth = 2;
@@ -43,11 +64,13 @@ const macky = {
     dolava: new Image(),
     doprava: new Image(),
     plazeniedoprava: new Image(),
+    npc: new Image(),
 };
 
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
-macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png'
+macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png';
+macky.npc.src = '../../asseti/Plaziaca_macka.png';
 
 let actualnaakciacici = macky.doprava;
 const keys = { right: false, left: false };
@@ -220,6 +243,28 @@ window.addEventListener('keydown', (e) => {
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
+
+    if (e.key.toLowerCase() === 'mousedown', 'e' && npc.canInteract) {
+        if (!npc.isTalking) {
+            npc.isTalking = true;
+            npc.currentLine = 0;
+        } else {
+            npc.currentLine++;
+            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
+        }
+    }
+});
+
+canvas.addEventListener('click', (e) => {
+    if (npc.canInteract) {
+        if (!npc.isTalking) {
+            npc.isTalking = true;
+            npc.currentLine = 0;
+        } else {
+            npc.currentLine++;
+            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
+        }
+    }
 });
 
 window.addEventListener('keyup', (e) => {
@@ -306,7 +351,6 @@ function animovanie() {
             c.fillRect(p.x, p.y, p.width, p.height);
         }
     });
-
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
@@ -315,6 +359,23 @@ function animovanie() {
             if (p.hasRope) drawRopes(p);
         } 
     });
+
+   if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
+        c.drawImage(macky.npc, npc.x, npc.y, npc.width, npc.height);
+    } else {
+        c.fillStyle = npc.color; 
+        c.fillRect(npc.x, npc.y, npc.width, npc.height);
+    }
+
+    // 4. Detekcia a interakcia
+    let dist = Math.sqrt((player.x - npc.x)**2 + (player.y - npc.y)**2);
+    npc.canInteract = dist < 120;
+
+    if (npc.canInteract && !npc.isTalking) {
+        c.fillStyle = "#ffff00"; 
+        c.font = "bold 15px Arial";
+        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20); 
+    }
 
     // 3. Pohyb a fyzika
     if (keys.right) player.dx += player.speed;
@@ -326,6 +387,36 @@ function animovanie() {
     player.dy += gravitacia;
     player.y += player.dy;
     player.grounded = false;
+
+    // box na hovorenie pre cici
+
+    if (npc.isTalking) {
+        const dialog = npc.dialogues[npc.currentLine];
+        const isCat = dialog.hovori === "MAČKA";
+
+        // Box
+        c.fillStyle = "rgba(0, 0, 0, 0.85)";
+        c.strokeStyle = isCat ? "#00ff41" : "#ff00ff";
+        c.lineWidth = 3;
+        c.beginPath();
+        c.roundRect(250, 450, 800, 110, 15);
+        c.fill();
+        c.stroke();
+
+        // Meno hovoriaceho
+        c.fillStyle = isCat ? "#00ff41" : "#ff00ff";
+        c.font = "bold 20px Courier New";
+        c.fillText(dialog.hovori, 280, 480);
+
+        // Text
+        c.fillStyle = "white";
+        c.font = "22px Arial";
+        c.fillText(dialog.text, 280, 520);
+
+        c.fillStyle = "#666";
+        c.font = "14px Arial";
+        c.fillText("Clikni pre pokračovanie...", 850, 545);
+    }
 
     // 4. Kolízie
     platforms.forEach(platform => {
