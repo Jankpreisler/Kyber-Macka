@@ -244,7 +244,7 @@ window.addEventListener('keydown', (e) => {
         actualnaakciacici = macky.plazeniedoprava;
     }
 
-    if (e.key.toLowerCase() === 'mousedown', 'e' && npc.canInteract) {
+    if (e.key.toLowerCase() === 'e' && npc.canInteract) {
         if (!npc.isTalking) {
             npc.isTalking = true;
             npc.currentLine = 0;
