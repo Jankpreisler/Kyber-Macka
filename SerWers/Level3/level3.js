@@ -48,7 +48,7 @@ const npc   = {
             { hovori: "Robo mouse", text: "Ale. Nieco je na tebe ine." },
             { hovori: "MAČKA", text: "Mnau?" },
             { hovori: "Robo mouse", text: "Samozrejme okrem toho ze nevies rozpravat." },
-            { hovori: "Robo mouse", text: "Musis mat zoskratovany ale teda asi nedokonceny program" },
+            { hovori: "Robo mouse", text: "Ale neviem co. Posobis dokonalejsie nez my tu dole.ddddd" },
             { hovori: "MAČKA", text: "Mnaaaaaaaauuuuuuuuu." },
             { hovori: "Robo mouse", text: "Kazdopadne ja uz ti nepomozem. Moj koniec sa bliiiiizi" },
             { hovori: "Robo mouse", text: "Najdi Dr. Rokwela. Je v pipe...." },
