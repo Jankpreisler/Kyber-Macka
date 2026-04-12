@@ -1,36 +1,52 @@
-const volumeBar = document.getElementById('volumeControl');
+const coreCanvas = document.getElementById('coreCanvas');
+const ctx = coreCanvas.getContext('2d');
 
-window.addEventListener('DOMContentLoaded', () => {
-    const savedVolume = localStorage.getItem('gameVolume') || 0.5;
-    if (music) music.volume = savedVolume;
-    if (volumeBar) volumeBar.value = savedVolume;
-});
-
-if (volumeBar) {
-    volumeBar.addEventListener('input', (e) => {
-        const value = e.target.value;
-        if (music) music.volume = value;
-        
-        localStorage.setItem('gameVolume', value);
-    });
+function setupCanvas() {
+    coreCanvas.width = 440;
+    coreCanvas.height = 440;
 }
+setupCanvas();
+
+let time = 0;
+function draw() {
+    ctx.clearRect(0, 0, 440, 440);
+    const cx = 220;
+    const cy = 220;
+    time += 0.02;
+
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "#00f2ff";
+    ctx.lineWidth = 2;
+
+    for(let i=0; i<5; i++) {
+        ctx.strokeStyle = `rgba(0, 242, 255, ${0.8 - i*0.15})`;
+        ctx.beginPath();
+        let r = 80 + i*20;
+        let start = i % 2 === 0 ? time : -time;
+        ctx.arc(cx, cy, r, start, start + Math.PI * 1.2);
+        ctx.stroke();
+    }
+    
+    requestAnimationFrame(draw);
+}
+draw();
+
+window.addEventListener('resize', setupCanvas);
 
 function krasneprehadzovanie(url) {
-    
-    const menu = document.querySelector('.menu-overlay');
-    menu.classList.add('fade-out');
-
-    setTimeout(() => {
-        window.location.href = url;
-    }, 500);
+    document.body.style.opacity = "0";
+    document.body.style.transition = "0.4s";
+    setTimeout(() => { window.location.href = url; }, 400);
 }
 
-const music = document.getElementById("bgMusic");
-
+// OPRAVENÉ SPÚŠŤANIE HUDBY
 window.addEventListener('click', () => {
-    if (music.paused) {
-        music.play().catch(error => {
-            console.log("Autoplay bol zablokovaný, čakám na interakciu.");
+    const music = document.getElementById("bgMusic");
+    if (music && music.paused) {
+        music.play().then(() => {
+            console.log("Hudba úspešne spustená");
+        }).catch(err => {
+            console.warn("Autoplay blokovaný:", err);
         });
     }
-}, { once: true }); 
+}, { once: true });
