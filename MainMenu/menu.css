@@ -1,241 +1,75 @@
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Courier New', monospace; }
 
-body {
-    font-family: 'Courier New', monospace;
-    overflow: hidden;
-    background: black;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    
-}
-.bckgrnd {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    image-rendering: pixelated;
-    filter: contrast(120%) saturate(120%);
-}
+.background-container { position: absolute; width: 100%; height: 100%; z-index: 1; }
 
-@keyframes glitchAnim {
-    0% { clip: rect(20px, 9999px, 40px, 0); }
-    20% { clip: rect(60px, 9999px, 10px, 0); }
-    40% { clip: rect(10px, 9999px, 70px, 0); }
-    60% { clip: rect(80px, 9999px, 30px, 0); }
-    80% { clip: rect(40px, 9999px, 90px, 0); }
-    100% { clip: rect(10px, 9999px, 50px, 0); }
-}
+.zone { position: absolute; width: 100%; height: 100%; overflow: hidden; opacity: 5; } /*tu sa meni opacity */
 
-.button {
-    width: 260px;
-    padding: 15px;
-    font-size: 16px;
-    font-family: 'Courier New', monospace;
-    color: white;
-    background: #5d00ff;
-    border: 4px solid #0d00fd;
-    cursor: pointer;
-    box-shadow: 4px 4px 0px #83dde9, inset -4px -4px 0px #305486, inset 4px 4px 0px #00eaff;
-    position: relative; 
-    transition: background 0.1s;
-    text-transform: uppercase;
+/* --- 1. SERVERS IN SERVERS (Zelená) - OPRAVENÉ (vymazané čierne pruhy) --- */
+.zone-top {
+    background: linear-gradient(to bottom, #001a00, #000);
+    clip-path: polygon(0 0, 100% 0, 50% 50%);
 }
+/* Odstránené .ceiling-pipes a upravené pozicovanie serverov */
+.server-room { 
+    display: flex; 
+    justify-content: center; 
+    gap: 12px; 
+    padding-top: 20px; /* Servery posunuté vyššie, keďže tam nie sú potrubia */
+}
+.rack { width: 45px; height: 140px; background: #050505; border: 1px solid #004400; position: relative; }
+.leds { width: 100%; height: 70%; background: repeating-linear-gradient(#0f0 0 1px, transparent 1px 4px); animation: flicker 0.4s infinite alternate; }
+.label { color: #0f0; font-size: 8px; position: absolute; bottom: 5px; width: 100%; text-align: center; opacity: 0.7; }
 
-.button::before, .button::after {
-    content: "CYBER-CAT"; 
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #ad710a;
-    display: none;
+/* --- 2. BUG TOWN (Červená) --- */
+.zone-left {
+    background: linear-gradient(90deg, #1a0000, #000);
+    clip-path: polygon(0 0, 0 100%, 50% 50%);
 }
+.skyline { position: absolute; bottom: 0; display: flex; align-items: flex-end; width: 100%; height: 100%; padding-left: 10px; }
+.building { width: 35px; background: #0a0a0a; border-top: 2px solid #900; margin-right: 8px; position: relative; }
+.b1 { height: 120px; } .b2 { height: 180px; } .b3 { height: 140px; } .b4 { height: 210px; }
+.windows { width: 100%; height: 100%; background: repeating-linear-gradient(#300 0 2px, transparent 2px 8px); opacity: 0.3; }
+.warning-layer { position: absolute; top: 30%; left: 5%; color: #f00; font-weight: bold; font-size: 14px; opacity: 0.4; transform: rotate(-15deg); }
 
-.button:hover::before {
-    display: block;
-    left: 3px;
-    background:  #5e9b38; 
-    animation: glitchAnim 0.3s infinite linear alternate-reverse;
+/* --- 3. DATA BAY (Modrá) --- */
+.zone-right {
+    background: linear-gradient(-90deg, #000b1a, #000);
+    clip-path: polygon(100% 0, 100% 100%, 50% 50%);
 }
+.digital-water { position: absolute; bottom: 0; width: 100%; height: 40%; background: linear-gradient(transparent, #00f2ff22); }
+.packet { position: absolute; width: 8px; height: 8px; background: #00f2ff; border-radius: 2px; box-shadow: 0 0 10px #00f2ff; }
+.p1 { top: 20%; right: 10%; animation: float 4s infinite; }
+.p2 { top: 50%; right: 25%; animation: float 6s infinite reverse; }
+.p3 { top: 80%; right: 15%; animation: float 5s infinite 1s; }
 
-.button:hover::after {
-    display: block;
-    left: -3px;
-    background: -2px 0 #00fff9; 
-    animation: glitchAnim 0.2s infinite linear alternate;
+/* --- 4. UPLOAD HIGHWAY (Fialová) --- */
+.zone-bottom {
+    background: linear-gradient(0deg, #0d001a, #000);
+    clip-path: polygon(0 100%, 100% 100%, 50% 50%);
 }
+.highway { position: absolute; width: 180px; height: 100%; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.02); border-left: 1px solid #406; border-right: 1px solid #406; }
+.lane-lines { position: absolute; left: 50%; width: 1px; height: 100%; border-left: 1px dashed #609; opacity: 0.5; }
+.data-unit { width: 8px; height: 25px; background: #bc00ff; position: absolute; bottom: -50px; box-shadow: 0 0 12px #bc00ff; animation: drive 1.5s infinite linear; }
+@keyframes drive { from { bottom: -100px; } to { bottom: 120%; } }
 
-.button:hover {
-    background: #fc14d5;
-    animation: glitchMove 0.2s infinite;
-}
+/* CENTER CORE & LINES */
+.x-lines .line { position: absolute; top: 50%; left: 50%; width: 150vw; height: 2px; background: rgba(0, 242, 255, 0.3); z-index: 5; }
+.l1 { transform: translate(-50%, -50%) rotate(26.5deg); }
+.l2 { transform: translate(-50%, -50%) rotate(-26.5deg); }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden
-}
+.center-stage { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; pointer-events: none; }
+#coreCanvas { width: 440px; height: 440px; }
+.main-title { color: #fff; font-size: 60px; line-height: 0.8; margin-top: -100px; font-weight: 900; text-shadow: 0 0 20px #00f2ff; letter-spacing: -2px; }
 
-.bckgrnd {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    z-index: -1;
-}
+/* UI BUTTONS */
+.nav-link { position: absolute; z-index: 20; transform: translate(-50%, -50%); }
+.pos-top { top: 12%; left: 50%; }
+.pos-bottom { bottom: 6%; left: 50%; }
+.pos-left { top: 50%; left: 14%; }
+.pos-right { top: 50%; right: 4%; }
 
-.menu-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 1px; 
-    height: 1px;
-}
+.cyber-button { background: rgba(0,0,0,0.9); color: #00f2ff; border: 1px solid #00f2ff; padding: 12px 30px; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.cyber-button:hover { background: #00f2ff; color: #000; box-shadow: 0 0 30px #00f2ff; transform: scale(1.05); }
 
-.menu-overlay a {
-    position: absolute;
-    transform: translate(-50%, -50%); 
-    text-decoration: none;
-}
-
-
-.playbutton {
-    top: -350px; 
-}
-
-.Aboutus {
-    left: -650px; 
-    top: 0px;  
-}
-.settings {
-    left: 650px;  
-    top: 0;
-}
-
-.quit {
-    top: 350px;   
-}
-
-.title{
-    position: absolute;
-    top: -175px;
-    left: -175px;
-    width: 700px;
-    font-size: 50px;
-}
-
-.fade-out {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(-1.9) ;
-    transition: all 0.7s ease-in-out;
-    pointer-events: none; 
-}
-.Nastaveneittile{
-    position: absolute;
-    font-size: 90px;
-    top: -300px;
-}
-.Volume{
-    position: absolute;
-    font-size: 55px;
-    top: -100px;
-}
-.volumeBar{
-    position: absolute;
-    font-size: 55px;
-    
-    size: 10px;
-    top: 30px;
-}
-.backcudo{
-    position: absolute;
-    font-size: 55px;
-    size: 10px;
-    top: 330px;
-    right: -440px;
-    text-decoration: none;
-}
-
-.Credits{
-    position: absolute;
-    top: -600px;
-    left: -400px;
-    font-size: 100px;
-}
-
-.programatoros{
-    position: absolute;
-    top: -400px;
-    left: -380px;
-    font-size: 50px;
-   
-}
-
-.asd{
-    position: absolute;
-    top: -320px;
-    left: -480px;
-    width: 2000px;
-    font-size: 25px;
-}
-
-.dizajneros{
-     position: absolute;
-    top: -250px;
-    left: -280px;
-    font-size: 50px;
-}
-
-.matheeeeeeeeeeeeew{
-    position: absolute;
-    top: -180px;
-    left: -328px;
-    width: 2000px;
-    font-size: 25px;
-}
-
-.muzikos{
-    position: absolute;
-    top: -115px;
-    left: -345px;
-    font-size: 50px;
-}
-
-.dzenkoooooouuuuuuuuuuuu{
-     position: absolute;
-    top: -40px;
-    left: -360px;
-    width: 2000px;
-    font-size: 25px;
-}
-
-.testeros{
-    position: absolute;
-    top: 40px;
-    left: -305px;
-    font-size: 50px;
-}
-
-.testeri{
-     position: absolute;
-    top: 120px;
-    left: -360px;
-    width: 2000px;
-    font-size: 25px;
-}
-
-.backcudos{
-     position: absolute;
-    font-size: 55px;
-    size: 10px;
-    top: 330px;
-    right: -1140px;
-    width: 1000px;
-    text-decoration: none;
-}
+@keyframes flicker { from { opacity: 0.3; } to { opacity: 0.9; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
