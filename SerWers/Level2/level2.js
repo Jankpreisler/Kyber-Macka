@@ -61,7 +61,8 @@ let player = {
     dy: 0,
     speed: 5,
     jumpForce: 10,
-    grounded: false
+    grounded: false,
+    friction: 0.5
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -315,10 +316,11 @@ function animovanie() {
     });
 
     // 3. Pohyb a fyzika
-    if (keys.right) player.dx = player.speed;
-    else if (keys.left) player.dx = -player.speed;
+    if (keys.right) player.dx += player.speed;
+    else if (keys.left) player.dx += -player.speed;
     else player.dx = 0;
 
+    player.dx *= player.friction;
     player.x += player.dx;
     player.dy += gravitacia;
     player.y += player.dy;
@@ -374,7 +376,7 @@ function animovanie() {
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "SerWers/Level3/level3.html";
+        window.location.href = "/SerWers/Level3/level3.html";
     }
 
     // 6. Vykreslenie postavy

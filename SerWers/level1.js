@@ -55,7 +55,8 @@ let player = {
     dy: 0,
     speed: 5,
     jumpForce: 10,
-    grounded: false
+    grounded: false,
+    friction: 0.5
     
 };
 
@@ -286,9 +287,11 @@ function animovanie() {
     });
 
     // 3. Pohyb a fyzika
-    if (keys.right) player.dx = player.speed;
-    else if (keys.left) player.dx = -player.speed;
+    if (keys.right) player.dx += player.speed;
+    else if (keys.left) player.dx += -player.speed;
     else player.dx = 0;
+
+    player.dx *= player.friction;
 
     player.x += player.dx;
     player.dy += gravitacia;
