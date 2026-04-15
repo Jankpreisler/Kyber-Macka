@@ -2,11 +2,10 @@
 Jan Kristian Preisler - Developer, Storyliner
 Matej Kapusniak - Developer, Dizajner
 
-Poznamky
-- zajtra rokvelov labak (mozno)
-
 Stvrtok
-* Pridanie par levelov
+* Pridanie puzzle levelu
 * Dokoncenie main screenu
 * Napisanie osnovy
 * a nakreslit mapu sveta
+* ten puzzle level aj s posuvnou kamerou
+* a potencialne dokoncenie Serwers
