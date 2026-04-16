@@ -42,7 +42,7 @@ macky.dolava.src = 'asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = 'asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = 'asseti/Plaziaca_macka.png'
 
-let actualnaakciacici = macky.doprava;
+let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===

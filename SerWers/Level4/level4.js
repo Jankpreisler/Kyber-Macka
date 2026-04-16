@@ -51,7 +51,7 @@ macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png';
 macky.npc.src = '../../asseti/Plaziaca_macka.png';
 
-let actualnaakciacici = macky.doprava;
+let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
@@ -261,7 +261,7 @@ function resetPlayer() {
     player.dx = 0;   
     player.dy = 0;   
     player.height = 50; 
-    actualnaakciacici = macky.doprava;
+    actualnaakciacici = macky.dolava;
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -403,7 +403,7 @@ function animovanie() {
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "SerWers/Level3/level3.html";
+        window.location.href = "/SerWers/RokvelLabak/Rokvel.html";
     }
 
     // 6. Vykreslenie postavy
