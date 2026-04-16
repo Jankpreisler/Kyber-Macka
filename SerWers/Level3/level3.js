@@ -206,11 +206,11 @@ function drawFog() {
 }
 
 function mozeSaPostavit() {
-    // Simulujeme pozíciu a výšku po postavení
+   
     const buducaVyska = 50;
     const buduceY = player.y - 25;
 
-    // Skontrolujeme kolíziu s každou platformou pre túto novú polohu
+
     for (let platform of platforms) {
         if (
             player.x < platform.x + platform.width &&
@@ -218,7 +218,7 @@ function mozeSaPostavit() {
             buduceY < platform.y + platform.height &&
             buduceY + buducaVyska > platform.y
         ) {
-            return false; // Našli sme prekážku, nemôže sa postaviť
+            return false; // nemôže sa postaviť
         }
     }
     return true; // Miesto je voľné

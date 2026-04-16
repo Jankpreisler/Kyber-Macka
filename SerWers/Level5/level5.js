@@ -261,29 +261,26 @@ function animovanie() {
     requestAnimationFrame(animovanie);
     time += 0.01;
 
+    // 1. Vyčistíme canvas
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    c.save(); 
-    c.translate(-Karera.x, 0 -Karera.y, 0);
-
-    // 1. Pozadie
-    let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
-    bgGrad.addColorStop(0, '#0a100a');
-    bgGrad.addColorStop(1, '#010501');
-    c.fillStyle = bgGrad;
-    c.fillRect(0, 0, canvas.width, canvas.height);
-
+    // 2. VYKRESLENIE POZADIA 
+   
     c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 2200, canvas.height); 
+    c.fillRect(0, 0, canvas.width, canvas.height); 
 
+    // Atmosférická hmla (tiež fixná pre lepší efekt hĺbky)
     drawFog();
 
-    // 2. Vykreslenie objektov
+    // 3. NASTAVENIE KAMERY
+    c.save(); 
+    c.translate(-Math.floor(Karera.x), -Math.floor(Karera.y));
+
+    // 4. VYKRESLENIE OBJEKTOV LEVELU
     platforms.forEach(p => {
         if (p.type === 'floor') {
             c.fillStyle = '#000';
             c.fillRect(p.x, p.y, p.width, p.height);
-
             let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
             sliz.addColorStop(0, '#000000');
             sliz.addColorStop(1, 'transparent');
@@ -302,41 +299,15 @@ function animovanie() {
         else if (p.type === 'valve') {
             c.fillStyle = '#400';
             c.fillRect(p.x, p.y, p.width, p.height);
-            c.fillStyle = '#600';
-            c.fillRect(p.x + 5, p.y + 20, 10, 10);
         }
-        else if(p.speed){
-                p.x += p.speed * p.direction;
-                if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
-                if (p.hasRope) drawRopes(p);
-              
-        }
-        else {
-            c.fillStyle = 'transparent';
-            c.fillRect(p.x, p.y, p.width, p.height);
-        }
-    });
-    // Funguje nedotykat sa nikdydw
-    platforms.forEach(p => {
-        if (p.speed) {
-        if (p.type === 'valve') {
-            // Vertikálny pohyb pre ventil/plošinu
-            p.y += p.speed * p.direction;
-            // Ak narazí na hranicu rozsahu (startY + range), otočí smer
-            if (p.y > p.startY + p.range || p.y < p.startY) {
-                p.direction *= -1;
-            }
-        } else {
-            // Horizontálny pohyb pre ostatné plošiny
+        else if (p.speed) {
+            // Logika pre pohyblivé plošiny
             p.x += p.speed * p.direction;
-            if (p.x > p.startX + p.range || p.x < p.startX) {
-                p.direction *= -1;
-            }
+            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
         }
-    }
     });
 
-    // 3. Pohyb a fyzika
+    // 5. FYZIKA A POHYB HRÁČA
     if (keys.right) player.dx += player.speed;
     else if (keys.left) player.dx += -player.speed;
     else player.dx = 0;
@@ -347,75 +318,51 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
+    // Aktualizácia pozície kamery
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
 
-    if (Karera.y < 0) Karera.y = 0;
+    // Hranice kamery
     if (Karera.x < 0) Karera.x = 0;
-    // 4. Kolízie
+    if (Karera.y < 0) Karera.y = 0;
+
+    // 6. KOLÍZIE (
     platforms.forEach(platform => {
-        if (
-            player.x < platform.x + platform.width &&
-            player.x + player.width > platform.x &&
-            player.y < platform.y + platform.height &&
-            player.y + player.height > platform.y
-        ) {
+        if (isTouching(player, platform)) {
             if (platform.type === 'floor') {
                 resetPlayer();
-                return; // Ukončíme kontrolu pre túto platformu
+                return;
             }
-
-            // dopad zhora
+            // Kolízia zhora (dopad)
             if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
                 player.y = platform.y - player.height;
                 player.dy = 0;
                 player.grounded = true;
             }
-
-            // náraz sprava do steny
+            // Ostatné kolízie (steny, zdola)
             else if (player.dx > 0 && (player.x + player.width - player.dx) <= platform.x) {
                 player.x = platform.x - player.width;
             }
-
-            // náraz zľava do steny
             else if (player.dx < 0 && (player.x - player.dx) >= platform.x + platform.width) {
                 player.x = platform.x + platform.width;
             }
-
-            // náraz hlavou zdola
             else if (player.dy < 0 && (player.y - player.dy) >= platform.y + platform.height) {
                 player.y = platform.y + platform.height;
                 player.dy = 0;
             }
-            
-            if (player.height === 25 && player.chceSaPostavit) {
-                if (mozeSaPostavit()) {
-                    player.height = 50;
-                    player.y -= 25;
-                    player.actualnaakciacici = macky.doprava;
-                    player.chceSaPostavit = false;
-                }
-            }
         }
-        
     });
 
-//PRECHOD DO ĎALŠIEHO LEVELU
-    if (isTouching(player, exitZone)) {
-        window.location.href = "SerWers/Level3/level3.html";
-    }
-
-    // 6. Vykreslenie postavy
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
+    // 7. VYKRESLENIE POSTAVY
+    if (actualnaakciacici && actualnaakciacici.complete) {
         c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
     } else {
         c.fillStyle = 'red';
         c.fillRect(player.x, player.y, player.width, player.height);
     }
 
-
+    // KONIEC POSUNU KAMERY
     c.restore();
-
 }
 
 animovanie();
