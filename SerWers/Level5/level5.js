@@ -325,6 +325,7 @@ function animovanie() {
             c.fillStyle = 'transparent';
             c.fillRect(p.x, p.y, p.width, p.height);
         }
+        
     });
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
@@ -406,6 +407,22 @@ function animovanie() {
             // Opravené: priraďujeme k premennej, ktorú používaš na kreslenie
             actualnaakciacici = macky.doprava; 
         }
+    }
+
+    function vykonajAkciu(id) {
+        if (id === 'tlacidlo1') {
+            console.log("Stojíš na tlačidle! Otváram dvere...");
+            nastavViditelnost('papi, false');
+        }
+        if (id === 'tlacidlo2') {
+            console.log("Stojíš na tlačidle! Otváram dvere...");
+            nastavViditelnost('papo, false');
+        }
+        if (id === 'tlacidlo3') {
+            console.log("Stojíš na tlačidle! Otváram dvere...");
+            nastavViditelnost('papa, false');
+        }
+    
     }
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
