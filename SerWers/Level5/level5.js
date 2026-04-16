@@ -390,6 +390,9 @@ function animovanie() {
                 player.dy = 0;
             }
         }
+        if (platform.type === 'trigger') {
+            vykonajAkciu(platform.id);
+        }
     });
 
     // === 5. DOPLNKOVÁ LOGIKA (Kamera a postavenie sa) ===
@@ -412,15 +415,15 @@ function animovanie() {
     function vykonajAkciu(id) {
         if (id === 'tlacidlo1') {
             console.log("Stojíš na tlačidle! Otváram dvere...");
-            nastavViditelnost('papi, false');
+            nastavViditelnost('papi', false);
         }
         if (id === 'tlacidlo2') {
             console.log("Stojíš na tlačidle! Otváram dvere...");
-            nastavViditelnost('papo, false');
+            nastavViditelnost('papo', false);
         }
         if (id === 'tlacidlo3') {
             console.log("Stojíš na tlačidle! Otváram dvere...");
-            nastavViditelnost('papa, false');
+            nastavViditelnost('papa', false);
         }
     
     }
