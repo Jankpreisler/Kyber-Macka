@@ -46,7 +46,7 @@ const macky = {
 
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
-macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png'
+macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png'
 
 let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };

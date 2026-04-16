@@ -7,8 +7,8 @@ canvas.height = 600;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 1210,
-    y: 150,
+    x: 1280,
+    y: 250,
     width: 60,
     height: 80
 };
@@ -82,8 +82,8 @@ const macky = {
 
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
-macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png';
-macky.npc.src = '../../asseti/Plaziaca_macka.png';
+macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
+macky.npc.src = '../../asseti/Plaziaca macka.png';
 
 let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };

@@ -6,7 +6,7 @@ canvas.height = 600;
 
 const gravitacia = 0.4;
 
-// === EXIT ZÓNA  ===
+// === EXIT ZÓNA ===
 const exitZone = {
     x: 1210,
     y: 20,
@@ -14,23 +14,23 @@ const exitZone = {
     height: 60
 };
 
-
 // === DEFINÍCIA PLATFORIEM ===
 const platforms = [
     { x: 0, y: 580, width: 100, height: 20, color: '#050505', type: 'floor' },
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 600 },
     { x: 1300, y: 0, width: 1, height: 600 }, 
-    { x: 0, y: 535, width: 800, height: 400, color: '#1a1a1a', type: 'wall' }, // spawn
-    { x: 130, y: 0, width: 150, height: 500, color: '#333', type: 'pipe_v' }, // vacsie hned vedla nej
-    { x: 280, y: 300, width: 150, height: 200, color: '#333', type: 'pipe_v' }, // mensia pipe hned na zaciatku
-    { x: 280, y: 200, width: 470, height: 20, color: '#555', type: 'pipe_h' }, // trupka vedla tych dvoch velkych
-    { x: 750, y: 350, width: 250, height: 400, color: '#1a1a1a', type: 'wall' }, // to druhe platformove cudo
-    { x: 700, y: 450, width: 50, height: 150, color: '#400', type: 'valve' }, // cervene vyko
-    { x: 450, y: 90, width: 920, height: 20, color: '#555', type: 'pipe_h' }, // final platform
-    { x: 900, y: 240, width: 100, height: 400, color: '#333', type: 'pipe_v' }, // platfor
-    { x: 1000, y: 70, width: 300, height: 900, color: '#1a1a1a', type: 'wall' }, // panel druhym
+    { x: 0, y: 535, width: 800, height: 400, color: '#1a1a1a', type: 'wall' }, 
+    { x: 130, y: 0, width: 150, height: 500, color: '#333', type: 'pipe_v' }, 
+    { x: 280, y: 300, width: 150, height: 200, color: '#333', type: 'pipe_v' }, 
+    { x: 280, y: 200, width: 470, height: 20, color: '#555', type: 'pipe_h' }, 
+    { x: 750, y: 350, width: 250, height: 400, color: '#1a1a1a', type: 'wall' }, 
+    { x: 700, y: 450, width: 50, height: 150, color: '#400', type: 'valve' }, 
+    { x: 450, y: 90, width: 920, height: 20, color: '#555', type: 'pipe_h' }, 
+    { x: 900, y: 240, width: 100, height: 400, color: '#333', type: 'pipe_v' }, 
+    { x: 1000, y: 70, width: 300, height: 900, color: '#1a1a1a', type: 'wall' }, 
 ];
+
 // === NAČÍTANIE OBRÁZKOV ===
 const macky = {
     dolava: new Image(),
@@ -40,9 +40,8 @@ const macky = {
 
 macky.dolava.src = 'asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = 'asseti/Cybermacka druhy pohlad.png';
-macky.plazeniedoprava.src = 'asseti/Plaziaca_macka.png'
+macky.plazeniedoprava.src = 'asseti/Plaziaca macka.png';
 
-let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
@@ -56,8 +55,9 @@ let player = {
     speed: 5,
     jumpForce: 10,
     grounded: false,
-    friction: 0.5
-    
+    friction: 0.5,
+    direction: 'doprava', // Spawn otočený doprava
+    chceSaPostavit: false  // Logika pre plynulé vstávanie
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -72,7 +72,31 @@ for (let i = 0; i < 30; i++) {
     });
 }
 
-// === GRAFICKÉ RUTINY ===
+// === POMOCNÉ FUNKCIE ===
+
+function ziskajAktualnuTexturu() {
+    if (player.height === 25) {
+        return macky.plazeniedoprava; 
+    }
+    // Ak sa pozerá doprava, vráť obrázok 'doprava'
+    return (player.direction === 'doprava') ? macky.dolava : macky.doprava;
+}
+function mozeSaPostavit() {
+    const buducaVyska = 50;
+    const buduceY = player.y - 25; // Simulujeme posun hlavy hore
+    
+    for (let platform of platforms) {
+        if (
+            player.x < platform.x + platform.width &&
+            player.x + player.width > platform.x &&
+            buduceY < platform.y + platform.height &&
+            buduceY + buducaVyska > platform.y
+        ) {
+            return false; 
+        }
+    }
+    return true; 
+}
 
 function getBrickPattern() {
     const p = document.createElement('canvas');
@@ -92,22 +116,18 @@ const brickPattern = getBrickPattern();
 function drawRealPipe(p, isVertical) {
     c.save();
     let grad;
-
     if (isVertical) {
         grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
     } else {
         grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
     }
-
     grad.addColorStop(0, '#111');
     grad.addColorStop(0.2, '#3a403a');
     grad.addColorStop(0.5, '#222');
     grad.addColorStop(0.8, '#443020');
     grad.addColorStop(1, '#050505');
-
     c.fillStyle = grad;
     c.fillRect(p.x, p.y, p.width, p.height);
-
     c.fillStyle = 'rgba(0,0,0,0.4)';
     if (isVertical) {
         for (let i = 10; i < p.height; i += 20) {
@@ -125,7 +145,6 @@ function drawRealServer(p) {
     c.save();
     c.fillStyle = '#0d0f12';
     c.fillRect(p.x, p.y, p.width, p.height);
-
     c.strokeStyle = '#1a1d24';
     c.lineWidth = 1;
     for (let i = p.y + 10; i < p.y + p.height; i += 10) {
@@ -134,55 +153,29 @@ function drawRealServer(p) {
         c.lineTo(p.x + p.width - 10, i);
         c.stroke();
     }
-
     for (let i = p.y + 15; i < p.y + p.height; i += 20) {
         c.fillStyle = Math.random() > 0.98 ? '#ff0055' : (Math.random() > 0.5 ? '#00ff41' : '#004411');
         c.fillRect(p.x + 5, i, 4, 3);
     }
-
     c.restore();
 }
 
 function drawFog() {
     c.save();
     c.globalCompositeOperation = 'screen';
-
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
         grad.addColorStop(0, 'rgba(0, 100, 30, 0.1)');
         grad.addColorStop(1, 'transparent');
-
         c.fillStyle = grad;
         c.beginPath();
         c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         c.fill();
-
         p.x += Math.sin(time + p.r) * 0.2;
     });
-
     c.restore();
 }
 
-function mozeSaPostavit() {
-    // Simulujeme pozíciu a výšku po postavení
-    const buducaVyska = 50;
-    const buduceY = player.y - 25;
-    
-    // Skontrolujeme kolíziu s každou platformou pre túto novú polohu
-    for (let platform of platforms) {
-        if (
-            player.x < platform.x + platform.width &&
-            player.x + player.width > platform.x &&
-            buduceY < platform.y + platform.height &&
-            buduceY + buducaVyska > platform.y
-        ) {
-            return false; // Našli sme prekážku, nemôže sa postaviť
-        }
-    }
-    return true; // Miesto je voľné
-}
-
-// === KOLÍZIA ===
 function isTouching(a, b) {
     return (
         a.x < b.x + b.width &&
@@ -196,41 +189,27 @@ function isTouching(a, b) {
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd') {
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+        player.direction = 'doprava';
     }
-
     if (e.key === 'ArrowLeft' || e.key === 'a') {
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+        player.direction = 'dolava';
     }
-
     if ((e.key === 'ArrowUp' || e.key === 'w') && player.grounded) {
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
-
-    if ((e.key === 'ArrowDown' || e.key === 's') && player.grounded) {
+    if ((e.key === 'ArrowDown' || e.key === 's')) {
         player.height = 25;
-        player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
+        player.chceSaPostavit = false;
     }
 });
 
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
     if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
-
     if (e.key === 'ArrowDown' || e.key === 's') {
-        // Tu je zmena: Postaví sa len ak je nad ním voľno
-        if (player.height === 25) {
-            if (mozeSaPostavit()) {
-                player.height = 50;
-                player.y -= 25;
-                actualnaakciacici = macky.doprava;
-            } else {
-                player.chceSaPostavit = true; 
-            }
-        }
+        player.chceSaPostavit = true; 
     }
 });
 
@@ -247,10 +226,8 @@ function animovanie() {
     bgGrad.addColorStop(1, '#010501');
     c.fillStyle = bgGrad;
     c.fillRect(0, 0, canvas.width, canvas.height);
-
     c.fillStyle = brickPattern;
     c.fillRect(0, 0, canvas.width, canvas.height);
-
     drawFog();
 
     // 2. Vykreslenie objektov
@@ -258,31 +235,20 @@ function animovanie() {
         if (p.type === 'floor') {
             c.fillStyle = '#000';
             c.fillRect(p.x, p.y, p.width, p.height);
-
             let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
             sliz.addColorStop(0, '#00ff41');
             sliz.addColorStop(1, 'transparent');
             c.fillStyle = sliz;
             c.fillRect(p.x, p.y, p.width, 3);
         }
-        else if (p.type === 'wall') {
-            drawRealServer(p);
-        }
-        else if (p.type === 'pipe_v') {
-            drawRealPipe(p, true);
-        }
-        else if (p.type === 'pipe_h') {
-            drawRealPipe(p, false);
-        }
+        else if (p.type === 'wall') drawRealServer(p);
+        else if (p.type === 'pipe_v') drawRealPipe(p, true);
+        else if (p.type === 'pipe_h') drawRealPipe(p, false);
         else if (p.type === 'valve') {
             c.fillStyle = '#400';
             c.fillRect(p.x, p.y, p.width, p.height);
             c.fillStyle = '#600';
             c.fillRect(p.x + 5, p.y + 20, 10, 10);
-        }
-        else {
-            c.fillStyle = 'transparent';
-            c.fillRect(p.x, p.y, p.width, p.height);
         }
     });
 
@@ -292,7 +258,6 @@ function animovanie() {
     else player.dx = 0;
 
     player.dx *= player.friction;
-
     player.x += player.dx;
     player.dy += gravitacia;
     player.y += player.dy;
@@ -300,56 +265,55 @@ function animovanie() {
 
     // 4. Kolízie
     platforms.forEach(platform => {
-        if (
-            player.x < platform.x + platform.width &&
-            player.x + player.width > platform.x &&
-            player.y < platform.y + platform.height &&
-            player.y + player.height > platform.y
-        ) {
-            // dopad zhora
+        if (isTouching(player, platform)) {
             if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
                 player.y = platform.y - player.height;
                 player.dy = 0;
                 player.grounded = true;
             }
-            // náraz sprava do steny
             else if (player.dx > 0 && (player.x + player.width - player.dx) <= platform.x) {
                 player.x = platform.x - player.width;
             }
-            // náraz zľava do steny
             else if (player.dx < 0 && (player.x - player.dx) >= platform.x + platform.width) {
                 player.x = platform.x + platform.width;
             }
-            // náraz hlavou zdola
             else if (player.dy < 0 && (player.y - player.dy) >= platform.y + platform.height) {
                 player.y = platform.y + platform.height;
                 player.dy = 0;
             }
-
-          
-        if (player.height === 25 && player.chceSaPostavit) {
-            if (mozeSaPostavit()) {
-                player.height = 50;
-                player.y -= 25;
-                player.actualnaakciacici = macky.doprava;
-                player.chceSaPostavit = false; 
-            }   
-}
         }
     });
+
+    // KONTROLA VSTÁVANIA (Mimo cyklu kolízií pre plynulosť)
+    if (player.chceSaPostavit && player.height === 25) {
+        if (mozeSaPostavit()) {
+            player.height = 50;
+            player.y -= 25; 
+            player.chceSaPostavit = false;
+        }
+    }
 
     // 5. PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
         window.location.href = "/SerWers/Level2/level2.html";
     }
 
-    // 6. Vykreslenie postavy
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+  // 6. Vykreslenie postavy
+  const aktImg = ziskajAktualnuTexturu();
+    
+  if (aktImg && aktImg.complete && aktImg.naturalWidth !== 0) {
+      if (player.height === 25) {
+          // PLAZENIE: 
+          // Namiesto 50x25 ju vykreslíme napr. 90x30
+          c.drawImage(aktImg, player.x - 20, player.y - 5, 100, 40);
+      } else {
+          // STÁTIE: Klasických 50x50
+          c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+      }
+  } else {
+      c.fillStyle = 'red';
+      c.fillRect(player.x, player.y, player.width, player.height);
+  }
 }
 
 animovanie();
