@@ -20,7 +20,7 @@ const Karera = {
     height: canvas.height
 };
 
-// === DEFINÍCIA PLATFORIEM ===
+//                       === DEFINÍCIA PLATFORIEM ===
 const platforms = [ 
     { x: 0, y: 500, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
     { x: 0, y: 200, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
@@ -28,7 +28,7 @@ const platforms = [
     { x: 400, y: 0, width: 100, height: 400, color: '#333', type: 'pipe_v' },
     { x: 1850, y: 500, width: 650, height: 100, color: '#333', type: 'pipe_h' },
     { x: 1850, y: 300, width: 650, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 2050, y: 400, width: 100, height: 100, color: '#333', type: 'pipe_v' },
+    { x: 2050, y: 400, width: 200, height: 100, color: '#333', type: 'pipe_v' },
     { x: 0, y: 1000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
     { x: 150, y: 1000, width: 2350, height: 50, color: '#333', type: 'wall' },
     { x: 750, y: 900, width: 250, height: 50, color: '#333', type: 'wall' },
@@ -337,69 +337,66 @@ function animovanie() {
     });
 
     // 3. Pohyb a fyzika
-    if (keys.right) player.dx += player.speed;
-    else if (keys.left) player.dx += -player.speed;
+    if (keys.right) player.dx = player.speed;
+    else if (keys.left) player.dx = -player.speed;
     else player.dx = 0;
 
-    player.dx *= player.friction;
     player.x += player.dx;
+
+    platforms.forEach(platform => {
+        if (isTouching(player, platform)) {
+            if (platform.type === 'floor') {
+                resetPlayer();
+                return;
+            }
+            // Kolízia na X (steny)
+            if (player.dx > 0) {
+                player.x = platform.x - player.width;
+            } else if (player.dx < 0) {
+                player.x = platform.x + platform.width;
+            }
+        }
+    });
+
+    // === 4. VERTIKÁLNY POHYB A KOLÍZIE (Os Y) ===
     player.dy += gravitacia;
     player.y += player.dy;
     player.grounded = false;
 
+    platforms.forEach(platform => {
+        if (isTouching(player, platform)) {
+            if (platform.type === 'floor') {
+                resetPlayer();
+                return;
+            }
+            // Kolízia na Y (podlaha a strop)
+            if (player.dy > 0) {
+                player.y = platform.y - player.height;
+                player.dy = 0;
+                player.grounded = true;
+            } else if (player.dy < 0) {
+                player.y = platform.y + platform.height;
+                player.dy = 0;
+            }
+        }
+    });
+
+    // === 5. DOPLNKOVÁ LOGIKA (Kamera a postavenie sa) ===
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
 
     if (Karera.y < 0) Karera.y = 0;
     if (Karera.x < 0) Karera.x = 0;
-    // 4. Kolízie
-    platforms.forEach(platform => {
-        if (
-            player.x < platform.x + platform.width &&
-            player.x + player.width > platform.x &&
-            player.y < platform.y + platform.height &&
-            player.y + player.height > platform.y
-        ) {
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return; // Ukončíme kontrolu pre túto platformu
-            }
 
-            // dopad zhora
-            if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
-                player.y = platform.y - player.height;
-                player.dy = 0;
-                player.grounded = true;
-            }
-
-            // náraz sprava do steny
-            else if (player.dx > 0 && (player.x + player.width - player.dx) <= platform.x) {
-                player.x = platform.x - player.width;
-            }
-
-            // náraz zľava do steny
-            else if (player.dx < 0 && (player.x - player.dx) >= platform.x + platform.width) {
-                player.x = platform.x + platform.width;
-            }
-
-            // náraz hlavou zdola
-            else if (player.dy < 0 && (player.y - player.dy) >= platform.y + platform.height) {
-                player.y = platform.y + platform.height;
-                player.dy = 0;
-            }
-            
-            if (player.height === 25 && player.chceSaPostavit) {
-                if (mozeSaPostavit()) {
-                    player.height = 50;
-                    player.y -= 25;
-                    player.actualnaakciacici = macky.doprava;
-                    player.chceSaPostavit = false;
-                }
-            }
+    if (player.height === 25 && player.chceSaPostavit) {
+        if (mozeSaPostavit()) {
+            player.height = 50;
+            player.y -= 25;
+            player.chceSaPostavit = false;
+            // Opravené: priraďujeme k premennej, ktorú používaš na kreslenie
+            actualnaakciacici = macky.doprava; 
         }
-        
-    });
-
+    }
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
         window.location.href = "SerWers/Level3/level3.html";
