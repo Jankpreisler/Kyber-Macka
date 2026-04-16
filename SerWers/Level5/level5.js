@@ -40,7 +40,7 @@ const platforms = [
     { x: 1450, y: 300, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1250, y: 200, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 2050, y: 900, width: 250, height: 50, color: 'red', type: 'trigger', id: 'tlacidlo1' },
-    { x: 0, y: 198, width: 250, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo2' },
+    { x: 0, y: 195, width: 250, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo2' },
     { x: 2150, y: 490, width: 250, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3' },
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 1000 },
@@ -250,6 +250,13 @@ window.addEventListener('keyup', (e) => {
     }
 });
 
+function nastavViditelnost(id, stav) {
+    const p = platforms.find(obj => obj.id === id);
+    if (p) {
+        p.visible = stav;
+    }
+}
+
 function resetPlayer() {
     player.x = 50;   
     player.y = 320;  
@@ -268,12 +275,6 @@ function animovanie() {
     c.save(); 
     c.translate(-Karera.x, 0 -Karera.y, 0);
 
-    function nastavViditelnost(id, stav) {
-        const p = platforms.find(obj => obj.id === id);
-        if (p) {
-            p.visible = stav; 
-        }
-    }
 
     // 1. Pozadie
     let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
@@ -363,8 +364,10 @@ function animovanie() {
 
     if (Karera.y < 0) Karera.y = 0;
     if (Karera.x < 0) Karera.x = 0;
+
     // 4. Kolízie
     platforms.forEach(platform => {
+        if (platform.visible === false) return;
         if (
             player.x < platform.x + platform.width &&
             player.x + player.width > platform.x &&
@@ -381,6 +384,7 @@ function animovanie() {
                 player.y = platform.y - player.height;
                 player.dy = 0;
                 player.grounded = true;
+
             }
 
             // náraz sprava do steny
@@ -397,6 +401,9 @@ function animovanie() {
             else if (player.dy < 0 && (player.y - player.dy) >= platform.y + platform.height) {
                 player.y = platform.y + platform.height;
                 player.dy = 0;
+            }
+            if (platform.type === 'trigger') {
+                vykonajAkciu(platform.id);
             }
         }
     });
@@ -417,6 +424,22 @@ function animovanie() {
             actualnaakciacici = macky.doprava; 
         }
     }
+
+    function vykonajAkciu(id) {
+        if (id === 'tlacidlo1') {
+            nastavViditelnost('papi', false); // Stena zmizne
+            console.log("Cesta je voľná!");
+        }
+        if (id === 'tlacidlo2') {
+            nastavViditelnost('papo', false); // Stena zmizne
+            console.log("Cesta je voľná!");
+        }
+        if (id === 'tlacidlo3') {
+            nastavViditelnost('papa', false); // Stena zmizne
+            console.log("Cesta je voľná!");
+        }
+    }
+    
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
         window.location.href = "SerWers/Level3/level3.html";
