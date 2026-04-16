@@ -39,9 +39,9 @@ const platforms = [
     { x: 1550, y: 400, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1450, y: 300, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1250, y: 200, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 2050, y: 900, width: 250, height: 50, color: 'red', type: 'trigger', id: 'tlacidlo1' },
-    { x: 0, y: 195, width: 250, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo2' },
-    { x: 2150, y: 490, width: 250, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3' },
+    { x: 2050, y: 980, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo1' },
+    { x: 0, y: 195, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo2' },
+    { x: 2150, y: 490, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo3' },
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 1000 },
     { x: 2500, y: 0, width: 1, height: 1000 },
@@ -68,7 +68,7 @@ let player = {
     height: 50,
     dx: 0,
     dy: 0,
-    speed: 5,
+    speed: 3,
     jumpForce: 10,
     grounded: false,
     friction: 0.5
@@ -156,6 +156,8 @@ function drawRealServer(p) {
 
     c.restore();
 }
+
+
 
 function drawFog() {
     c.save();
@@ -284,7 +286,7 @@ function animovanie() {
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 2200, canvas.height); 
+    c.fillRect(0, 0, 30000, 30000); 
 
     drawFog();
 
