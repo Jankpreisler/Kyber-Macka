@@ -8,7 +8,7 @@ const gravitacia = 0.4;
 
 const exitZone = {
     x: 0,
-    y: 150,
+    y: 450,
     width: 60,
     height: 80
 };
@@ -24,21 +24,24 @@ const Karera = {
 const platforms = [ 
     { x: 0, y: 500, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
     { x: 0, y: 200, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 400, y: 200, width: 100, height: 400, color: '#333', type: 'pipe_v' },
-    { x: 400, y: 0, width: 100, height: 400, color: '#333', type: 'pipe_v' },
+    { x: 400, y: 200, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papa', visible: true},
+    { x: 400, y: 0, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papi', visible: true},
     { x: 1850, y: 500, width: 650, height: 100, color: '#333', type: 'pipe_h' },
     { x: 1850, y: 300, width: 650, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 2050, y: 400, width: 100, height: 100, color: '#333', type: 'pipe_v' },
+    { x: 2050, y: 400, width: 100, height: 100, color: '#333', type: 'pipe_v',id: 'papo', visible: true },
     { x: 0, y: 1000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
     { x: 150, y: 1000, width: 2350, height: 50, color: '#333', type: 'wall' },
     { x: 750, y: 900, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 950, y: 800, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1050, y: 700, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1350, y: 600, width: 450, height: 50, color: '#333', type: 'wall' },
-   { x: 1450, y: 500, width: 250, height: 50, color: '#333', type: 'wall' },
+    { x: 1450, y: 500, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1550, y: 400, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1450, y: 300, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1250, y: 200, width: 250, height: 50, color: '#333', type: 'wall' },
+    { x: 2050, y: 900, width: 250, height: 50, color: 'red', type: 'trigger', id: 'tlacidlo1' },
+    { x: 0, y: 198, width: 250, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo2' },
+    { x: 2150, y: 490, width: 250, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3' },
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 1000 },
     { x: 2500, y: 0, width: 1, height: 1000 },
@@ -55,7 +58,7 @@ macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png';
 
 let actualnaakciacici = macky.dolava;
-    const keys = { right: false, left: false }; 
+const keys = { right: false, left: false }; 
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
@@ -255,7 +258,6 @@ function resetPlayer() {
     player.height = 50; 
     actualnaakciacici = macky.dolava;
 }
-
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
     requestAnimationFrame(animovanie);
@@ -265,6 +267,13 @@ function animovanie() {
 
     c.save(); 
     c.translate(-Karera.x, 0 -Karera.y, 0);
+
+    function nastavViditelnost(id, stav) {
+        const p = platforms.find(obj => obj.id === id);
+        if (p) {
+            p.visible = stav; 
+        }
+    }
 
     // 1. Pozadie
     let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
@@ -280,6 +289,7 @@ function animovanie() {
 
     // 2. Vykreslenie objektov
     platforms.forEach(p => {
+        if (p.visible === false) return;
         if (p.type === 'floor') {
             c.fillStyle = '#000';
             c.fillRect(p.x, p.y, p.width, p.height);
@@ -360,6 +370,7 @@ function animovanie() {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
+            if (platform.visible === false) return;
             if (platform.type === 'floor') {
                 resetPlayer();
                 return; // Ukončíme kontrolu pre túto platformu
@@ -370,6 +381,10 @@ function animovanie() {
                 player.y = platform.y - player.height;
                 player.dy = 0;
                 player.grounded = true;
+            }
+            if (platform.type === 'trigger') {
+                vykonajAkciu(platform.id);
+                console.log("Som tu asi");
             }
 
             // náraz sprava do steny
@@ -395,12 +410,27 @@ function animovanie() {
                     player.actualnaakciacici = macky.doprava;
                     player.chceSaPostavit = false;
                 }
-            }
+            } 
         }
         
     });
 
-//PRECHOD DO ĎALŠIEHO LEVELU
+    function vykonajAkciu(id) {
+        if (id === 'tlacidlo1') {
+            console.log("Stojíš na tlačidle! Otváram dvere...");
+            nastavViditelnost('papi', false);
+        }
+        if (id === 'tlacidlo2') {
+            console.log("Stojíš na tlačidle! Otváram dvere...");
+            nastavViditelnost('papo', false);
+        }
+        if (id === 'tlacidlo3') {
+            console.log("Stojíš na tlačidle! Otváram dvere...");
+            nastavViditelnost('papa', false);
+        }
+    }
+
+    //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
         window.location.href = "SerWers/Level3/level3.html";
     }
