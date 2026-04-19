@@ -5,27 +5,25 @@ canvas.width = 1300;
 canvas.height = 600;
 
 const gravitacia = 0.4;
-const keys = { right: false, left: false, interact: false };
-let time = 0;
+const keys = { right: false, left: false };
 
 // === NAČÍTANIE OBRÁZKOV ===
 const macky = {
     dolava: new Image(),
     doprava: new Image(),
     plazeniedoprava: new Image(),
-    npc: new Image() // Miesto pre obrázok NPC
+    npc: new Image()
 };
 macky.dolava.src = 'asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = 'asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = 'asseti/Plaziaca_macka.png';
-macky.npc.src = 'asseti/npc_robot.png'; // Ak nemáš obrázok, vykreslí sa farebný štvorec
+macky.npc.src = 'asseti/npc_robot.png';
 
 // === DEFINÍCIA LEVELU ===
 const currentLevel = {
     playerStart: { x: 50, y: 400 },
     exitZone: { x: 1180, y: 40, width: 100, height: 120 },
     
-    // NOVÉ: Definícia NPC
     npc: {
         x: 250,
         y: 450,
@@ -33,8 +31,18 @@ const currentLevel = {
         height: 50,
         color: '#ff00ff',
         name: "PROTO-TYPE 01",
-        dialog: "Mňau... Teda, PÍP! Pozor na tú kyselinu dole!",
-        showDialog: false
+        // DIALÓG AKO POLE OBJEKTOV (striedanie postáv)
+        dialogues: [
+            { hovori: "PROTO-TYPE 01", text: "PÍP! Detekujem organickú formu života. Kto si?" },
+            { hovori: "MAČKA", text: "Mňau! Som kyber-mačka a hľadám cestu von." },
+            { hovori: "PROTO-TYPE 01", text: "Cesta von vedie cez kyselinové jazero. Je to nebezpečné." },
+            { hovori: "MAČKA", text: "Neboj sa, viem dobre skákať. Máš nejakú radu?" },
+            { hovori: "PROTO-TYPE 01", text: "Použi pohyblivé plošiny a hlavne nespadni do zelenej vody!" },
+            { hovori: "MAČKA", text: "Rozumiem. Idem na to!" }
+        ],
+        currentLine: 0,
+        isTalking: false,
+        canInteract: false
     },
 
     platforms: [
@@ -77,14 +85,18 @@ let player = {
     },
 
     update() {
-        if (keys.right) {
-            this.dx = this.speed;
-            this.img = (this.height === 25) ? macky.plazeniedoprava : macky.dolava;
-        } else if (keys.left) {
-            this.dx = -this.speed;
-            this.img = (this.height === 25) ? macky.plazeniedoprava : macky.doprava;
-        } else {
+        if (currentLevel.npc.isTalking) {
             this.dx = 0;
+        } else {
+            if (keys.right) {
+                this.dx = this.speed;
+                this.img = (this.height === 25) ? macky.plazeniedoprava : macky.dolava;
+            } else if (keys.left) {
+                this.dx = -this.speed;
+                this.img = (this.height === 25) ? macky.plazeniedoprava : macky.doprava;
+            } else {
+                this.dx = 0;
+            }
         }
 
         this.x += this.dx;
@@ -103,7 +115,7 @@ let player = {
                         this.y = p.y - this.height;
                         this.dy = 0;
                         this.grounded = true;
-                        if (p.type === 'moving') this.x += p.speed * p.direction;
+                        if (p.type === 'moving' && !currentLevel.npc.isTalking) this.x += p.speed * p.direction;
                     } 
                     else if (this.dx > 0 && (this.x + this.width - this.dx) <= p.x) this.x = p.x - this.width;
                     else if (this.dx < 0 && (this.x - this.dx) >= p.x + p.width) this.x = p.x + p.width;
@@ -118,64 +130,82 @@ let player = {
             this.chceSaPostavit = false;
         }
 
-        // Interakcia s NPC (kontrola vzdialenosti)
         const npc = currentLevel.npc;
-        let dist = Math.abs(this.x - npc.x);
-        npc.showDialog = (dist < 100); 
+        let dist = Math.sqrt((this.x - npc.x)**2 + (this.y - npc.y)**2);
+        npc.canInteract = (dist < 120); 
+        if (!npc.canInteract) npc.isTalking = false;
     },
 
     draw() {
+        // Mačka sa pri hovorení jemne trasie
+        let shake = (currentLevel.npc.isTalking) ? Math.sin(Date.now() * 0.2) * 2 : 0;
         if (this.img && this.img.complete && this.img.naturalWidth !== 0) {
-            c.drawImage(this.img, this.x, this.y, this.width, this.height);
+            c.drawImage(this.img, this.x, this.y + shake, this.width, this.height);
         } else {
             c.fillStyle = 'cyan';
-            c.fillRect(this.x, this.y, this.width, this.height);
+            c.fillRect(this.x, this.y + shake, this.width, this.height);
         }
     }
 };
-
-function drawRopes(p) {
-    c.strokeStyle = '#555';
-    c.lineWidth = 2;
-    c.beginPath();
-    c.moveTo(p.x + 20, p.y); c.lineTo(p.x + 35, 0);
-    c.moveTo(p.x + p.width - 20, p.y); c.lineTo(p.x + p.width - 35, 0);
-    c.stroke();
-}
 
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
     if (e.key === 'd' || e.key === 'ArrowRight') keys.right = true;
     if (e.key === 'a' || e.key === 'ArrowLeft') keys.left = true;
-    if ((e.key === 'w' || e.key === 'ArrowUp') && player.grounded) {
+    if ((e.key === 'w' || e.key === 'ArrowUp') && player.grounded && !currentLevel.npc.isTalking) {
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
     if (e.key === 's' || e.key === 'ArrowDown') player.height = 25;
+
+    // Dialóg
+    if (e.key.toLowerCase() === 'e' && currentLevel.npc.canInteract) {
+        const n = currentLevel.npc;
+        
+        // Otočenie mačky k robotovi
+        if (player.x < n.x) player.img = macky.dolava;
+        else player.img = macky.doprava;
+
+        if (!n.isTalking) {
+            n.isTalking = true;
+            n.currentLine = 0;
+        } else {
+            n.currentLine++;
+            if (n.currentLine >= n.dialogues.length) {
+                n.isTalking = false;
+            }
+        }
+    }
 });
 
 window.addEventListener('keyup', (e) => {
     if (e.key === 'd' || e.key === 'ArrowRight') keys.right = false;
     if (e.key === 'a' || e.key === 'ArrowLeft') keys.left = false;
     if (e.key === 's' || e.key === 'ArrowDown') player.chceSaPostavit = true;
+
+    if (e.key.toLowerCase() === 'e' && npc.canInteract) {
+        if (!npc.isTalking) {
+            npc.isTalking = true;
+            npc.currentLine = 0;
+        } else {
+            npc.currentLine++;
+            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
+        }
+    }
 });
 
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
     requestAnimationFrame(animovanie);
-    time += 0.01;
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Pozadie
     c.fillStyle = '#0a0a0a';
     c.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Platformy
     currentLevel.platforms.forEach(p => {
         if (p.type === 'moving') {
             p.x += p.speed * p.direction;
             if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
-            if (p.hasRope) drawRopes(p);
         }
         if (p.type === 'moving_v') {
             p.y += p.speed * p.direction;
@@ -185,7 +215,12 @@ function animovanie() {
         c.fillRect(p.x, p.y, p.width, p.height);
     });
 
-    // === VYKRESLENIE NPC ===
+    if (macky.npc.complete) {
+        c.drawImage(macky.npc, npc.x, npc.y, npc.width, npc.height);
+    } else {
+        c.fillStyle = 'purple'; c.fillRect(npc.x, npc.y, npc.width, npc.height);
+    }
+
     const n = currentLevel.npc;
     if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
         c.drawImage(macky.npc, n.x, n.y, n.width, n.height);
@@ -194,42 +229,47 @@ function animovanie() {
         c.fillRect(n.x, n.y, n.width, n.height);
     }
 
-    // Bublina s dialógom
-    if (n.showDialog) {
-        c.fillStyle = "rgba(0, 0, 0, 0.8)";
-        c.strokeStyle = "#00ffff";
-        c.lineWidth = 2;
+    // Výkričník nad mačkou
+    if (n.canInteract && !n.isTalking) {
+        c.fillStyle = "#ffff00";
+        c.font = "bold 26px Arial";
+        c.fillText("!", player.x + player.width/2 - 5, player.y - 15);
+    }
+
+    // === VYLEPŠENÝ DIALÓGOVÝ SYSTÉM ===
+    if (n.isTalking) {
+        const line = n.dialogues[n.currentLine];
+        const isCat = (line.hovori === "MAČKA");
+
+        // Pozadie boxu
+        c.fillStyle = "rgba(10, 10, 10, 0.95)";
+        c.strokeStyle = isCat ? "#00ff00" : "#00ffff"; // Mačka má zelený okraj, robot modrý
+        c.lineWidth = 3;
         c.beginPath();
-        c.roundRect(n.x - 50, n.y - 70, 300, 50, 10);
+        c.roundRect(250, 460, 800, 110, 15);
         c.fill();
         c.stroke();
 
-        c.fillStyle = "#00ffff";
-        c.font = "bold 12px Arial";
-        c.fillText(n.name, n.x - 40, n.y - 55);
+        // Meno hovoriaceho
+        c.fillStyle = isCat ? "#00ff00" : "#00ffff";
+        c.font = "bold 18px Courier New";
+        c.fillText(line.hovori, 280, 490);
+        
+        // Text repliky
         c.fillStyle = "white";
-        c.font = "14px Arial";
-        c.fillText(n.dialog, n.x - 40, n.y - 35);
+        c.font = "20px Arial";
+        c.fillText(line.text, 280, 525);
+
+        c.fillStyle = "#666";
+        c.font = "12px Arial";
+        c.fillText("Stlač [E]...", 1000, 555);
     }
 
-    // Oranžový cieľ
     c.fillStyle = 'orange';
     c.fillRect(currentLevel.exitZone.x, currentLevel.exitZone.y, currentLevel.exitZone.width, currentLevel.exitZone.height);
-    c.fillStyle = 'black';
-    c.font = "bold 16px Arial";
-    c.fillText("CIEĽ", currentLevel.exitZone.x + 30, currentLevel.exitZone.y + 65);
 
     player.update();
     player.draw();
-
-    // Výhra
-    if (player.x + player.width > currentLevel.exitZone.x && 
-        player.x < currentLevel.exitZone.x + currentLevel.exitZone.width &&
-        player.y < currentLevel.exitZone.y + currentLevel.exitZone.height) {
-        c.fillStyle = "white";
-        c.font = "40px Arial";
-        c.fillText("LEVEL COMPLETE!", 450, 300);
-    }
 }
 
 animovanie();

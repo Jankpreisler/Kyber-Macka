@@ -15,54 +15,20 @@ const exitZone = {
 
 
 // === DEFINÍCIA PLATFORIEM ===
-const platforms = [    
-    { x: 0, y: 0, width: 1300, height: 1 }, // Border
-    { x: 0, y: 0, width: 1, height: 600 }, // Border
-    { x: 1300, y: 0, width: 1, height: 600 }, // Border
-    
-    { x: 140, y: 2, width: 11250, height: 50, color: '#333', type: 'pipe_h' },
-    { x: 140, y: 500, width: 11250, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 140, y: 370, width: 11250, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 300, y: 590, width: 1100, height: 20, color: '#050505', type: 'floor' }, // kill virus
-    { x: 0, y: 250, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
-    { x: 150, y: 370, width: 150, height: 270, color: '#333', type: 'pipe_v' }, // 1 skok
-    { x: 400, y: 370, width: 150, height: 270, color: '#333', type: 'pipe_v' }, //2. skok
-    { x: 0, y: 2, width: 150, height: 170, color: '#333', type: 'pipe_v' },
-    { x: 650, y: 370, width: 150, height: 270, color: '#333', type: 'pipe_v' },
-    { x: 900, y: 370, width: 150, height: 270, color: '#333', type: 'pipe_v' },
-    { x: 1150, y: 370, width: 150, height: 270, color: '#333', type: 'pipe_v' },
+const platforms = [ 
+    { x: 0, y: 2, width: 11250, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 0, y: 590, width: 2900, height: 20, color: '#050505', type: 'floor' }, // kill virus
+    { x: 0, y: 0, width: 1300, height: 1 },
+    { x: 0, y: 0, width: 1, height: 600 },
+    { x: 1300, y: 0, width: 1, height: 600 },
+    { x: 0, y: 370, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 200, y: 500, width: 200, height: 20, color: '#333', type: 'pipe_h',startX: 200, range: 150, speed: 1.8, direction: 1, hasRope: false, },
+    { x: 700, y: 450, width: 230, height: 20, color: '#333', type: 'pipe_h',startX: 598, range: 250, speed: 2.8, direction: 1, hasRope: false, },
+    { x: 1150, y: 370, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 620, y: 500, width: 50, height: 50, color: '#333', type: 'valve', 
+            startY: 200, range: 300, speed: 2.5, direction: 1, }, 
 ];
 
-const npc   = {
-        x: 1050,
-        y: 315,
-        width: 50,
-        height: 50,
-        color: '#ff00ff',
-        name: "Robo mouse",
-        
-        dialogues: [
-            { hovori: "MAČKA", text: "Mňau?" },
-            { hovori: "Robo mouse", text: "AAAAAAAA" },
-            { hovori: "MAČKA", text: "Cheeeeeee" },
-            { hovori: "Robo mouse", text: "Eeeee, prepac, ale kto si?" },
-            { hovori: "MAČKA", text: "Mňau!" },
-            { hovori: "Josi", text: "Ja som Joši, ale... Ano, uz asi viem kto si. Si jeden z nas. Slobodnych" },
-            { hovori: "Josi", text: "Ale. Nieco je na tebe ine." },
-            { hovori: "MAČKA", text: "Mnau?" },
-            { hovori: "Josi", text: "Samozrejme okrem toho ze nevies rozpravat." },
-            { hovori: "Josi", text: "Ale neviem co. Posobis dokonalejsie nez my tu dole." },
-            { hovori: "MAČKA", text: "Mnaaaaaaaauuuuuuuuu." },
-            { hovori: "Josi", text: "Kazdopadne ja uz ti nepomozem. Moj koniec sa bliiiiizi" },
-            { hovori: "Josi", text: "Najdi Dr. Rokwela. Je v pipe...." },
-            { hovori: "Josi", text: "Meste. On ti pomoze....." },
-            { hovori: "MAČKA", text: "Mnau?" },
-            { hovori: "Josi", text: "....." },
-        ],
-        currentLine: 0,
-        isTalking: false,
-        canInteract: false
-    };
 
 function drawRopes(p) {
     c.strokeStyle = '#555';
@@ -206,11 +172,11 @@ function drawFog() {
 }
 
 function mozeSaPostavit() {
-   
+    // Simulujeme pozíciu a výšku po postavení
     const buducaVyska = 50;
     const buduceY = player.y - 25;
 
-
+    // Skontrolujeme kolíziu s každou platformou pre túto novú polohu
     for (let platform of platforms) {
         if (
             player.x < platform.x + platform.width &&
@@ -218,7 +184,7 @@ function mozeSaPostavit() {
             buduceY < platform.y + platform.height &&
             buduceY + buducaVyska > platform.y
         ) {
-            return false; // nemôže sa postaviť
+            return false; // Našli sme prekážku, nemôže sa postaviť
         }
     }
     return true; // Miesto je voľné
@@ -257,15 +223,6 @@ window.addEventListener('keydown', (e) => {
         actualnaakciacici = macky.plazeniedoprava;
     }
 
-    if (e.key.toLowerCase() === 'e' && npc.canInteract) {
-        if (!npc.isTalking) {
-            npc.isTalking = true;
-            npc.currentLine = 0;
-        } else {
-            npc.currentLine++;
-            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
-        }
-    }
 });
 
 canvas.addEventListener('click', (e) => {
@@ -300,10 +257,10 @@ window.addEventListener('keyup', (e) => {
 
 function resetPlayer() {
     player.x = 50;   
-    player.y = 475;  
+    player.y = 320;  
     player.dx = 0;   
     player.dy = 0;   
-    player.height = 200; 
+    player.height = 50; 
     actualnaakciacici = macky.dolava;
 }
 
@@ -367,28 +324,23 @@ function animovanie() {
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
+        if (p.type === 'valve') {
+            // Vertikálny pohyb pre ventil/plošinu
+            p.y += p.speed * p.direction;
+            // Ak narazí na hranicu rozsahu (startY + range), otočí smer
+            if (p.y > p.startY + p.range || p.y < p.startY) {
+                p.direction *= -1;
+            }
+        } else {
+            // Horizontálny pohyb pre ostatné plošiny
             p.x += p.speed * p.direction;
-            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
-            if (p.hasRope) drawRopes(p);
-        } 
+            if (p.x > p.startX + p.range || p.x < p.startX) {
+                p.direction *= -1;
+            }
+        }
+    }
     });
 
-   if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
-        c.drawImage(macky.npc, npc.x, npc.y, npc.width, npc.height);
-    } else {
-        c.fillStyle = npc.color; 
-        c.fillRect(npc.x, npc.y, npc.width, npc.height);
-    }
-
-    // 4. Detekcia a interakcia
-    let dist = Math.sqrt((player.x - npc.x)**2 + (player.y - npc.y)**2);
-    npc.canInteract = dist < 120;
-
-    if (npc.canInteract && !npc.isTalking) {
-        c.fillStyle = "#ffff00"; 
-        c.font = "bold 15px Arial";
-        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20); 
-    }
 
     // 3. Pohyb a fyzika
     if (keys.right) player.dx += player.speed;
@@ -400,36 +352,6 @@ function animovanie() {
     player.dy += gravitacia;
     player.y += player.dy;
     player.grounded = false;
-
-    // box na hovorenie pre cici
-
-    if (npc.isTalking) {
-        const dialog = npc.dialogues[npc.currentLine];
-        const isCat = dialog.hovori === "MAČKA";
-
-        // Box
-        c.fillStyle = "rgba(0, 0, 0, 0.85)";
-        c.strokeStyle = isCat ? "#00ff41" : "#ff00ff";
-        c.lineWidth = 3;
-        c.beginPath();
-        c.roundRect(250, 450, 800, 110, 15);
-        c.fill();
-        c.stroke();
-
-        // Meno hovoriaceho
-        c.fillStyle = isCat ? "#00ff41" : "#ff00ff";
-        c.font = "bold 20px Courier New";
-        c.fillText(dialog.hovori, 280, 480);
-
-        // Text
-        c.fillStyle = "white";
-        c.font = "22px Arial";
-        c.fillText(dialog.text, 280, 520);
-
-        c.fillStyle = "#666";
-        c.font = "14px Arial";
-        c.fillText("Clikni pre pokračovanie...", 850, 545);
-    }
 
     // 4. Kolízie
     platforms.forEach(platform => {
@@ -481,7 +403,7 @@ function animovanie() {
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level4/level4.html";
+        window.location.href = "/SerWers/RokvelLabak/Rokvel.html";
     }
 
     // 6. Vykreslenie postavy
