@@ -8,7 +8,7 @@ const gravitacia = 0.4;
 
 const exitZone = {
     x: 0,
-    y: 450,
+    y: 850,
     width: 60,
     height: 80
 };
@@ -22,13 +22,26 @@ const Karera = {
 
 //                       === DEFINÍCIA PLATFORIEM ===
 const platforms = [ 
-    { x: 2200, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 2350, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 2500, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 2650, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 2800, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 2950, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 3100, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 0, y: 2000, width: 2250, height: 150, color: '#333', type: 'pipe_h' }, 
+    { x: 2200, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 2350, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 2500, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 2650, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 2800, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 2950, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' },
+    { x: 2800, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 500, y: 1790, width: 3150, height: 100, color: '#333', type: 'pipe_h' }, 
+    { x: 0, y: 1900, width: 350, height: 100, color: '#333', type: 'pipe_h' }, 
+    { x: 0, y: 1700, width: 350, height: 100, color: '#333', type: 'pipe_h' }, 
+    { x: 500, y: 1590, width: 3150, height: 100, color: '#333', type: 'pipe_h' }, 
+    { x: 0, y: 1500, width: 350, height: 100, color: '#333', type: 'pipe_h' }, 
+    { x: 500, y: 1390, width: 3150, height: 100, color: '#333', type: 'pipe_h' }, 
+    { x: 0, y: 1300, width: 350, height: 100, color: '#333', type: 'pipe_h' },
+    { x: 500, y: 1190, width: 3150, height: 100, color: '#333', type: 'pipe_h' },  
+    { x: 0, y: 1100, width: 350, height: 100, color: '#333', type: 'pipe_h' },
+    { x: 500, y: 1000, width: 3150, height: 100, color: '#333', type: 'pipe_h' },  
+    { x: 0, y: 900, width: 350, height: 100, color: '#333', type: 'pipe_h' },
+    { x: 0, y: 700, width: 3150, height: 100, color: '#333', type: 'pipe_h' }, 
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 2000 },
     { x: 2500, y: 0, width: 1, height: 2000 },
@@ -44,12 +57,12 @@ macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png';
 
-let actualnaakciacici = macky.dolava;
+let actualnaakciacici = macky.doprava;
 const keys = { right: false, left: false }; 
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 2230,
+    x: 2200,
     y: 1950,
     width: 50,
     height: 50,
