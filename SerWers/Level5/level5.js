@@ -68,7 +68,7 @@ let player = {
     height: 50,
     dx: 0,
     dy: 0,
-    speed: 3,
+    speed: 4,
     jumpForce: 10,
     grounded: false,
     friction: 0.5
@@ -156,8 +156,6 @@ function drawRealServer(p) {
 
     c.restore();
 }
-
-
 
 function drawFog() {
     c.save();
