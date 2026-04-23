@@ -22,29 +22,16 @@ const Karera = {
 
 //                       === DEFINÍCIA PLATFORIEM ===
 const platforms = [ 
-    { x: 0, y: 500, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 0, y: 200, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 400, y: 200, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papa', visible: true},
-    { x: 400, y: 0, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papi', visible: true},
-    { x: 1850, y: 500, width: 650, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 1850, y: 300, width: 650, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 2050, y: 400, width: 100, height: 100, color: '#333', type: 'pipe_v',id: 'papo', visible: true },
-    { x: 0, y: 1000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 150, y: 1000, width: 2350, height: 50, color: '#333', type: 'wall' },
-    { x: 750, y: 900, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 950, y: 800, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 1050, y: 700, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 1350, y: 600, width: 450, height: 50, color: '#333', type: 'wall' },
-    { x: 1450, y: 500, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 1550, y: 400, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 1450, y: 300, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 1250, y: 200, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 2050, y: 980, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo1' },
-    { x: 0, y: 195, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo2' },
-    { x: 2150, y: 490, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo3' },
+    { x: 2200, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 2350, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 2500, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 2650, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 2800, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 2950, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 3100, y: 2000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
     { x: 0, y: 0, width: 1300, height: 1 },
-    { x: 0, y: 0, width: 1, height: 1000 },
-    { x: 2500, y: 0, width: 1, height: 1000 },
+    { x: 0, y: 0, width: 1, height: 2000 },
+    { x: 2500, y: 0, width: 1, height: 2000 },
 ];
 
 const macky = {
@@ -62,8 +49,8 @@ const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 50,
-    y: 950,
+    x: 2230,
+    y: 1950,
     width: 50,
     height: 50,
     dx: 0,
