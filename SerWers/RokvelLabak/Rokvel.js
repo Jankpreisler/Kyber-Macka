@@ -7,8 +7,8 @@ canvas.height = 600;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 2200,
-    y: 150,
+    x: 2100,
+    y: 200,
     width: 60,
     height: 80
 };
@@ -241,6 +241,8 @@ function mozeSaPostavit() {
     }
     return true; // Miesto je voľné
 }
+
+
 
 // === KOLÍZIA ===
 function isTouching(a, b) {
@@ -487,7 +489,7 @@ function animovanie() {
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "SerWers/Level5/level5.html";
+        window.location.href = "/SerWers/Level5/level5.html";
     }
 
     // 6. Vykreslenie postavy
