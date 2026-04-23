@@ -20,9 +20,9 @@ const Karera = {
     height: canvas.height
 };
 
-//                       === DEFINÍCIA PLATFORIEM ===
+//                  === DEFINÍCIA PLATFORIEM ===
 const platforms = [
-    /*  { x: 0, y: 500, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
+    /* { x: 0, y: 500, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
       { x: 0, y: 200, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
       { x: 400, y: 200, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papa', visible: true},
       { x: 400, y: 0, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papi', visible: true},
@@ -32,7 +32,7 @@ const platforms = [
   
       */
 
-      { x: 0, y: 1300, width: 2000, height: 20, color: '#050505', type: 'floor' }, //kill
+    { x: 0, y: 1300, width: 2250, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 0, y: 1000, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 200, y: 1200, width: 200, height: 100, color: '#333', type: 'pipe_v', range: 400, id: 'vetrak' }, //vetrak c1
@@ -41,9 +41,11 @@ const platforms = [
     { x: 650, y: 1000, width: 150, height: 300, color: '#333', type: 'pipe_v' },
 
 
-  //   { x: 0, y: 1000, width: 600, height: 300, color: '#333', type: 'pipe_v' }, //toto potom vymazat (len na testing)
-    { x: 800, y: 1280, width: 300, height: 300, color: '#333', type: 'pipe_v' },
+ { x: 0, y: 1000, width: 600, height: 300, color: '#333', type: 'pipe_v' }, //toto potom vymazat (len na testing)
 
+
+
+    { x: 800, y: 1280, width: 300, height: 300, color: '#333', type: 'pipe_v' },
     { x: 800, y: 1230, width: 50, height: 50, color: '#333', type: 'pipe_v' }, //BUTTON (janko urobi)
     { x: 1250, y: 1200, width: 150, height: 100, color: '#333', type: 'pipe_v' },
     { x: 1500, y: 1080, width: 150, height: 90, color: '#333', type: 'pipe_v' },
@@ -57,7 +59,7 @@ const platforms = [
     { x: 2000, y: 381, width: 500, height: 90, color: '#333', type: 'pipe_v' },
     { x: 2500, y: -30, width: 150, height: 500, color: '#333', type: 'pipe_v' },
 
-
+    { x: 2100, y: 470, width: 150, height: 830, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 1.2 } //vetrak ktory fuka dolava
 
 
 
@@ -106,7 +108,7 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction: 0.5
+    friction: 0.9 // ZMENENÉ pre plynulosť
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -385,11 +387,15 @@ function animovanie() {
     });
 
     // 3. Pohyb a fyzika
-    if (keys.right) player.dx += player.speed;
-    else if (keys.left) player.dx += -player.speed;
-    else player.dx = 0;
+    if (keys.right) player.dx += 0.8; // ZMENENÉ na zrýchlenie
+    else if (keys.left) player.dx -= 0.8; // ZMENENÉ na zrýchlenie
 
-    player.dx *= player.friction;
+    player.dx *= player.friction; // Aplikácia trenia (0.9 namiesto natvrdo 0)
+    
+    // Limit maximálnej rýchlosti hráča
+    if (player.dx > player.speed) player.dx = player.speed;
+    if (player.dx < -player.speed) player.dx = -player.speed;
+
     player.x += player.dx;
     player.dy += gravitacia;
     player.y += player.dy;
@@ -404,57 +410,106 @@ function animovanie() {
 
 
 
-   // --- LOGIKA A VIZUÁL VETRÁKA ---
-platforms.forEach(p => {
-    if (p.id === 'vetrak') {
-        //  FYZIKA 
-        if (
-            player.x + player.width > p.x &&
-            player.x < p.x + p.width &&
-            player.y + player.height > p.y - p.range &&
-            player.y + player.height <= p.y
-        ) {
-            let vzdialenostOdVetráka = p.y - (player.y + player.height);
-            if (vzdialenostOdVetráka > p.range * 0.8) {
-                player.dy -= 0.35; // Vznášanie sa hore
-            } else {
-                player.dy -= 0.8;    // prúd hore
+    // --- LOGIKA A VIZUÁL VETRÁKA ---
+    platforms.forEach(p => {
+
+        // ===== PRVÝ VETRÁK (HORE) =====
+        if (p.id === 'vetrak') {
+            if (
+                player.x + player.width > p.x &&
+                player.x < p.x + p.width &&
+                player.y + player.height > p.y - p.range &&
+                player.y + player.height <= p.y
+            ) {
+                let vzdialenostOdVetráka = p.y - (player.y + player.height);
+                if (vzdialenostOdVetráka > p.range * 0.8) {
+                    player.dy -= 0.35;
+                } else {
+                    player.dy -= 0.8;
+                }
+                if (player.dy < -5) player.dy = -5;
             }
-            if (player.dy < -5) player.dy = -5;
+
+            if (Math.random() > 0.6) {
+                windParticles.push({
+                    x: p.x + Math.random() * p.width,
+                    y: p.y,
+                    speed: Math.random() * 5 + 3,
+                    opacity: 1,
+                    maxHeight: p.y - p.range
+                });
+            }
         }
 
-        //  GENEROVANIE VZDUCHU
-        if (Math.random() > 0.6) { // Čím nižšie číslo, tým viac častíc
-            windParticles.push({
-                x: p.x + Math.random() * p.width,
-                y: p.y,
-                speed: Math.random() * 5 + 3,
-                opacity: 1,
-                maxHeight: p.y - p.range
-            });
+       // ===== DRUHÝ VETRÁK (DOĽAVA) =====
+if (p.id === 'vetrak2' && p.zapnuty) {
+
+    const vnutri =
+        player.y + player.height > p.y &&
+        player.y < p.y + p.height &&
+        player.x < p.x &&
+        player.x + player.width > p.x - p.range;
+
+    if (vnutri) {
+        player.dx -= 0.67; 
+    }
+
+    // Častice - UPRAVENÉ ŠPAWNOVANIE
+    if (Math.random() > 0.4) { // Trochu sme zvýšili šancu, aby bol hustejší
+        windParticles.push({
+            // TOTO JE KĽÚČ: x nebude len p.x, ale náhodný bod v celom dosahu
+            x: p.x - Math.random() * p.range, 
+            y: p.y + Math.random() * p.height,
+            speed: Math.random() * 5 + 2,
+            opacity: Math.random() * 0.5 + 0.5, // Náhodná priehľadnosť pre prirodzenejší vzhľad
+            direction: 'left',
+            minX: p.x - p.range
+        });
+    }
+}
+
+    });
+
+
+    // ⬇⬇⬇ DRUHÁ ZMENA – ČASTICE ⬇⬇⬇
+
+    c.save();
+    windParticles.forEach((part, index) => {
+
+        // smer
+        if (part.direction === 'left') {
+            part.x -= part.speed;
+        } else {
+            part.y -= part.speed;
         }
-    }
-});
 
+        part.opacity -= 0.015;
 
-c.save();
-windParticles.forEach((part, index) => {
-    part.y -= part.speed;       // Pohyb hore
-    part.opacity -= 0.015;      // Postupné blednutie
+        c.strokeStyle = `rgba(255, 0, 0, ${part.opacity})`;
+        c.lineWidth = 2;
+        c.beginPath();
 
-    c.strokeStyle = `rgba(255, 0, 0, ${part.opacity})`; // farba
-    c.lineWidth = 2;
-    c.beginPath();
-    c.moveTo(part.x, part.y);
-    c.lineTo(part.x, part.y + 15); // Dĺžka čiarky
-    c.stroke();
+        if (part.direction === 'left') {
+            c.moveTo(part.x, part.y);
+            c.lineTo(part.x + 15, part.y);
+        } else {
+            c.moveTo(part.x, part.y);
+            c.lineTo(part.x, part.y + 15);
+        }
 
-    // Odstránenie častice z poľa, ak je neviditeľná alebo príliš vysoko
-    if (part.opacity <= 0 || part.y < part.maxHeight) {
-        windParticles.splice(index, 1);
-    }
-});
-c.restore();
+        c.stroke();
+
+        if (
+            part.opacity <= 0 ||
+            (part.direction === 'left' && part.x < part.minX) ||
+            (!part.direction && part.y < part.maxHeight)
+        ) {
+            windParticles.splice(index, 1);
+        }
+
+    });
+    c.restore();
+
 
 
 
@@ -484,11 +539,13 @@ c.restore();
             // náraz sprava do steny
             else if (player.dx > 0 && (player.x + player.width - player.dx) <= platform.x) {
                 player.x = platform.x - player.width;
+                player.dx = 0; // Pridané pre stabilitu
             }
 
             // náraz zľava do steny
             else if (player.dx < 0 && (player.x - player.dx) >= platform.x + platform.width) {
                 player.x = platform.x + platform.width;
+                player.dx = 0; // Pridané pre stabilitu
             }
 
             // náraz hlavou zdola
