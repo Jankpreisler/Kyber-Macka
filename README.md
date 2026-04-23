@@ -2,7 +2,7 @@
 Jan Kristian Preisler - Developer, Storyliner
 Matej Kapusniak - Developer, Dizajner
 
-Stvrtok
--fixnut bugz
-- rozlozenie lvls
+Stvrtok- dokoncenie SERWERS a zacatie BT
 - pridat abilitku
+-j-dokoncit 1.lvl
+-m-nakreslit BT
