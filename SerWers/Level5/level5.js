@@ -22,15 +22,18 @@ const Karera = {
 
 //                       === DEFINÍCIA PLATFORIEM ===
 const platforms = [ 
+    { x: 2050, y: 980, width: 200, height: 20, color: '#ec0000', type: 'trigger', id: 'tlacidlo1', isPressed: false },
+    { x: 50, y: 185, width: 50, height: 30, color: '#ec0000', type: 'trigger', id: 'tlacidlo2', isPressed: false },
+    { x: 2250, y: 480, width: 50, height: 20, color: '#ec0000', type: 'trigger', id: 'tlacidlo3', isPressed: false },
     { x: 0, y: 500, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
     { x: 0, y: 200, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
     { x: 400, y: 200, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papa', visible: true},
     { x: 400, y: 0, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papi', visible: true},
-    { x: 1850, y: 500, width: 650, height: 100, color: '#333', type: 'pipe_h' },
-    { x: 1850, y: 300, width: 650, height: 100, color: '#333', type: 'pipe_h' },
+    { x: 1850, y: 500, width: 1250, height: 100, color: '#333', type: 'pipe_h' },
+    { x: 1850, y: 300, width: 1250, height: 100, color: '#333', type: 'pipe_h' },
     { x: 2050, y: 400, width: 100, height: 100, color: '#333', type: 'pipe_v',id: 'papo', visible: true },
     { x: 0, y: 1000, width: 150, height: 350, color: '#333', type: 'pipe_v' }, //spawn
-    { x: 150, y: 1000, width: 2350, height: 50, color: '#333', type: 'wall' },
+    { x: 150, y: 1000, width: 2950, height: 50, color: '#333', type: 'wall' },
     { x: 750, y: 900, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 950, y: 800, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1050, y: 700, width: 250, height: 50, color: '#333', type: 'wall' },
@@ -39,9 +42,6 @@ const platforms = [
     { x: 1550, y: 400, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1450, y: 300, width: 250, height: 50, color: '#333', type: 'wall' },
     { x: 1250, y: 200, width: 250, height: 50, color: '#333', type: 'wall' },
-    { x: 2050, y: 980, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo1' },
-    { x: 0, y: 195, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo2' },
-    { x: 2150, y: 490, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo3' },
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 1000 },
     { x: 2500, y: 0, width: 1, height: 1000 },
@@ -152,6 +152,33 @@ function drawRealServer(p) {
     for (let i = p.y + 15; i < p.y + p.height; i += 20) {
         c.fillStyle = Math.random() > 0.98 ? '#ff0055' : (Math.random() > 0.5 ? '#00ff41' : '#004411');
         c.fillRect(p.x + 5, i, 4, 3);
+    }
+
+    c.restore();
+}
+
+function drawStyledButton(btn, isHovered = false, isPressed = false) {
+    c.save();
+
+    if (isPressed) {
+        c.fillStyle = '#004411'; 
+    } else {
+        c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
+    }
+    
+    c.fillRect(btn.x, btn.y, btn.width, btn.height);
+
+    c.strokeStyle = isPressed ? '#00ff41' : '#323741';
+    c.lineWidth = isPressed ? 4 : 2; 
+    c.strokeRect(btn.x, btn.y, btn.width, btn.height);
+
+    c.strokeStyle = isPressed ? '#00ff41' : '#1a1d24';
+    c.lineWidth = 1;
+    for (let i = btn.y + 8; i < btn.y + btn.height - 5; i += 6) {
+        c.beginPath();
+        c.moveTo(btn.x + 15, i);
+        c.lineTo(btn.x + btn.width - 15, i);
+        c.stroke();
     }
 
     c.restore();
@@ -310,6 +337,9 @@ function animovanie() {
         else if (p.type === 'pipe_h') {
             drawRealPipe(p, false);
         }
+        else if (p.type === 'trigger') {
+            drawStyledButton(p, false, p.isPressed);
+        }
         else if (p.type === 'valve') {
             c.fillStyle = '#400';
             c.fillRect(p.x, p.y, p.width, p.height);
@@ -328,6 +358,7 @@ function animovanie() {
         }
         
     });
+
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
@@ -426,6 +457,9 @@ function animovanie() {
     }
 
     function vykonajAkciu(id) {
+        const btn = platforms.find(p => p.id === id);
+        if (btn) btn.isPressed = true;
+
         if (id === 'tlacidlo1') {
             nastavViditelnost('papi', false); // Stena zmizne
             console.log("Cesta je voľná!");
