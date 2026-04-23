@@ -2,4 +2,7 @@
 Jan Kristian Preisler - Developer, Storyliner
 Matej Kapusniak - Developer, Dizajner
 
-|Stvortok - Hotovy
+Stvrtok
+-fixnut bugz
+- rozlozenie lvls
+- pridat abilitku
