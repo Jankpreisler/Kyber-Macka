@@ -34,6 +34,7 @@ const platforms = [
     { x: 800, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },
     { x: 1300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },// tu bude npc
     { x: 2000, y: 1270, width: 280, height: 400, color: '#333', type: 'pipe_v', visible: true, id: 'stienkaprechodna'},
+    { x: 2000, y: 1600, width: 280, height: 70, color: '#333', type: 'pipe_v' }, // tajna miska vec v nevideitelnej veci
    // { x: 800, y: 1280, width: 300, height: 300, color: '#333', type: 'pipe_v' },
    // { x: 800, y: 1230, width: 50, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false }, //BUTTON (janko urobi) ne neurobim :D
     //{ x: 1250, y: 1200, width: 150, height: 100, color: '#333', type: 'pipe_v' },
