@@ -22,66 +22,32 @@ const Karera = {
 
 //                  === DEFINÍCIA PLATFORIEM ===
 const platforms = [
-    /* { x: 0, y: 500, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
-      { x: 0, y: 200, width: 1200, height: 100, color: '#333', type: 'pipe_h' },
-      { x: 400, y: 200, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papa', visible: true},
-      { x: 400, y: 0, width: 100, height: 400, color: '#333', type: 'pipe_v', id: 'papi', visible: true},
-      { x: 1850, y: 500, width: 650, height: 100, color: '#333', type: 'pipe_h' },
-      { x: 1850, y: 300, width: 650, height: 100, color: '#333', type: 'pipe_h' },
-      { x: 2050, y: 400, width: 100, height: 100, color: '#333', type: 'pipe_v',id: 'papo', visible: true },
-  
-      */
-
-    { x: 0, y: 1300, width: 2250, height: 20, color: '#050505', type: 'floor' }, //kill
-    { x: 0, y: 1000, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 0, y: 2900, width: 2750, height: 20, color: '#050505', type: 'floor' }, //kill
+    { x: 0, y: 1900, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 200, y: 1200, width: 200, height: 100, color: '#333', type: 'pipe_v', range: 400, id: 'vetrak' }, //vetrak c1
-    { x: 580, y: 900, width: 300, height: 100, color: '#333', type: 'pipe_v' },
-    { x: 780, y: 200, width: 100, height: 670, color: '#333', type: 'pipe_v' },
-    { x: 650, y: 1000, width: 150, height: 300, color: '#333', type: 'pipe_v' },
-
-
- { x: 0, y: 1000, width: 600, height: 300, color: '#333', type: 'pipe_v' }, //toto potom vymazat (len na testing)
-
-
-
-    { x: 800, y: 1280, width: 300, height: 300, color: '#333', type: 'pipe_v' },
-    { x: 800, y: 1230, width: 50, height: 50, color: '#333', type: 'pipe_v' }, //BUTTON (janko urobi)
-    { x: 1250, y: 1200, width: 150, height: 100, color: '#333', type: 'pipe_v' },
-    { x: 1500, y: 1080, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 1800, y: 1000, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 1500, y: 900, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 1200, y: 800, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 900, y: 700, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 1200, y: 600, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 1520, y: 500, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 1800, y: 381, width: 150, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 2000, y: 381, width: 500, height: 90, color: '#333', type: 'pipe_v' },
-    { x: 2500, y: -30, width: 150, height: 500, color: '#333', type: 'pipe_v' },
-
-    { x: 2100, y: 470, width: 150, height: 830, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 1.2 } //vetrak ktory fuka dolava
-
-
-
-    /*
-
-      { x: 150, y: 1000, width: 2350, height: 50, color: '#333', type: 'wall' },
-      { x: 750, y: 900, width: 250, height: 50, color: '#333', type: 'wall' },
-      { x: 950, y: 800, width: 250, height: 50, color: '#333', type: 'wall' },
-      { x: 1050, y: 700, width: 250, height: 50, color: '#333', type: 'wall' },
-      { x: 1350, y: 600, width: 450, height: 50, color: '#333', type: 'wall' },
-      { x: 1450, y: 500, width: 250, height: 50, color: '#333', type: 'wall' },
-      { x: 1550, y: 400, width: 250, height: 50, color: '#333', type: 'wall' },
-      { x: 1450, y: 300, width: 250, height: 50, color: '#333', type: 'wall' },
-      { x: 1250, y: 200, width: 250, height: 50, color: '#333', type: 'wall' },
-      { x: 2050, y: 980, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo1' },
-      { x: 0, y: 195, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo2' },
-      { x: 2150, y: 490, width: 250, height: 50, color: '#ec0000', type: 'trigger', id: 'tlacidlo3' },
-      { x: 0, y: 0, width: 1300, height: 1 },
-      { x: 0, y: 0, width: 1, height: 1000 },
-      { x: 2500, y: 0, width: 1, height: 1000 },
-  
-    */
+    //{ x: 200, y: 1200, width: 200, height: 100, color: '#333', type: 'pipe_v', range: 400, id: 'vetrak' }, //vetrak c1
+    { x: 300, y: 1800, width: 180, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 1000, y: 1600, width: 1000, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 650, y: 1700, width: 180, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 300, y: 2500, width: 180, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 800, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 1300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },// tu bude npc
+    { x: 2000, y: 1270, width: 280, height: 400, color: '#333', type: 'pipe_v', visible: true, id: 'stienkaprechodna'},
+   // { x: 800, y: 1280, width: 300, height: 300, color: '#333', type: 'pipe_v' },
+   // { x: 800, y: 1230, width: 50, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false }, //BUTTON (janko urobi) ne neurobim :D
+    //{ x: 1250, y: 1200, width: 150, height: 100, color: '#333', type: 'pipe_v' },
+    //{ x: 1500, y: 1080, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+    //{ x: 1800, y: 1000, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+    //{ x: 1500, y: 900, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+//    { x: 1200, y: 800, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+  //  { x: 900, y: 700, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+    //{ x: 1200, y: 600, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+//    { x: 1520, y: 500, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+  //  { x: 1800, y: 381, width: 150, height: 90, color: '#333', type: 'pipe_v' },
+    //{ x: 2000, y: 381, width: 500, height: 90, color: '#333', type: 'pipe_v' },
+   // { x: 2500, y: -30, width: 150, height: 500, color: '#333', type: 'pipe_v' },
+   // { x: 2100, y: 470, width: 150, height: 830, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 1.2 } //vetrak ktory fuka dolava
 ];
 
 const macky = {
@@ -100,7 +66,7 @@ const keys = { right: false, left: false };
 // === VLASTNOSTI HRÁČA ===
 let player = {
     x: 50,
-    y: 950,
+    y: 1850,
     width: 50,
     height: 50,
     dx: 0,
@@ -170,6 +136,33 @@ function drawRealPipe(p, isVertical) {
             c.fillRect(p.x + i, p.y + 2, 2, p.height - 4);
         }
     }
+    c.restore();
+}
+
+function drawStyledButton(btn, isHovered = false, isPressed = false) {
+    c.save();
+
+    if (isPressed) {
+        c.fillStyle = '#004411'; 
+    } else {
+        c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
+    }
+    
+    c.fillRect(btn.x, btn.y, btn.width, btn.height);
+
+    c.strokeStyle = isPressed ? '#ff0000' : '#323741';
+    c.lineWidth = isPressed ? 4 : 2; 
+    c.strokeRect(btn.x, btn.y, btn.width, btn.height);
+
+    c.strokeStyle = isPressed ? '#ff0000' : '#1a1d24';
+    c.lineWidth = 1;
+    for (let i = btn.y + 8; i < btn.y + btn.height - 5; i += 6) {
+        c.beginPath();
+        c.moveTo(btn.x + 15, i);
+        c.lineTo(btn.x + btn.width - 15, i);
+        c.stroke();
+    }
+
     c.restore();
 }
 
@@ -256,12 +249,19 @@ window.addEventListener('keydown', (e) => {
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') && player.grounded) {
+    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) {
         player.dy = -player.jumpForce;
         player.grounded = false;
+        console.log(e.key);
     }
 
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') && player.grounded) {
+    if ((e.code === 'Backspace') && player.grounded) {
+        player.dy = -player.jumpForce;
+        player.grounded = false;
+         console.log(e.code);
+    }
+
+    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
@@ -274,7 +274,7 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
 
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') {
 
         if (player.height === 25) {
             if (mozeSaPostavit()) {
@@ -291,18 +291,19 @@ window.addEventListener('keyup', (e) => {
 function nastavViditelnost(id, stav) {
     const p = platforms.find(obj => obj.id === id);
     if (p) {
-        p.visible = stav;
+        p.zapnuty = stav;
     }
 }
 
 function resetPlayer() {
-    player.x = 0;
-    player.y = 950;
+    player.x = 50;
+    player.y = 1850;
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
     actualnaakciacici = macky.dolava;
 }
+
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
     requestAnimationFrame(animovanie);
@@ -347,6 +348,9 @@ function animovanie() {
         }
         else if (p.type === 'pipe_h') {
             drawRealPipe(p, false);
+        }
+        else if (p.type === 'trigger') {
+            drawStyledButton(p, false, p.isPressed);
         }
         else if (p.type === 'valve') {
             c.fillStyle = '#400';
@@ -407,9 +411,6 @@ function animovanie() {
     if (Karera.y < 0) Karera.y = 0;
     if (Karera.x < 0) Karera.x = 0;
 
-
-
-
     // --- LOGIKA A VIZUÁL VETRÁKA ---
     platforms.forEach(p => {
 
@@ -442,7 +443,7 @@ function animovanie() {
         }
 
        // ===== DRUHÝ VETRÁK (DOĽAVA) =====
-if (p.id === 'vetrak2' && p.zapnuty) {
+if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     const vnutri =
         player.y + player.height > p.y &&
@@ -469,9 +470,6 @@ if (p.id === 'vetrak2' && p.zapnuty) {
 }
 
     });
-
-
-    // ⬇⬇⬇ DRUHÁ ZMENA – ČASTICE ⬇⬇⬇
 
     c.save();
     windParticles.forEach((part, index) => {
@@ -511,11 +509,9 @@ if (p.id === 'vetrak2' && p.zapnuty) {
     c.restore();
 
 
-
-
-
     // 4. Kolízie
     platforms.forEach(platform => {
+        if (platform.id === "stienkaprechodna") return;
         if (platform.visible === false) return;
         if (
             player.x < platform.x + platform.width &&
@@ -577,16 +573,11 @@ if (p.id === 'vetrak2' && p.zapnuty) {
     }
 
     function vykonajAkciu(id) {
-        if (id === 'tlacidlo1') {
-            nastavViditelnost('papi', false); // Stena zmizne
-            console.log("Cesta je voľná!");
-        }
-        if (id === 'tlacidlo2') {
-            nastavViditelnost('papo', false); // Stena zmizne
-            console.log("Cesta je voľná!");
-        }
+        const btn = platforms.find(p => p.id === id);
+        if (btn) btn.isPressed = true;
+
         if (id === 'tlacidlo3') {
-            nastavViditelnost('papa', false); // Stena zmizne
+            nastavViditelnost('vetrak2', false); // Stena zmizne
             console.log("Cesta je voľná!");
         }
     }
