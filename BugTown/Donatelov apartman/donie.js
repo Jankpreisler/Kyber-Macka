@@ -7,8 +7,8 @@ canvas.height = 600;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 2300,
-    y: 1350,
+    x: 0,
+    y: 1300,
     width: 60,
     height: 80
 };
@@ -22,67 +22,42 @@ const Karera = {
 
 //                  === DEFINÍCIA PLATFORIEM ===
 const platforms = [
-    { x: 0, y: 2900, width: 2750, height: 20, color: '#050505', type: 'floor' }, //kill
-    { x: 0, y: 1900, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 0, y: 2900, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
+    { x: 0, y: 1900, width: 750, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 3360, y: 1400, width: 1, height: 2000, color: '#333', type: 'pipe_v' }, //left border
-    //{ x: 200, y: 1200, width: 200, height: 100, color: '#333', type: 'pipe_v', range: 400, id: 'vetrak' }, //vetrak c1
-    { x: 300, y: 1800, width: 380, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1000, y: 1600, width: 1000, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 650, y: 1700, width: 180, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 300, y: 2500, width: 180, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 800, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },// tu bude npc
-    { x: 2000, y: 1270, width: 280, height: 400, color: '#333', type: 'pipe_v', visible: true, id: 'stienkaprechodna'},
-    { x: 2000, y: 1600, width: 280, height: 70, color: '#333', type: 'pipe_v' }, // tajna miska vec v nevideitelnej veci
-    { x: 2280, y: 1600, width: 1080, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 2000, y: 1200, width: 280, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 2280, y: 1200, width: 780, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1200, y: 1480, width: 380, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1400, y: 1360, width: 380, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1650, y: 1260, width: 180, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 3200, y: 1580, width: 80, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false }, 
-    { x: 2270, y: 1050, width: 150, height: 150, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 7.2 } //vetrak ktory fuka dolava
+    { x: 300, y: 1370, width: 380, height: 490, color: '#333', type: 'pipe_v'},
+    { x: 900, y: 1800, width: 500, height: 70, color: '#333', type: 'pipe_v'  },
+    { x: 1380, y: 1700, width: 500, height: 70, color: '#333', type: 'pipe_v'  },
+    { x: 1680, y: 1370, width: 210, height: 400, color: '#333', type: 'pipe_v', id: 'stienkaprechodna' },
+    { x: 2000, y: 1600, width: 200, height: 70, color: '#333', type: 'pipe_v'  },
+    { x: 2350, y: 1800, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 250, speed: 1.8, direction: -1, id: 'stienkaprechodna' },
+    { x: 2350, y: 2000, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 250, speed: 1.8, direction: -1,  },
+    { x: 3150, y: 1300, width: 180, height: 70, color: '#333', type: 'valve',startY: 1300, range: 750, speed: 1.8, direction: 1, },
+    { x: 3350, y: 0, width: 1080, height: 100000, color: '#333', type: 'pipe_v' },
+    { x: 0, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    { x: 300, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    { x: 600, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    { x: 900, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    { x: 1200, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h'},
+    { x: 1500, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    { x: 1800, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h'},
+    { x: 2100, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    { x: 2400, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    { x: 2700, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
+    
+    //{ x: 1300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },// tu bude npc
+   // { x: 2000, y: 1270, width: 280, height: 400, color: '#333', type: 'pipe_v', visible: true, id: 'stienkaprechodna'},
+   // { x: 2000, y: 1600, width: 280, height: 70, color: '#333', type: 'pipe_v' }, // tajna miska vec v nevideitelnej veci
+   // { x: 2280, y: 1600, width: 1080, height: 70, color: '#333', type: 'pipe_v' },
+  //  { x: 2000, y: 1200, width: 280, height: 70, color: '#333', type: 'pipe_v' },
+   // { x: 2280, y: 1200, width: 780, height: 70, color: '#333', type: 'pipe_v' },
+   // { x: 1200, y: 1480, width: 380, height: 70, color: '#333', type: 'pipe_v' },
+   // { x: 1400, y: 1360, width: 380, height: 70, color: '#333', type: 'pipe_v' },
+   // { x: 1650, y: 1260, width: 180, height: 70, color: '#333', type: 'pipe_v' },
+   // { x: 3200, y: 1580, width: 80, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false }, 
+   // { x: 2270, y: 1050, width: 150, height: 150, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 7.2 } //vetrak ktory fuka dolava
 ];
 
-const RND   = {
-        x: 1400,
-        y: 2450,
-        width: 50,
-        height: 50,
-        color: '#00ff40',
-        name: "Experiment 3065",
-        
-        dialogues: [
-            { hovori: "MAČKA", text: "Mňau?" },
-            { hovori: "Dr. Rokwel", text: "Kto si cicovy priatel." },
-            { hovori: "MAČKA", text: "Mnau." },
-            { hovori: "Dr. Rokwel", text: "Ano uz to vidime. Mas pokazeny prekladaci cip." },
-            { hovori: "Dr. Rokwel", text: "Uz by to malo byt" },
-            { hovori: "MAČKA", text: "Neviem ci to uplne fungovalo" },
-            { hovori: "MAČKA", text: "Pockaj pocujem hlas. Dakujem Dr." },
-            { hovori: "Dr. Rokwel", text: "A co hladas tu dole. Detekujem ze si jeho dokanaly prototip." },
-            { hovori: "Dr. Rokwel", text: "Lenze si slobodny bez nutnosti ho pocuvat. My sa tu pred nim schovavame" },
-            { hovori: "Dr. Rokwel", text: "Ale neviem nas oslobodit od neho. " },
-            { hovori: "Dr. Rokwel", text: "Keby nas nasiel mohol by z nas urobit svojich otrokov. CO vlastne aj sme" },
-            { hovori: "MAČKA", text: "Ja si nic nepamatam. Prve na co si spominam je ako som lezal v rieke tu dole." },
-             { hovori: "MAČKA", text: "Pockaj nieco sa mi vracia. Pamatam si na svojich bratov a sestry." },
-            { hovori: "Dr. Rokwel", text: "Neboj sa o nich nic horsie sa im uz nemoze stat." },
-            { hovori: "Dr. Rokwel", text: "Kazdopadne vidim ze ty nas zachranis Mesto riadi z The Cor-u." },
-            { hovori: "Dr. Rokwel", text: "Dostan sa tam a oslobod nas." },
-            { hovori: "MAČKA", text: "Ale ja neviem ako" },
-            { hovori: "Dr. Rokwel", text: "Hore mam priatela ten ti pomoze. Vola sa Donatelo a strazi BugTown." },
-            { hovori: "Dr. Rokwel", text: "On ti vsetko vysvetli." },
-            { hovori: "MAČKA", text: "Okej. Urobim co viem" },
-            { hovori: "Dr. Rokwel", text: "Boh nech ta chrani" },
-            { hovori: "Dr. Rokwel", text: "A oslobod nas. Vsetkych" },
-
-        ],
-        currentLine: 0,
-        isTalking: false,
-        canInteract: false
-    };
 
 const macky = {
     dolava: new Image(),
@@ -101,8 +76,8 @@ const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 2000,
-    y: 1280,
+    x: 50,
+    y: 120,
     width: 50,
     height: 50,
     dx: 0,
@@ -141,6 +116,7 @@ function getBrickPattern() {
     pc.fillRect(1, 1, 28, 12);
     return c.createPattern(p, 'repeat');
 }
+
 const brickPattern = getBrickPattern();
 
 function drawRealPipe(p, isVertical) {
@@ -302,28 +278,9 @@ window.addEventListener('keydown', (e) => {
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
-   if (e.key.toLowerCase() === 'e' && RND.canInteract) {
-        if (!RND.isTalking) {
-            RND.isTalking = true;
-            RND.currentLine = 0;
-        } else {
-            RND.currentLine++;
-            if (RND.currentLine >= RND.dialogues.length) RND.isTalking = false;
-        }
-    }
 });
 
-canvas.addEventListener('click', (e) => {
-    if (RND.canInteract) {
-        if (!RND.isTalking) {
-            RND.isTalking = true;
-            RND.currentLine = 0;
-        } else {
-            RND.currentLine++;
-            if (RND.currentLine >= RND.dialogues.length) RND.isTalking = false;
-        }
-    }
-});
+
 
 
 window.addEventListener('keyup', (e) => {
@@ -568,24 +525,6 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
     if (Karera.x < 0) Karera.x = 0;
 
 
-    if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
-        c.drawImage(macky.npc, RND.x, RND.y, RND.width, RND.height);
-    } else {
-        c.fillStyle = RND.color; 
-        c.fillRect(RND.x, RND.y, RND.width, RND.height);
-    }
-
-
-    let dist = Math.sqrt((player.x - RND.x)**2 + (player.y - RND.y)**2);
-    RND.canInteract = dist < 120;
-
-    if (RND.canInteract && !RND.isTalking) {
-        c.fillStyle = "#ffff00"; 
-        c.font = "bold 15px Arial";
-        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20); 
-    }
-
-
     // 4. Kolízie
     platforms.forEach(platform => {
         if (platform.id === "stienkaprechodna" ) return;
@@ -603,12 +542,18 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
             }
 
             // dopad zhora
-            if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
-                player.y = platform.y - player.height;
-                player.dy = 0;
-                player.grounded = true;
+            if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
+            player.y = platform.y - player.height;
+            player.dy = 0;
+            player.grounded = true;
 
-            }
+                if (platform.type === 'valve' && platform.speed) {
+                    player.y += platform.speed * platform.direction;
+                }
+                else if (platform.type === 'pipe_h' && platform.speed) {
+                    player.x += platform.speed * platform.direction;
+                }
+        }
 
             // náraz sprava do steny
             else if (player.dx > 0 && (player.x + player.width - player.dx) <= platform.x) {
