@@ -105,12 +105,12 @@ let player = {
     y: 1280,
     width: 50,
     height: 50,
-    dx: 0.5,
-    dy: 0.4,
+    dx: 0,
+    dy: 0,
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction: 0.9 // ZMENENÉ pre plynulosť
+    friction: 0.9 
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---

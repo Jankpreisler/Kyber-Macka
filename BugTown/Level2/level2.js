@@ -5,6 +5,7 @@ canvas.width = 1300; // na normal leevely
 canvas.height = 600;
 
 const gravitacia = 0.4;
+let lastTime = 0;
 
 const exitZone = {
     x: 2300,
@@ -447,8 +448,8 @@ function animovanie() {
     });
 
     // 3. Pohyb a fyzika
-    if (keys.right) player.dx += 0.8; // ZMENENÉ na zrýchlenie
-    else if (keys.left) player.dx -= 0.8; // ZMENENÉ na zrýchlenie
+    if (keys.right) player.dx += 0.8; 
+    else if (keys.left) player.dx -= 0.8; 
 
     player.dx *= player.friction; // Aplikácia trenia (0.9 namiesto natvrdo 0)
     
