@@ -236,22 +236,22 @@ function isTouching(a, b) {
 
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd') {
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
 
-    if (e.key === 'ArrowLeft' || e.key === 'a') {
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w') && player.grounded) {
+    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
 
-    if ((e.key === 'ArrowDown' || e.key === 's') && player.grounded) {
+    if ((e.key === 'ArrowDown' || e.key === 's'|| e.key === 'S' || e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
@@ -281,10 +281,10 @@ canvas.addEventListener('click', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
-    if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
 
-    if (e.key === 'ArrowDown' || e.key === 's') {
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') {
         
         if (player.height === 25) {
             if (mozeSaPostavit()) {

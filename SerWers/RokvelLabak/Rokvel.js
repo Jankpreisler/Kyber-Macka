@@ -266,36 +266,36 @@ window.addEventListener('keydown', (e) => {
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') && player.grounded) {
+    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
 
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') && player.grounded) {
+    if ((e.key === 'ArrowDown' || e.key === 's'|| e.key === 'S' || e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
-    if (e.key.toLowerCase() === 'e' && Rokvel.canInteract) {
-        if (!Rokvel.isTalking) {
-            Rokvel.isTalking = true;
-            Rokvel.currentLine = 0;
+
+    if (e.key.toLowerCase() === 'e' && npc.canInteract) {
+        if (!npc.isTalking) {
+            npc.isTalking = true;
+            npc.currentLine = 0;
         } else {
-            Rokvel.currentLine++;
-            if (Rokvel.currentLine >= Rokvel.dialogues.length) Rokvel.isTalking = false;
+            npc.currentLine++;
+            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
         }
     }
-
 });
 
 canvas.addEventListener('click', (e) => {
-    if (Rokvel.canInteract) {
-        if (!Rokvel.isTalking) {
-            Rokvel.isTalking = true;
-            Rokvel.currentLine = 0;
+    if (npc.canInteract) {
+        if (!npc.isTalking) {
+            npc.isTalking = true;
+            npc.currentLine = 0;
         } else {
-            Rokvel.currentLine++;
-            if (Rokvel.currentLine >= Rokvel.dialogues.length) Rokvel.isTalking = false;
+            npc.currentLine++;
+            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
         }
     }
 });
@@ -304,7 +304,7 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
 
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') {
         
         if (player.height === 25) {
             if (mozeSaPostavit()) {

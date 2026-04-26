@@ -187,28 +187,36 @@ function isTouching(a, b) {
 
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd') {
+    if (e.key === 'ArrowRight' || e.key === 'd'|| e.key === 'D') {
         keys.right = true;
         player.direction = 'doprava';
     }
-    if (e.key === 'ArrowLeft' || e.key === 'a') {
+    if (e.key === 'ArrowLeft' || e.key === 'a'|| e.key === 'A') {
         keys.left = true;
         player.direction = 'dolava';
     }
-    if ((e.key === 'ArrowUp' || e.key === 'w') && player.grounded) {
+   if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) {
         player.dy = -player.jumpForce;
         player.grounded = false;
+        console.log(e.key);
     }
-    if ((e.key === 'ArrowDown' || e.key === 's')) {
+
+    if ((e.code === 'Backspace') && player.grounded) {
+        player.dy = -player.jumpForce;
+        player.grounded = false;
+         console.log(e.code);
+    }
+
+    if ((e.key === 'ArrowDown' || e.key === 's'|| e.key === 'S'|| e.key === 'Shift')) {
         player.height = 25;
         player.chceSaPostavit = false;
     }
 });
 
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
-    if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
-    if (e.key === 'ArrowDown' || e.key === 's') {
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+    if (e.key === 'ArrowLeft' || e.key === 'a'|| e.key === 'A') keys.left = false;
+    if (e.key === 'ArrowDown' || e.key === 's'|| e.key === 'S'|| e.key === 'Shift') {
         player.chceSaPostavit = true; 
     }
 });
@@ -295,7 +303,7 @@ function animovanie() {
 
     // 5. PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level2/level2.html";
+        window.location.href = "SerWers/Level2/level2.html";
     }
 
   // 6. Vykreslenie postavy

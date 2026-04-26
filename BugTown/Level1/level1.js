@@ -72,7 +72,7 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction: 0.9
+    friction: 2
 };
 
 // === Atmosféra BUGTOWN (tmavá, zeleno-čierna, červené bugy) ===
@@ -733,7 +733,7 @@ c.fillRect(0, -900, canvas.width, canvas.height + 1800);
 
     // === Prechod do ďalšieho levelu ===
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "SerWers/Level6-prechod_do_bugtown/Prechod.html";
     }
 
     // === Postava ===
