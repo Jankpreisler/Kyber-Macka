@@ -220,10 +220,11 @@ window.addEventListener('keyup', (e) => {
         player.chceSaPostavit = true; 
     }
 });
-
+let lastTime = 0;
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
     requestAnimationFrame(animovanie);
+    
     time += 0.01;
 
     c.clearRect(0, 0, canvas.width, canvas.height);
