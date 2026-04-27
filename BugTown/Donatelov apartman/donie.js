@@ -4,6 +4,11 @@ const c = canvas.getContext('2d');
 canvas.width = 1300; // na normal leevely
 canvas.height = 600;
 
+let zobrazitHUD = true; 
+let mana = 100;
+let maximalnaMana = 100;
+let minmana = 0;
+
 const gravitacia = 0.4;
 
 const exitZone = {
@@ -33,7 +38,8 @@ const platforms = [
     { x: 2350, y: 1800, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 250, speed: 1.8, direction: -1, id: 'stienkaprechodna' },
     { x: 2350, y: 2000, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 250, speed: 1.8, direction: -1,  },
     { x: 3150, y: 1300, width: 180, height: 70, color: '#333', type: 'valve',startY: 1300, range: 750, speed: 1.8, direction: 1, },
-    { x: 3350, y: 0, width: 1080, height: 100000, color: '#333', type: 'pipe_v' },
+    { x: 3350, y: 0, width: 2080, height: 1200, color: '#333', type: 'pipe_h',id: 'tajne_dvere', visible: true },
+    { x: 3350, y: 1200, width: 2080, height: 100000, color: '#333', type: 'pipe_h'},
     { x: 0, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
     { x: 300, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
     { x: 600, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
@@ -44,19 +50,52 @@ const platforms = [
     { x: 2100, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
     { x: 2400, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
     { x: 2700, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
-    
-    //{ x: 1300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },// tu bude npc
-   // { x: 2000, y: 1270, width: 280, height: 400, color: '#333', type: 'pipe_v', visible: true, id: 'stienkaprechodna'},
-   // { x: 2000, y: 1600, width: 280, height: 70, color: '#333', type: 'pipe_v' }, // tajna miska vec v nevideitelnej veci
-   // { x: 2280, y: 1600, width: 1080, height: 70, color: '#333', type: 'pipe_v' },
-  //  { x: 2000, y: 1200, width: 280, height: 70, color: '#333', type: 'pipe_v' },
-   // { x: 2280, y: 1200, width: 780, height: 70, color: '#333', type: 'pipe_v' },
-   // { x: 1200, y: 1480, width: 380, height: 70, color: '#333', type: 'pipe_v' },
-   // { x: 1400, y: 1360, width: 380, height: 70, color: '#333', type: 'pipe_v' },
-   // { x: 1650, y: 1260, width: 180, height: 70, color: '#333', type: 'pipe_v' },
-   // { x: 3200, y: 1580, width: 80, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false }, 
-   // { x: 2270, y: 1050, width: 150, height: 150, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 7.2 } //vetrak ktory fuka dolava
 ];
+
+const Donatelo   = {
+        x: 50,
+        y: 1220,
+        width: 50,
+        height: 50,
+        color: '#5901a0',
+        name: "Donatelo",
+        
+        dialogues: [
+            { hovori: "MAČKA", text: "Mňau?" },
+            { hovori: "MAČKA", text: "Teda Halo?" },
+            { hovori: "Donatelo", text: "Ano" },
+            { hovori: "Donatelo", text: "Kto si?" },
+            { hovori: "Donatelo", text: "Som Macka asi neviem nepamatam si na svoje meno" },
+            { hovori: "Donatelo", text: "He He si vtipny ako moj dobry priatel JKP." },
+            { hovori: "Donatelo", text: "Ako si sa o mne dozvedel" },
+            { hovori: "MAČKA", text: "Dr. Rokvel ma poslal" },
+            { hovori: "Donatelo", text: "Trochu som dufal ze jeden z mojich bratov" },
+            { hovori: "MAČKA", text: "Ty mas bratov" },
+            { hovori: "Donatelo", text: "Ano, 3 Lea, Michaela, Raynolda ako ty novodobi umelci" },
+            { hovori: "MAČKA", text: "Ja som mal ties ale neviem co sa stalo" },
+            { hovori: "MAČKA", text: "Dufam ze..." },
+            { hovori: "MAČKA", text: "Alw nic... Nechaj to tak." },
+            { hovori: "MAČKA", text: "Co sa stalo tvojim" },
+            { hovori: "Donatelo", text: "Pohadal som sa snimi" },
+            { hovori: "Donatelo", text: "A oni teda my sme sa...." },
+            { hovori: "Donatelo", text: "Odcudzili" },
+            { hovori: "Donatelo", text: "Kazdopadne. Si jeden z prototypov" },
+            { hovori: "Donatelo", text: "Minule som videl jedneho z vas ako skakal ako divy" },
+            { hovori: "Donatelo", text: "Musis ho aktivovat a budes neporazitelny" },
+            { hovori: "MAČKA", text: "Dakujem za rada...Pockat" },
+            { hovori: "MAČKA", text: "Ako...Ja..?" },
+            { hovori: "Donatelo", text: "Mozno su to tvoji surodenci.." },
+            { hovori: "MAČKA", text: "Neviem dufam alebo nie" },
+            { hovori: "Donatelo", text: "Najdi LEA" },
+            { hovori: "Donatelo", text: "Malby byt tu v meste" },
+            { hovori: "MAČKA", text: "Jasne, chapem" },
+            { hovori: "Donatelo", text: "A......" },
+            { hovori: "Donatelo", text: "Povedz mu ze ma to mrzi" },
+        ],
+        currentLine: 0,
+        isTalking: false,
+        canInteract: false
+    };
 
 
 const macky = {
@@ -77,7 +116,7 @@ const keys = { right: false, left: false };
 // === VLASTNOSTI HRÁČA ===
 let player = {
     x: 50,
-    y: 120,
+    y: 1220,
     width: 50,
     height: 50,
     dx: 0,
@@ -85,7 +124,9 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction: 0.9 
+    friction: 0.9, 
+    isdashing: false,
+    dashspeed: 35,
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -251,6 +292,7 @@ function isTouching(a, b) {
 
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
+
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         keys.right = true;
         actualnaakciacici = macky.dolava;
@@ -278,10 +320,50 @@ window.addEventListener('keydown', (e) => {
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
+    if (e.key.toLowerCase() === 'e' && Donatelo.canInteract) {
+        if (!Donatelo.isTalking) {
+            Donatelo.isTalking = true;
+            Donatelo.currentLine = 0;
+        } else {
+            Donatelo.currentLine++;
+            if (Donatelo.currentLine >= Donatelo.dialogues.length) {
+                Donatelo.isTalking = false; 
+                zobrazitHUD = true;
+                console.log("Vitaj v mojom hude")
+            }
+        }
+    }
+     if ((e.key === 'Q' || e.key === 'q' ) && mana >= 20) {
+        mana -= 20;
+        player.isdashing = true;
+        let smer = 0;
+        if (keys.right) {
+            smer = 1;
+        }
+        else if (keys.left){
+            smer = -1;
+        } 
+        else smer = (actualnaakciacici === macky.dolava) ? 1 : -1; 
+        player.dx = smer * player.dashspeed;
+    }
 });
 
-
-
+canvas.addEventListener('click', (e) => {
+    if (Donatelo.canInteract) {
+        if (!Donatelo.isTalking) {
+            Donatelo.isTalking = true;
+            Donatelo.currentLine = 0;
+            
+        } else {
+            Donatelo.currentLine++;
+            if (Donatelo.currentLine >= Donatelo.dialogues.length){
+                Donatelo.isTalking = false;
+                zobrazitHUD = true;
+                console.log("Vitaj v mojom hude")
+            } 
+        }
+    }
+});
 
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
@@ -402,19 +484,40 @@ function animovanie() {
             }
         }
     });
+    
+        if (mana < maximalnaMana) {
+            mana += 0.1; 
+        }
 
-    // 3. Pohyb a fyzika
-    if (keys.right) player.dx += 0.8; // ZMENENÉ na zrýchlenie
-    else if (keys.left) player.dx -= 0.8; // ZMENENÉ na zrýchlenie
+    
 
-    player.dx *= player.friction; // Aplikácia trenia (0.9 namiesto natvrdo 0)
+    // --- LOGIKA DASHU (DOPLNENIE) ---
+        if (player.isdashing) {
+    
+        if (Math.abs(player.dx) < 5) {
+            player.isdashing = false;
+        }
+}
+
+    // 3. Pohyb a fyzik
+    if (keys.right) player.dx += 0.8; 
+    else if (keys.left) player.dx -= 0.8; 
+
+    player.dx *= player.friction; 
     
     // Limit maximálnej rýchlosti hráča
-    if (player.dx > player.speed) player.dx = player.speed;
-    if (player.dx < -player.speed) player.dx = -player.speed;
-
+    if(player.isdashing == true) {
+        
+         if (player.dx > player.dashspeed) player.dx = player.dashspeed;
+        if (player.dx < -player.dashspeed) player.dx = -player.dashspeed;
+    }
+    else{
+         if (player.dx > player.speed) player.dx = player.speed;
+        if (player.dx < -player.speed) player.dx = -player.speed;
+        player.dy += gravitacia;
+    }
+   
     player.x += player.dx;
-    player.dy += gravitacia;
     player.y += player.dy;
     player.grounded = false;
 
@@ -524,6 +627,23 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
     Karera.x = player.x - canvas.width / 2;
     if (Karera.x < 0) Karera.x = 0;
 
+    if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
+        c.drawImage(macky.npc, Donatelo.x, Donatelo.y, Donatelo.width, Donatelo.height);
+    } else {
+        c.fillStyle = Donatelo.color; 
+        c.fillRect(Donatelo.x, Donatelo.y, Donatelo.width, Donatelo.height);
+    }
+
+    let dist = Math.sqrt((player.x - Donatelo.x)**2 + (player.y - Donatelo.y)**2);
+    Donatelo.canInteract = dist < 120;
+
+    if (Donatelo.canInteract && !Donatelo.isTalking) {
+        c.fillStyle = "#ffff00"; 
+        c.font = "bold 15px Arial";
+        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20); 
+    }
+    
+
 
     // 4. Kolízie
     platforms.forEach(platform => {
@@ -620,8 +740,8 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     c.restore();
 
-    if (RND.isTalking) {
-        const dialog = RND.dialogues[RND.currentLine];
+    if (Donatelo.isTalking) {
+        const dialog = Donatelo.dialogues[Donatelo.currentLine];
         const isCat = dialog.hovori === "MAČKA";
 
         // Box
@@ -647,6 +767,67 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
         c.font = "14px Arial";
         c.fillText("Clikni pre pokračovanie...", 850, 545);
     }
+
+    if (zobrazitHUD === true) {
+        c.save();
+
+        const barX = 20;
+        const barY = 20;
+        const barWidth = 250;
+        const barHeight = 30;
+
+    // 1. Pozadie baru (tmavý podklad)
+        c.fillStyle = 'rgba(20, 20, 20, 0.8)';
+        c.beginPath();
+        c.roundRect(barX, barY, barWidth, barHeight, 5); 
+        c.fill();
+        c.strokeStyle = '#333';
+        c.lineWidth = 4;
+        c.stroke();
+
+    // 2. Samotný Progress (Výplň many)
+        let percento = mana / maximalnaMana;
+        if (percento < 0) percento = 0; // Ochrana proti zápornej mane
+
+    // Vytvoríme gradient (prechod farieb z tmavomodrej do svetlomodrej)
+        let manaGrad = c.createLinearGradient(barX, 0, barX + barWidth, 0);
+        manaGrad.addColorStop(0, '#0044ff'); // Tmavšia modrá na začiatku
+        manaGrad.addColorStop(1, '#00d4ff'); // Žiarivá azúrová na konci
+
+        c.fillStyle = manaGrad;
+        c.beginPath();
+    // Vykreslíme výplň podľa aktuálnej many
+        c.roundRect(barX + 2, barY + 2, (barWidth - 4) * percento, barHeight - 4, 3);
+        c.fill();
+
+    // 3. Efekt "lesku" na bare (biely prúžok navrchu)
+        c.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        c.fillRect(barX + 2, barY + 2, (barWidth - 4) * percento, (barHeight - 4) / 2);
+
+    // 4. Textové info
+        c.fillStyle = "white";
+        c.font = "bold 13px Courier New";
+        c.shadowColor = "black";
+        c.shadowBlur = 4;
+        c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
+        c.shadowBlur = 0;
+
+    // --- JEDNODUCHÝ INVENTÁR ---
+        c.fillStyle = "rgba(0, 0, 0, 0.6)";
+        c.beginPath();
+        c.roundRect(barX, barY + 455, 200, 100, 5); //nasjkor vyska sirka height invertara zaoblenie
+        c.fill();
+    
+        c.fillStyle = "#aaa";
+        c.font = "11px Arial";
+        c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
+        c.fillText("• Error 404  [LOCKED]", barX + 10, barY + 500);
+        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 520);
+        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
+
+        c.restore();
+    }
+
 
 }
 
