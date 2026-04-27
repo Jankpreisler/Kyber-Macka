@@ -31,13 +31,13 @@ const platforms = [
     { x: 0, y: 1900, width: 750, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 300, y: 1370, width: 380, height: 490, color: '#333', type: 'pipe_v'},
-    { x: 900, y: 1800, width: 500, height: 70, color: '#333', type: 'pipe_v'  },
-    { x: 1380, y: 1700, width: 500, height: 70, color: '#333', type: 'pipe_v'  },
+    { x: 900, y: 1800, width: 280, height: 70, color: '#333', type: 'pipe_v'  },
+    { x: 1350, y: 1700, width: 530, height: 70, color: '#333', type: 'pipe_v'  },
     { x: 1680, y: 1370, width: 210, height: 400, color: '#333', type: 'pipe_v', id: 'stienkaprechodna' },
     { x: 2000, y: 1600, width: 200, height: 70, color: '#333', type: 'pipe_v'  },
-    { x: 2350, y: 1800, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 250, speed: 1.8, direction: -1, id: 'stienkaprechodna' },
-    { x: 2350, y: 2000, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 250, speed: 1.8, direction: -1,  },
-    { x: 3150, y: 1300, width: 180, height: 70, color: '#333', type: 'valve',startY: 1300, range: 750, speed: 1.8, direction: 1, },
+    { x: 2350, y: 1800, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 270, speed: 1.8, direction: -1, id: 'stienkaprechodna' },
+    { x: 2350, y: 2000, width: 400, height: 70, color: '#333', type: 'pipe_h',startX: 2350, range: 270, speed: 1.8, direction: -1,  },
+    { x: 3150, y: 1300, width: 180, height: 70, color: '#333', type: 'valve',startY: 1300, range: 750, speed: 1, direction: 1, },
     { x: 3350, y: 0, width: 2080, height: 1200, color: '#333', type: 'pipe_h',id: 'tajne_dvere', visible: true },
     { x: 3350, y: 1200, width: 2080, height: 100000, color: '#333', type: 'pipe_h'},
     { x: 0, y: 1300, width: 300, height: 70, color: '#333', type: 'pipe_h' },
@@ -116,7 +116,7 @@ const keys = { right: false, left: false };
 // === VLASTNOSTI HRÁČA ===
 let player = {
     x: 50,
-    y: 1220,
+    y: 1850,
     width: 50,
     height: 50,
     dx: 0,
@@ -330,6 +330,11 @@ window.addEventListener('keydown', (e) => {
                 Donatelo.isTalking = false; 
                 zobrazitHUD = true;
                 console.log("Vitaj v mojom hude")
+                const dvere = platforms.find(p => p.id === 'tajne_dvere'); 
+                 if (dvere) {
+                    dvere.visible = false; 
+                    dvere.id = 'stienkaprechodna'; 
+                }
             }
         }
     }
@@ -360,7 +365,12 @@ canvas.addEventListener('click', (e) => {
                 Donatelo.isTalking = false;
                 zobrazitHUD = true;
                 console.log("Vitaj v mojom hude")
-            } 
+                const dvere = platforms.find(p => p.id === 'tajne_dvere'); 
+                if (dvere) {
+                    dvere.visible = false; 
+                    dvere.id = 'stienkaprechodna'; 
+                }
+            }    
         }
     }
 });
