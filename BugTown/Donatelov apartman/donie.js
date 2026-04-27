@@ -4,7 +4,7 @@ const c = canvas.getContext('2d');
 canvas.width = 1300; // na normal leevely
 canvas.height = 600;
 
-let zobrazitHUD = true; 
+let zobrazitHUD = false; 
 let mana = 100;
 let maximalnaMana = 100;
 let minmana = 0;
