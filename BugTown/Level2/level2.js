@@ -631,6 +631,10 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
             if (platform.type === 'trigger') {
                 vykonajAkciu(platform.id);
             }
+            if (isTouching(player, exitZone)) {
+                ProgresManazer.ulozLevel(9);
+                window.location.href = "BugTown/Level3/Level3.html";
+            }
         }
     });
 

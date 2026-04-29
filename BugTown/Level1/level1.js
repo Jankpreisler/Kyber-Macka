@@ -701,6 +701,10 @@ c.fillRect(0, -900, canvas.width, canvas.height + 1800);
             if (platform.type === 'trigger') {
                 vykonajAkciu(platform.id);
             }
+            if (isTouching(player, exitZone)) {
+                ProgresManazer.ulozLevel(8);
+                window.location.href = "BugTown/Level2/Level2.html";
+            }
         }
     });
 
