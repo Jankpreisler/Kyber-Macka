@@ -397,6 +397,10 @@ function animovanie() {
                     player.chceSaPostavit = false;
                 }
             }
+            if (isTouching(player, exitZone)) {
+                ProgresManazer.ulozLevel(5);
+                window.location.href = "SerWers/Level5/Level5.html";
+            }
         }
         
     });

@@ -435,6 +435,10 @@ function animovanie() {
             if (platform.type === 'trigger') {
                 vykonajAkciu(platform.id);
             }
+            if (isTouching(player, exitZone)) {
+                ProgresManazer.ulozLevel(6);
+                window.location.href = "SerWers/Level6-prechod_do_bugtown/Prechod.html";
+            }
         }
     });
 

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Cyber Cat - Level Select</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #050505; }
+        canvas { display: block; background: #000; margin: auto; }
+        .info { color: #555; position: absolute; bottom: 10px; left: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas"></canvas>
+    <div class="info">Drž [TAB] pre výber levelu | Kláves [R] pre reset progresu</div>
+
+    <script src="progresik.js"></script>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const c = canvas.getContext('2d');
+        canvas.width = 1300;
+        canvas.height = 600;
+
+        // Nastavenia hry
+        const CELKOVY_POCET_LEVELOV = 6;
+        let keys = { tab: false };
+
+        // Simulácia kamery (tvoja Karera)
+        let Karera = { x: 0, y: 0 };
+
+        // --- OVLÁDANIE ---
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') { e.preventDefault(); keys.tab = true; }
+            if (e.key === 'r' || e.key === 'R') { 
+                if(confirm("Naozaj vymazať progres?")) ProgresManazer.resetujProgres();
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'Tab') keys.tab = false;
+        });
+
+        // --- KLIKANIE NA LEVEL ---
+        canvas.addEventListener('click', (e) => {
+            if (!keys.tab) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const progres = ProgresManazer.nacitaj();
+
+            for (let i = 1; i <= CELKOVY_POCET_LEVELOV; i++) {
+                const stlpec = (i - 1) % 3;
+                const riadok = Math.floor((i - 1) / 3);
+                
+                const btnX = 400 + stlpec * 180;
+                const btnY = 200 + riadok * 130;
+                const btnW = 150;
+                const btnH = 100;
+
+                // Ak klikneš na odomknutý level
+                if (mouseX > btnX && mouseX < btnX + btnW && mouseY > btnY && mouseY < btnY + btnH) {
+                    if (i <= progres.odomknute) {
+                        alert("Presmerovanie na level " + i);
+                        // Tu daj svoju cestu: window.location.href = `level${i}.html`;
+                    }
+                }
+            }
+        });
+
+        function drawLevelMenu() {
+            if (!keys.tab) return;
+
+            const progres = ProgresManazer.nacitaj();
+
+            // Pozadie menu
+            c.fillStyle = 'rgba(0, 0, 0, 0.9)';
+            c.fillRect(0, 0, canvas.width, canvas.height);
+
+            c.fillStyle = '#00ff41';
+            c.font = '30px Courier New';
+            c.textAlign = 'center';
+            c.fillText('CYBER-NET: VÝBER LEVELU', canvas.width / 2, 100);
+
+            // Vykreslenie kachličiek levelov
+            for (let i = 1; i <= CELKOVY_POCET_LEVELOV; i++) {
+                const stlpec = (i - 1) % 3;
+                const riadok = Math.floor((i - 1) / 3);
+                
+                const x = 400 + stlpec * 180;
+                const y = 200 + riadok * 130;
+                const w = 150;
+                const h = 100;
+
+                const odomknuty = i <= progres.odomknute;
+
+                // Box levelu
+                c.strokeStyle = odomknuty ? '#00ff41' : '#222';
+                c.lineWidth = 3;
+                c.strokeRect(x, y, w, h);
+
+                if (!odomknuty) {
+                    c.fillStyle = 'rgba(40, 40, 40, 0.5)';
+                    c.fillRect(x, y, w, h);
+                    c.fillStyle = '#444';
+                    c.font = '15px Arial';
+                    c.fillText('LOCKED', x + w/2, y + h/2 + 5);
+                } else {
+                    c.fillStyle = '#00ff41';
+                    c.font = '20px Courier New';
+                    c.fillText('LEVEL ' + i, x + w/2, y + h/2 + 5);
+                    
+                    // Malá značka pre aktuálny level
+                    if (i === progres.odomknute) {
+                        c.font = '10px Arial';
+                        c.fillText('NEXT UP', x + w/2, y + h - 10);
+                    }
+                }
+            }
+            c.textAlign = 'start'; // reset zarovnania
+        }
+
+        function update() {
+            // Tu by bola tvoja herná logika
+            // Ak postava prejde level: ProgresManazer.ulozLevel(2);
+        }
+
+        function draw() {
+            c.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Simulácia tvojej hry na pozadí
+            c.fillStyle = '#111';
+            c.font = '20px Arial';
+            c.fillText("HRA BEŽÍ... (Drž TAB pre menu)", 50, 50);
+
+            drawLevelMenu();
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+</body>
+</html>
