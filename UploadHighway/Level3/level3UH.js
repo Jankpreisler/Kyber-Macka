@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const c = canvas.getContext('2d');
 
-canvas.width = 1300; // na normal leevely
+canvas.width = 1300;
 canvas.height = 600;
 
 let zobrazitHUD = true;
@@ -26,67 +26,64 @@ const Karera = {
     height: canvas.height
 };
 
-// === DEFINÍCIA PLATFORIEM === Pridanie speedMultiho a frictionu
+// === DEFINÍCIA PLATFORIEM ===
 const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 0, y: 800, width: 750, height: 230, color: '#333', type: 'pipe_v'}, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h', friction:5},
+    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h', friction: 5},
     { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h'},
-    { x: 2200, y: 600, width: 180, height: 70, color: '#333', type: 'valve', startY: 600, range: 1000, speed: 1.8, direction: 1,},
-     { x: 1350, y: 1500, width: 750, height: 50, color: '#333', type: 'pipe_h'},
-     { x: 950, y: 1500, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
-      { x: 1550, y: 1900, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
-      { x: 2550, y: 2100, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
-      { x: 2750, y: 2100, width: 1550, height: 1550, color: '#333', type: 'pipe_h'},
-
-    
+    { x: 2200, y: 600, width: 180, height: 70, color: '#333', type: 'valve', startY: 600, range: 1000, speed: 1.8, direction: 1},
+    { x: 1350, y: 1500, width: 750, height: 50, color: '#333', type: 'pipe_h'},
+    { x: 950, y: 1500, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
+    { x: 1550, y: 1900, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
+    { x: 2550, y: 2100, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
+    { x: 2750, y: 2100, width: 1550, height: 1550, color: '#333', type: 'pipe_h'},
 ];
 
-const Mikey   = {
-        x: 2800,
-        y: 2050,
-        width: 50,
-        height: 50,
-        color: '#5901a0',
-        name: "Mikey",
-        
-        dialogues: [
-            { hovori: "MAČKA", text: "Mňau?" },
-            { hovori: "MAČKA", text: "Teda Halo?" },
-            { hovori: "Donatelo", text: "Ano" },
-            { hovori: "Donatelo", text: "Kto si?" },
-            { hovori: "Donatelo", text: "Som Macka asi neviem nepamatam si na svoje meno" },
-            { hovori: "Donatelo", text: "He He si vtipny ako moj dobry priatel JKP." },
-            { hovori: "Donatelo", text: "Ako si sa o mne dozvedel" },
-            { hovori: "MAČKA", text: "Dr. Rokvel ma poslal" },
-            { hovori: "Donatelo", text: "Trochu som dufal ze jeden z mojich bratov" },
-            { hovori: "MAČKA", text: "Ty mas bratov" },
-            { hovori: "Donatelo", text: "Ano, 3 Lea, Michaela, Raynolda ako ty novodobi umelci" },
-            { hovori: "MAČKA", text: "Ja som mal ties ale neviem co sa stalo" },
-            { hovori: "MAČKA", text: "Dufam ze..." },
-            { hovori: "MAČKA", text: "Alw nic... Nechaj to tak." },
-            { hovori: "MAČKA", text: "Co sa stalo tvojim" },
-            { hovori: "Donatelo", text: "Pohadal som sa snimi" },
-            { hovori: "Donatelo", text: "A oni teda my sme sa...." },
-            { hovori: "Donatelo", text: "Odcudzili" },
-            { hovori: "Donatelo", text: "Kazdopadne. Si jeden z prototypov" },
-            { hovori: "Donatelo", text: "Minule som videl jedneho z vas ako skakal ako divy" },
-            { hovori: "Donatelo", text: "Musis ho aktivovat a budes neporazitelny" },
-            { hovori: "MAČKA", text: "Dakujem za rada...Pockat" },
-            { hovori: "MAČKA", text: "Ako...Ja..?" },
-            { hovori: "Donatelo", text: "Mozno su to tvoji surodenci.." },
-            { hovori: "MAČKA", text: "Neviem dufam alebo nie" },
-            { hovori: "Donatelo", text: "Najdi LEA" },
-            { hovori: "Donatelo", text: "Malby byt tu v meste" },
-            { hovori: "MAČKA", text: "Jasne, chapem" },
-            { hovori: "Donatelo", text: "A......" },
-            { hovori: "Donatelo", text: "Povedz mu ze ma to mrzi" },
-        ],
-        currentLine: 0,
-        isTalking: false,
-        canInteract: false
-    };
+const Mikey = {
+    x: 2800,
+    y: 2050,
+    width: 50,
+    height: 50,
+    color: '#5901a0',
+    name: "Mikey",
+    dialogues: [
+        { hovori: "MAČKA", text: "Mňau?" },
+        { hovori: "MAČKA", text: "Teda Halo?" },
+        { hovori: "Donatelo", text: "Ano" },
+        { hovori: "Donatelo", text: "Kto si?" },
+        { hovori: "Donatelo", text: "Som Macka asi neviem nepamatam si na svoje meno" },
+        { hovori: "Donatelo", text: "He He si vtipny ako moj dobry priatel JKP." },
+        { hovori: "Donatelo", text: "Ako si sa o mne dozvedel" },
+        { hovori: "MAČKA", text: "Dr. Rokvel ma poslal" },
+        { hovori: "Donatelo", text: "Trochu som dufal ze jeden z mojich bratov" },
+        { hovori: "MAČKA", text: "Ty mas bratov" },
+        { hovori: "Donatelo", text: "Ano, 3 Lea, Michaela, Raynolda ako ty novodobi umelci" },
+        { hovori: "MAČKA", text: "Ja som mal ties ale neviem co sa stalo" },
+        { hovori: "MAČKA", text: "Dufam ze..." },
+        { hovori: "MAČKA", text: "Alw nic... Nechaj to tak." },
+        { hovori: "MAČKA", text: "Co sa stalo tvojim" },
+        { hovori: "Donatelo", text: "Pohadal som sa snimi" },
+        { hovori: "Donatelo", text: "A oni teda my sme sa...." },
+        { hovori: "Donatelo", text: "Odcudzili" },
+        { hovori: "Donatelo", text: "Kazdopadne. Si jeden z prototypov" },
+        { hovori: "Donatelo", text: "Minule som videl jedneho z vas ako skakal ako divy" },
+        { hovori: "Donatelo", text: "Musis ho aktivovat a budes neporazitelny" },
+        { hovori: "MAČKA", text: "Dakujem za rada...Pockat" },
+        { hovori: "MAČKA", text: "Ako...Ja..?" },
+        { hovori: "Donatelo", text: "Mozno su to tvoji surodenci.." },
+        { hovori: "MAČKA", text: "Neviem dufam alebo nie" },
+        { hovori: "Donatelo", text: "Najdi LEA" },
+        { hovori: "Donatelo", text: "Malby byt tu v meste" },
+        { hovori: "MAČKA", text: "Jasne, chapem" },
+        { hovori: "Donatelo", text: "A......" },
+        { hovori: "Donatelo", text: "Povedz mu ze ma to mrzi" },
+    ],
+    currentLine: 0,
+    isTalking: false,
+    canInteract: false
+};
 
 const boxy = [
     { x: 55555555, y: 1850, width: 50, height: 50, dx: 0, dy: 0, friction: 0.8 },
@@ -119,10 +116,12 @@ const keys = {
     left: false,
     up: false,
     down: false,
-    t: false
+    t: false,
+    u: false // Pridané pre spomalenie času
 };
 
-// === VLASTNOSTI HRÁČA ===
+let timeScale = 1.0;
+
 let player = {
     x: 50,
     y: 750,
@@ -139,7 +138,6 @@ let player = {
     chceSaPostavit: false
 };
 
-// --- ATMOSFÉRICKÉ EFEKTY ---
 let time = 0;
 let fogParticles = [];
 let windParticles = [];
@@ -152,7 +150,6 @@ for (let i = 0; i < 30; i++) {
     });
 }
 
-// === GRAFICKÉ RUTINY ===
 function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
@@ -348,6 +345,13 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
     }
+
+    if (e.key === 'u' || e.key === 'U') {
+        if (abilityUnlocked && mana > 0) {
+            keys.u = true;
+        }
+    }
+
     if (e.key.toLowerCase() === 'e' && Mikey.canInteract) {
         if (!Mikey.isTalking) {
             Mikey.isTalking = true;
@@ -357,9 +361,9 @@ window.addEventListener('keydown', (e) => {
             if (Mikey.currentLine >= Mikey.dialogues.length) {
                 Mikey.isTalking = false; 
                 zobrazitHUD = true;
-                console.log("Vitaj v mojom hude")
+                console.log("Vitaj v mojom hude");
                 const dvere = platforms.find(p => p.id === 'tajne_dvere'); 
-                 if (dvere) {
+                if (dvere) {
                     dvere.visible = false; 
                     dvere.id = 'stienkaprechodna'; 
                 }
@@ -373,13 +377,12 @@ canvas.addEventListener('click', (e) => {
         if (!Mikey.isTalking) {
             Mikey.isTalking = true;
             Mikey.currentLine = 0;
-            
         } else {
             Mikey.currentLine++;
             if (Mikey.currentLine >= Mikey.dialogues.length){
                 Mikey.isTalking = false;
                 zobrazitHUD = true;
-                console.log("Vitaj v mojom hude")
+                console.log("Vitaj v mojom hude");
                 const dvere = platforms.find(p => p.id === 'tajne_dvere'); 
                 if (dvere) {
                     dvere.visible = false; 
@@ -393,11 +396,13 @@ canvas.addEventListener('click', (e) => {
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
-
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') keys.up = false;
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keys.down = false;
-
     if (e.key === 't' || e.key === 'T') keys.t = false;
+    
+    if (e.key === 'u' || e.key === 'U') {
+        keys.u = false;
+    }
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') {
         if (player.height === 25) {
@@ -449,6 +454,22 @@ function animovanie() {
 
     drawFog();
 
+    // Spomalenie času
+    if (keys.u && abilityUnlocked && mana > 0) {
+        timeScale = 0.3;
+        mana -= 0.5;
+    } else {
+        timeScale = 1.0;
+        if (mana < maximalnaMana) {
+            mana += 0.1;
+        }
+    }
+
+    if (mana <= 0) {
+        keys.u = false;
+        timeScale = 1.0;
+    }
+
     platforms.forEach(p => {
         if (p.visible === false) return;
 
@@ -471,7 +492,7 @@ function animovanie() {
             drawStyledButton(p, false, p.isPressed);
         } else if (p.type === 'valve') {
             if (p.speed !== undefined) {
-                p.y += p.speed * p.direction; // Zmena osi Y namiesto X
+                p.y += p.speed * p.direction * timeScale;
 
                 if (p.y > p.startY + p.range || p.y < p.startY) {
                     p.direction *= -1;
@@ -482,7 +503,7 @@ function animovanie() {
             c.fillStyle = '#600';
             c.fillRect(p.x + 5, p.y + 20, 10, 10);
         } else if (p.speed) {
-            p.x += p.speed * p.direction;
+            p.x += p.speed * p.direction * timeScale;
             if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
             if (p.hasRope) drawRopes(p);
         } else {
@@ -501,15 +522,12 @@ function animovanie() {
         }
     }
 
-    // 3. Pohyb a fyzika s vlastnosťami
     let activeFriction = player.friction;
     let activeSpeed = player.speed;
 
-    // Zistíme, či sa mačka nachádza na špeciálnej platforme
     platforms.forEach(p => {
         if (p.visible === false) return;
 
-        // Kontrola, či hráč stojí na vrchole platformy
         if (
             player.x < p.x + p.width &&
             player.x + player.width > p.x &&
@@ -525,8 +543,8 @@ function animovanie() {
         }
     });
 
-    if (keys.right) player.dx += 0.8;
-    else if (keys.left) player.dx -= 0.8;
+    if (keys.right) player.dx += 0.8 * timeScale;
+    else if (keys.left) player.dx -= 0.8 * timeScale;
 
     player.dx *= activeFriction;
 
@@ -551,12 +569,12 @@ function animovanie() {
             player.dy = 0;
             player.dx = 0;
             if (keys.up) {
-                player.dy = -activeSpeed * 0.7;
+                player.dy = -activeSpeed * 0.7 * timeScale;
             } else if (keys.down) {
-                player.dy = activeSpeed * 0.7;
+                player.dy = activeSpeed * 0.7 * timeScale;
             }
         } else {
-            player.dy += gravitacia;
+            player.dy += gravitacia * timeScale;
         }
     }
 
@@ -564,9 +582,8 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
-    // Logika ventilátora
     platforms.forEach(p => {
-        if (p.id === 'vetrak'&& p.zapnuty === true) {
+        if (p.id === 'vetrak' && p.zapnuty === true) {
             if (
                 player.x + player.width > p.x &&
                 player.x < p.x + p.width &&
@@ -575,9 +592,9 @@ function animovanie() {
             ) {
                 let vzdialenostOdVetráka = p.y - (player.y + player.height);
                 if (vzdialenostOdVetráka > p.range * 0.8) {
-                    player.dy -= 0.35;
+                    player.dy -= 0.35 * timeScale;
                 } else {
-                    player.dy -= 0.8;
+                    player.dy -= 0.8 * timeScale;
                 }
                 if (player.dy < -5) player.dy = -5;
             }
@@ -585,7 +602,7 @@ function animovanie() {
                 windParticles.push({
                     x: p.x + Math.random() * p.width,
                     y: p.y,
-                    speed: Math.random() * 5 + 3,
+                    speed: (Math.random() * 5 + 3) * timeScale,
                     opacity: 1,
                     maxHeight: p.y - p.range
                 });
@@ -600,14 +617,14 @@ function animovanie() {
                 player.x + player.width > p.x - p.range;
 
             if (vnutri) {
-                player.dx -= 0.67;
+                player.dx -= 0.67 * timeScale;
             }
 
             if (Math.random() > 0.4) {
                 windParticles.push({
                     x: p.x - Math.random() * p.range,
                     y: p.y + Math.random() * p.height,
-                    speed: Math.random() * 5 + 2,
+                    speed: (Math.random() * 5 + 2) * timeScale,
                     opacity: Math.random() * 0.5 + 0.5,
                     direction: 'left',
                     minX: p.x - p.range
@@ -616,7 +633,6 @@ function animovanie() {
         }
     });
 
-    // Vykreslenie častíc vetra
     c.save();
     windParticles.forEach((part, index) => {
         if (part.direction === 'left') {
@@ -649,7 +665,6 @@ function animovanie() {
     });
     c.restore();
 
-    // 4. Kolízie
     platforms.forEach(platform => {
         if (platform.id === "stienkaprechodna") return;
         if (platform.id === "vetrak2") return;
@@ -694,7 +709,7 @@ function animovanie() {
     });
 
     boxy.forEach(box => {
-        box.dy += gravitacia;
+        box.dy += gravitacia * timeScale;
         box.y += box.dy;
         box.x += box.dx;
         box.dx *= box.friction;
@@ -814,7 +829,6 @@ function animovanie() {
         const isCat = dialog.hovori === "MAČKA";
         abilityUnlocked = true;
 
-        // Box
         c.fillStyle = "rgba(0, 0, 0, 0.85)";
         c.strokeStyle = isCat ? "#00ff41" : "#5901a0";
         c.lineWidth = 3;
@@ -823,12 +837,10 @@ function animovanie() {
         c.fill();
         c.stroke();
 
-        // Meno hovoriaceho
         c.fillStyle = isCat ? "#00ff41" : "#5901a0";
         c.font = "bold 20px Courier New";
         c.fillText(dialog.hovori, 280, 480);
 
-        // Text
         c.fillStyle = "white";
         c.font = "22px Arial";
         c.fillText(dialog.text, 280, 520);
@@ -885,12 +897,10 @@ function animovanie() {
         c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
         c.fillText("• Cyber Rage  [R]", barX + 10, barY + 500);
         c.fillText("• Wall Climb [T + W/S]", barX + 10, barY + 520);
-       
 
         if (abilityUnlocked) {
-            c.fillText("• TimeSLower [U]", barX + 10, barY + 540);
-        } 
-        else {
+            c.fillText("• Lietanie [U]", barX + 10, barY + 540);
+        } else {
             c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
         }
 
