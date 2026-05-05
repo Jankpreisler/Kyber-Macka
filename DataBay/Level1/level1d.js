@@ -12,7 +12,7 @@ let minmana = 0;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 5000,
+    x: 150,
     y: 1800,
     width: 60,
     height: 80
@@ -95,7 +95,7 @@ const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 2200,
+    x: 50,
     y: 1850,
     width: 50,
     height: 50,
@@ -447,6 +447,11 @@ function animovanie() {
             player.isdashing = false;
         }
     }
+    c.fillStyle = 'rgba(0, 150, 255, 0.3)';
+    c.strokeStyle = '#0066cc';
+    c.lineWidth = 2;
+    c.fillRect(exitZone.x, exitZone.y, exitZone.width, exitZone.height);
+    c.strokeRect(exitZone.x, exitZone.y, exitZone.width, exitZone.height);
 
     // 3. Pohyb a fyzik
     if (keys.right) player.dx += 0.8;
@@ -801,7 +806,7 @@ function animovanie() {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/DataBay/Level2/Level2D.html";
     }
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

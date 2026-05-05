@@ -8,8 +8,8 @@ const gravitacia = 0.4;
 let lastTime = 0;
 
 const exitZone = {
-    x: 2300,
-    y: 1350,
+    x: 2900,
+    y: 1150,
     width: 60,
     height: 80
 };
@@ -28,7 +28,7 @@ const platforms = [
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 3360, y: 1400, width: 1, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     //{ x: 200, y: 1200, width: 200, height: 100, color: '#333', type: 'pipe_v', range: 400, id: 'vetrak' }, //vetrak c1
-    { x: 300, y: 1800, width: 380, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 300, y: 1800, width: 170, height: 70, color: '#333', type: 'pipe_v' },
     { x: 1000, y: 1600, width: 1000, height: 70, color: '#333', type: 'pipe_v' },
     { x: 650, y: 1700, width: 180, height: 70, color: '#333', type: 'pipe_v' },
     { x: 300, y: 2500, width: 180, height: 70, color: '#333', type: 'pipe_v' },
@@ -102,8 +102,8 @@ const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 2000,
-    y: 1280,
+    x: 50,
+    y: 1850,
     width: 50,
     height: 50,
     dx: 0,
@@ -276,29 +276,24 @@ function isTouching(a, b) {
 
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //doprava
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
 
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { //dolava
         keys.left = true;
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) {
+    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) { //skok
         player.dy = -player.jumpForce;
         player.grounded = false;
         console.log(e.key);
     }
 
-    if ((e.code === 'Backspace') && player.grounded) {
-        player.dy = -player.jumpForce;
-        player.grounded = false;
-         console.log(e.code);
-    }
-
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) {
+   
+    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
@@ -328,10 +323,10 @@ canvas.addEventListener('click', (e) => {
 
 
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.right = false; //doprava
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.left = false; //dolava
 
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') {
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') { //shift
 
         if (player.height === 25) {
             if (mozeSaPostavit()) {
@@ -427,6 +422,7 @@ function animovanie() {
         }
 
     });
+    
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
@@ -446,6 +442,7 @@ function animovanie() {
             }
         }
     });
+
 
     // 3. Pohyb a fyzika
     if (keys.right) player.dx += 0.8; 
@@ -667,7 +664,7 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/BugTown/Donatelovapartman/donie.html";
     }
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

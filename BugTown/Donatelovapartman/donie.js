@@ -12,8 +12,8 @@ let minmana = 0;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 0,
-    y: 1300,
+    x: 4500,
+    y: 1100,
     width: 60,
     height: 80
 };
@@ -293,33 +293,28 @@ function isTouching(a, b) {
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
 
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') { //doprava
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
 
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') { //dolava
         keys.left = true;
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) {
+    if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && player.grounded) { //skok
         player.dy = -player.jumpForce;
         player.grounded = false;
         console.log(e.key);
     }
 
-    if ((e.code === 'Backspace') && player.grounded) {
-        player.dy = -player.jumpForce;
-        player.grounded = false;
-         console.log(e.code);
-    }
-
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) {
+    if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && player.grounded) { //skrcit sa
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
+
     if (e.key.toLowerCase() === 'e' && Donatelo.canInteract) {
         if (!Donatelo.isTalking) {
             Donatelo.isTalking = true;
@@ -376,16 +371,16 @@ canvas.addEventListener('click', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') keys.right = false; //doprava
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') keys.left = false; //dolava
 
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') {
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { //skrcit sa
 
         if (player.height === 25) {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.doprava;
+                actualnaakciacici = macky.dolava;
             } else {
                 player.chceSaPostavit = true;
             }
@@ -737,7 +732,7 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/BugTown/Level3/level3.html";
     }
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

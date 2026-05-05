@@ -405,27 +405,23 @@ function isTouching(a, b) {
 
 // === Ovládanie ===
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') { // doprava
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
 
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') { //dolava
         keys.left = true;
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
+    if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && player.grounded) { //skok
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
 
-    if ((e.code === 'Backspace') && player.grounded) {
-        player.dy = -player.jumpForce;
-        player.grounded = false;
-    }
 
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) {
+    if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
@@ -433,10 +429,10 @@ window.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') keys.right = false; //doprava
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') keys.left = false; //dolava
 
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') {
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //dole
         if (player.height === 25) {
             if (mozeSaPostavit()) {
                 player.height = 50;
@@ -737,7 +733,7 @@ c.fillRect(0, -900, canvas.width, canvas.height + 1800);
 
     // === Prechod do ďalšieho levelu ===
     if (isTouching(player, exitZone)) {
-        window.location.href = "SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/BugTown/Level2/level2.html";
     }
 
     // === Postava ===

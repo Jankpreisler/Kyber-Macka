@@ -13,9 +13,9 @@ let abilityUnlocked = false;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 0,
-    y: 1000,
-    width: 60,
+    x: 3250,
+    y: 1200,
+    width: 5000,
     height: 80
 };
 
@@ -81,7 +81,7 @@ const keys = {
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 50,
+    x: 3550,
     y: 750,
     width: 50,
     height: 50,
@@ -691,7 +691,7 @@ function animovanie() {
     }
 
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/UploadHighway/Level3/level3UH.html";
     }
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

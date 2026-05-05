@@ -13,9 +13,9 @@ const gravitacia = 0.4;
 
 const exitZone = {
     x: 0,
-    y: 1000,
-    width: 60,
-    height: 80
+    y: 900,
+    width: 90,
+    height: 100
 };
 
 const Karera = {
@@ -79,8 +79,8 @@ const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 50,
-    y: 1850,
+    x: 100,
+    y: 850,
     width: 50,
     height: 50,
     dx: 0,
@@ -722,7 +722,7 @@ function animovanie() {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/DataBay/Level3/Level3d.html";
     }
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

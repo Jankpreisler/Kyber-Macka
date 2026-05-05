@@ -334,32 +334,28 @@ function isTouching(a, b) {
 
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+   if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //doprava
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
 
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { //dolava
         keys.left = true;
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) {
+    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) { //skok
         player.dy = -player.jumpForce;
         player.grounded = false;
+        console.log(e.key);
     }
 
-    if ((e.code === 'Backspace') && player.grounded) {
-        player.dy = -player.jumpForce;
-        player.grounded = false;
-    }
-
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) {
+   
+    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
-
     if (e.key.toLowerCase() === 'e' && RND.canInteract) {
         if (!RND.isTalking) {
             RND.isTalking = true;
@@ -384,10 +380,11 @@ canvas.addEventListener('click', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.right = false; //doprava
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.left = false; //dolava
 
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') {
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') { //shift
+
         if (player.height === 25) {
             if (mozeSaPostavit()) {
                 player.height = 50;

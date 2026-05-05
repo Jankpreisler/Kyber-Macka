@@ -4,7 +4,7 @@ const c = canvas.getContext('2d');
 canvas.width = 1300; // na normal leevely
 canvas.height = 600;
 
-let zobrazitHUD = true; 
+let zobrazitHUD = true;
 let mana = 100;
 let maximalnaMana = 100;
 let minmana = 0;
@@ -12,8 +12,8 @@ let minmana = 0;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 0,
-    y: 1300,
+    x: 50,
+    y: 1000,
     width: 60,
     height: 80
 };
@@ -27,25 +27,25 @@ const Karera = {
 
 //=== DEFINÍCIA PLATFORIEM ===
 const platforms = [
-    { x: 3100, y: 800, width: 180, height: 70, color: '#333', type: 'valve',startY: 800, range: 2550, speed: 1.8, direction: 1, },
+    { x: 3100, y: 800, width: 180, height: 70, color: '#333', type: 'valve', startY: 800, range: 2550, speed: 1.8, direction: 1, },
     { x: 0, y: 2900, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 0, y: 1900, width: 750, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
-    { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v'}, //left border
+    { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 1000, y: 2000, width: 200, height: 100, color: '#333', type: 'pipe_v', range: 400, id: 'vetrak' }, // vetrak
-    { x: 1000, y: 1800, width: 250, height: 50, color: '#333', type: 'pipe_h' , id: 'stienkaprechodna' },
+    { x: 1000, y: 1800, width: 250, height: 50, color: '#333', type: 'pipe_h', id: 'stienkaprechodna' },
     { x: 1500, y: 1700, width: 250, height: 50, color: '#333', type: 'pipe_h', id: 'stienkaprechodna' },
     { x: 1750, y: 1800, width: 250, height: 50, color: '#333', type: 'pipe_h' },
-    { x: 2250, y: 1800, width: 180, height: 70, color: '#333', type: 'valve',startY: 1150, range: 750, speed: 1.8, direction: 1, },
+    { x: 2250, y: 1800, width: 180, height: 70, color: '#333', type: 'valve', startY: 1150, range: 750, speed: 1.8, direction: 1, },
     { x: 2750, y: 1600, width: 250, height: 50, color: '#333', type: 'pipe_h' },
     { x: 2750, y: 1400, width: 250, height: 50, color: '#333', type: 'pipe_h' },
-    { x: 2750, y: 1200, width: 250, height: 50, color: '#333', type: 'pipe_h',id: 'stienkaprechodna' },
+    { x: 2750, y: 1200, width: 250, height: 50, color: '#333', type: 'pipe_h', id: 'stienkaprechodna' },
     { x: 3200, y: 2500, width: 750, height: 2000, color: '#333', type: 'pipe_v' },
-    { x: 3400, y: 800, width: 180, height: 70, color: '#333', type: 'valve',startY: 800, range: 2550, speed: 1.8, direction: 1, id: 'stienkaprechodna' },
+    { x: 3400, y: 800, width: 180, height: 70, color: '#333', type: 'valve', startY: 800, range: 2550, speed: 1.8, direction: 1, id: 'stienkaprechodna' },
     { x: 3300, y: 2470, width: 50, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false },
     { x: 3470, y: 800, width: 150, height: 150, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 1.2 },
     { x: 3200, y: 2500, width: 750, height: 2000, color: '#333', type: 'pipe_v' },
-    { x: 450, y: 1000, width: 580, height: 20, color: '#555', type: 'pipe_h', startX: 450, range: 2250, speed: 1.8, direction: 1,},
-    {  x: 50, y: 1100, width: 350, height: 50, color: '#333', type: 'pipe_v' },
+    { x: 450, y: 1000, width: 580, height: 20, color: '#555', type: 'pipe_h', startX: 450, range: 2250, speed: 1.8, direction: 1, },
+    { x: 50, y: 1100, width: 350, height: 50, color: '#333', type: 'pipe_v' },
 ];
 
 const macky = {
@@ -74,7 +74,7 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction: 0.9, 
+    friction: 0.9,
     isdashing: false,
     dashspeed: 35,
 };
@@ -146,15 +146,15 @@ function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.save();
 
     if (isPressed) {
-        c.fillStyle = '#004411'; 
+        c.fillStyle = '#004411';
     } else {
         c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
     }
-    
+
     c.fillRect(btn.x, btn.y, btn.width, btn.height);
 
     c.strokeStyle = isPressed ? '#ff0000' : '#323741';
-    c.lineWidth = isPressed ? 4 : 2; 
+    c.lineWidth = isPressed ? 4 : 2;
     c.strokeRect(btn.x, btn.y, btn.width, btn.height);
 
     c.strokeStyle = isPressed ? '#ff0000' : '#1a1d24';
@@ -243,56 +243,48 @@ function isTouching(a, b) {
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
 
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') { // doprava
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
 
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') { //dolava
         keys.left = true;
         actualnaakciacici = macky.doprava;
     }
 
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) {
+    if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && player.grounded) { //skok
         player.dy = -player.jumpForce;
         player.grounded = false;
-        console.log(e.key);
     }
 
-    if ((e.code === 'Backspace') && player.grounded) {
-        player.dy = -player.jumpForce;
-        player.grounded = false;
-         console.log(e.code);
-    }
 
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) {
+    if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
 
-    
-     if ((e.key === 'Q' || e.key === 'q' ) && mana >= 20) {
+    if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
         mana -= 20;
         player.isdashing = true;
         let smer = 0;
         if (keys.right) {
             smer = 1;
         }
-        else if (keys.left){
+        else if (keys.left) {
             smer = -1;
-        } 
-        else smer = (actualnaakciacici === macky.dolava) ? 1 : -1; 
-        player.dx = smer * player.dashspeed;
         }
+        else smer = (actualnaakciacici === macky.dolava) ? 1 : -1;
+        player.dx = smer * player.dashspeed;
+    }
 });
 
 window.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+   if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') keys.right = false; //doprava
+    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') keys.left = false; //dolava
 
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') {
-
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //dole
         if (player.height === 25) {
             if (mozeSaPostavit()) {
                 player.height = 50;
@@ -406,39 +398,42 @@ function animovanie() {
             }
         }
     });
-    
-        if (mana < maximalnaMana) {
-            mana += 0.1; 
-        }
 
-    
+    if (mana < maximalnaMana) {
+        mana += 0.1;
+    }
+
+
+
 
     // --- LOGIKA DASHU (DOPLNENIE) ---
-        if (player.isdashing) {
-    
+    if (player.isdashing) {
+
         if (Math.abs(player.dx) < 5) {
             player.isdashing = false;
         }
-}
+    }
+
+    
 
     // 3. Pohyb a fyzik
-    if (keys.right) player.dx += 0.8; 
-    else if (keys.left) player.dx -= 0.8; 
+    if (keys.right) player.dx += 0.8;
+    else if (keys.left) player.dx -= 0.8;
 
-    player.dx *= player.friction; 
-    
+    player.dx *= player.friction;
+
     // Limit maximálnej rýchlosti hráča
-    if(player.isdashing == true) {
-        
-         if (player.dx > player.dashspeed) player.dx = player.dashspeed;
+    if (player.isdashing == true) {
+
+        if (player.dx > player.dashspeed) player.dx = player.dashspeed;
         if (player.dx < -player.dashspeed) player.dx = -player.dashspeed;
     }
-    else{
-         if (player.dx > player.speed) player.dx = player.speed;
+    else {
+        if (player.dx > player.speed) player.dx = player.speed;
         if (player.dx < -player.speed) player.dx = -player.speed;
         player.dy += gravitacia;
     }
-   
+
     player.x += player.dx;
     player.y += player.dy;
     player.grounded = false;
@@ -480,32 +475,32 @@ function animovanie() {
             }
         }
 
-       // ===== DRUHÝ VETRÁK (DOĽAVA) =====
-if (p.id === 'vetrak2' && p.zapnuty === true) {
+        // ===== DRUHÝ VETRÁK (DOĽAVA) =====
+        if (p.id === 'vetrak2' && p.zapnuty === true) {
 
-    const vnutri =
-        player.y + player.height > p.y &&
-        player.y < p.y + p.height &&
-        player.x < p.x &&
-        player.x + player.width > p.x - p.range;
+            const vnutri =
+                player.y + player.height > p.y &&
+                player.y < p.y + p.height &&
+                player.x < p.x &&
+                player.x + player.width > p.x - p.range;
 
-    if (vnutri) {
-        player.dx -= 0.67; 
-    }
+            if (vnutri) {
+                player.dx -= 0.67;
+            }
 
-    // Častice - UPRAVENÉ ŠPAWNOVANIE
-    if (Math.random() > 0.4) { // Trochu sme zvýšili šancu, aby bol hustejší
-        windParticles.push({
-            // TOTO JE KĽÚČ: x nebude len p.x, ale náhodný bod v celom dosahu
-            x: p.x - Math.random() * p.range, 
-            y: p.y + Math.random() * p.height,
-            speed: Math.random() * 5 + 2,
-            opacity: Math.random() * 0.5 + 0.5, // Náhodná priehľadnosť pre prirodzenejší vzhľad
-            direction: 'left',
-            minX: p.x - p.range
-        });
-    }
-}
+            // Častice - UPRAVENÉ ŠPAWNOVANIE
+            if (Math.random() > 0.4) { // Trochu sme zvýšili šancu, aby bol hustejší
+                windParticles.push({
+                    // TOTO JE KĽÚČ: x nebude len p.x, ale náhodný bod v celom dosahu
+                    x: p.x - Math.random() * p.range,
+                    y: p.y + Math.random() * p.height,
+                    speed: Math.random() * 5 + 2,
+                    opacity: Math.random() * 0.5 + 0.5, // Náhodná priehľadnosť pre prirodzenejší vzhľad
+                    direction: 'left',
+                    minX: p.x - p.range
+                });
+            }
+        }
 
     });
 
@@ -551,8 +546,8 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     // 4. Kolízie
     platforms.forEach(platform => {
-        if (platform.id === "stienkaprechodna" ) return;
-        if (platform.id === "vetrak2" ) return;
+        if (platform.id === "stienkaprechodna") return;
+        if (platform.id === "vetrak2") return;
         if (platform.visible === false) return;
         if (
             player.x < platform.x + platform.width &&
@@ -567,9 +562,9 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
             // dopad zhora
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
-            player.y = platform.y - player.height;
-            player.dy = 0;
-            player.grounded = true;
+                player.y = platform.y - player.height;
+                player.dy = 0;
+                player.grounded = true;
 
                 if (platform.type === 'valve' && platform.speed) {
                     player.y += platform.speed * platform.direction;
@@ -577,7 +572,7 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
                 else if (platform.type === 'pipe_h' && platform.speed) {
                     player.x += platform.speed * platform.direction;
                 }
-        }
+            }
 
             // náraz sprava do steny
             else if (player.dx > 0 && (player.x + player.width - player.dx) <= platform.x) {
@@ -635,7 +630,7 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/BugTown/Level4/Level4.html";
     }
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
@@ -655,35 +650,35 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
         const barWidth = 250;
         const barHeight = 30;
 
-    // 1. Pozadie baru (tmavý podklad)
+        // 1. Pozadie baru (tmavý podklad)
         c.fillStyle = 'rgba(20, 20, 20, 0.8)';
         c.beginPath();
-        c.roundRect(barX, barY, barWidth, barHeight, 5); 
+        c.roundRect(barX, barY, barWidth, barHeight, 5);
         c.fill();
         c.strokeStyle = '#333';
         c.lineWidth = 4;
         c.stroke();
 
-    // 2. Samotný Progress (Výplň many)
+        // 2. Samotný Progress (Výplň many)
         let percento = mana / maximalnaMana;
         if (percento < 0) percento = 0; // Ochrana proti zápornej mane
 
-    // Vytvoríme gradient (prechod farieb z tmavomodrej do svetlomodrej)
+        // Vytvoríme gradient (prechod farieb z tmavomodrej do svetlomodrej)
         let manaGrad = c.createLinearGradient(barX, 0, barX + barWidth, 0);
         manaGrad.addColorStop(0, '#0044ff'); // Tmavšia modrá na začiatku
         manaGrad.addColorStop(1, '#00d4ff'); // Žiarivá azúrová na konci
 
         c.fillStyle = manaGrad;
         c.beginPath();
-    // Vykreslíme výplň podľa aktuálnej many
+        // Vykreslíme výplň podľa aktuálnej many
         c.roundRect(barX + 2, barY + 2, (barWidth - 4) * percento, barHeight - 4, 3);
         c.fill();
 
-    // 3. Efekt "lesku" na bare (biely prúžok navrchu)
+        // 3. Efekt "lesku" na bare (biely prúžok navrchu)
         c.fillStyle = 'rgba(255, 255, 255, 0.1)';
         c.fillRect(barX + 2, barY + 2, (barWidth - 4) * percento, (barHeight - 4) / 2);
 
-    // 4. Textové info
+        // 4. Textové info
         c.fillStyle = "white";
         c.font = "bold 13px Courier New";
         c.shadowColor = "black";
@@ -691,12 +686,12 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
 
-    // --- JEDNODUCHÝ INVENTÁR ---
+        // --- JEDNODUCHÝ INVENTÁR ---
         c.fillStyle = "rgba(0, 0, 0, 0.6)";
         c.beginPath();
         c.roundRect(barX, barY + 455, 200, 100, 5); //nasjkor vyska sirka height invertara zaoblenie
         c.fill();
-    
+
         c.fillStyle = "#aaa";
         c.font = "11px Arial";
         c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);

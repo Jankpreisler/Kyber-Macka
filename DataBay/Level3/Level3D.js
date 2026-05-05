@@ -13,8 +13,8 @@ let abilityUnlocked = false;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 0,
-    y: 1000,
+    x: 100,
+    y: 2400,
     width: 60,
     height: 80
 };
@@ -30,7 +30,7 @@ const Karera = {
 const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 0, y: 1900, width: 750, height: 230, color: '#333', type: 'pipe_v' }, //spawn
-    { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
+    { x: 0, y: 100, width: 1, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
     { x: 3500, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 0, y: 2500, width: 550, height: 230, color: '#333', type: 'pipe_v' },
     { x: 400, y: 2050, width: 50, height: 530, color: '#333', type: 'pipe_v', id:"Dvierka", visible:true },
@@ -516,6 +516,7 @@ function animovanie() {
         }
     }
 
+
     // 3. Pohyb a fyzika
     if (keys.right) player.dx += 0.8;
     else if (keys.left) player.dx -= 0.8;
@@ -808,7 +809,7 @@ function animovanie() {
     }
 
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/DataBay/Level4/level4D.js";
     }
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
