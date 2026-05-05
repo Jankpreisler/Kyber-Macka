@@ -113,31 +113,29 @@ const RND   = {
     y: 1250,
     width: 50,
     height: 50,
-    color: '#00ff40',
-    name: "Experiment 3065",
+    color: '#3c00ff',
+    name: "Leo",
     dialogues: [
         { hovori: "MAČKA", text: "Mňau?" },
-        { hovori: "Dr. Rokwel", text: "Kto si cicovy priatel." },
-        { hovori: "MAČKA", text: "Mnau." },
-        { hovori: "Dr. Rokwel", text: "Ano uz to vidime. Mas pokazeny prekladaci cip." },
-        { hovori: "Dr. Rokwel", text: "Uz by to malo byt" },
-        { hovori: "MAČKA", text: "Neviem ci to uplne fungovalo" },
-        { hovori: "MAČKA", text: "Pockaj pocujem hlas. Dakujem Dr." },
-        { hovori: "Dr. Rokwel", text: "A co hladas tu dole. Detekujem ze si jeho dokanaly prototip." },
-        { hovori: "Dr. Rokwel", text: "Lenze si slobodny bez nutnosti ho pocuvat. My sa tu pred nim schovavame" },
-        { hovori: "Dr. Rokwel", text: "Ale neviem nas oslobodit od neho. " },
-        { hovori: "Dr. Rokwel", text: "Keby nas nasiel mohol by z nas urobit svojich otrokov. CO vlastne aj sme" },
-        { hovori: "MAČKA", text: "Ja si nic nepamatam. Prve na co si spominam je ako som lezal v rieke tu dole." },
-        { hovori: "MAČKA", text: "Pockaj nieco sa mi vracia. Pamatam si na svojich bratov a sestry." },
-        { hovori: "Dr. Rokwel", text: "Neboj sa o nich nic horsie sa im uz nemoze stat." },
-        { hovori: "Dr. Rokwel", text: "Kazdopadne vidim ze ty nas zachranis Mesto riadi z The Cor-u." },
-        { hovori: "Dr. Rokwel", text: "Dostan sa tam a oslobod nas." },
-        { hovori: "MAČKA", text: "Ale ja neviem ako" },
-        { hovori: "Dr. Rokwel", text: "Hore mam priatela ten ti pomoze. Vola sa Donatelo a strazi BugTown." },
-        { hovori: "Dr. Rokwel", text: "On ti vsetko vysvetli." },
-        { hovori: "MAČKA", text: "Okej. Urobim co viem" },
-        { hovori: "Dr. Rokwel", text: "Boh nech ta chrani" },
-        { hovori: "Dr. Rokwel", text: "A oslobod nas. Vsetkych" },
+        { hovori: "Leo", text: "Kto ta poslal" },
+        { hovori: "MAČKA", text: "Donatelo" },
+        { hovori: "Leo", text: "Vypadni" },
+        { hovori: "Leo", text: "Nemame sa o com bavit" },
+        { hovori: "MAČKA", text: "Preco ved je to tvoj brat" },
+        { hovori: "Leo", text: "Pre mna je mrtvy" },
+        { hovori: "Leo", text: "Nemame sa o com bavit" },
+        { hovori: "Leo", text: "Pre mna je mrtvy" },
+        { hovori: "MAČKA", text: "Len mi povedz ako sa dostanem do" },
+         { hovori: "Leo", text: "Cor-u zblaznil si sa" },
+         { hovori: "Leo", text: "S tym ti nepomozem" },
+         { hovori: "MAČKA", text: "Aspon ako sa tam dostanem" },
+         { hovori: "MAČKA", text: "Slubil som to Rokvelovi" },
+         { hovori: "Leo", text: "Najdi mikeyho je databay" },
+         { hovori: "Leo", text: "Len si davaj pozor na orbi" },
+         { hovori: "Leo", text: "Mas neuveritelnu schopnost ich lahko porazit" },
+         { hovori: "MAČKA", text: "Dobre, najdem ho" },
+         { hovori: "Leo", text: "A pozdravuj ho odo mna" },
+        
     ],
     currentLine: 0,
     isTalking: false,
@@ -742,14 +740,14 @@ if (platform.type === 'valve') {
         const isCat = dialog.hovori === "MAČKA";
 
         c.fillStyle = "rgba(0, 0, 0, 0.85)";
-        c.strokeStyle = isCat ? "#00ff41" : "#5901a0";
+        c.strokeStyle = isCat ? "#00ff41" : "#3c00ff";
         c.lineWidth = 3;
         c.beginPath();
         c.roundRect(250, 450, 800, 110, 15);
         c.fill();
         c.stroke();
 
-        c.fillStyle = isCat ? "#00ff41" : "#5901a0";
+        c.fillStyle = isCat ? "#00ff41" : "#3c00ff";
         c.font = "bold 20px Courier New";
         c.fillText(dialog.hovori, 280, 480);
 

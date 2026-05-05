@@ -29,16 +29,16 @@ const Karera = {
 // === DEFINÍCIA PLATFORIEM ===
 const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
-    { x: 0, y: 800, width: 750, height: 230, color: '#333', type: 'pipe_v'}, //spawn
+    { x: 0, y: 800, width: 750, height: 230, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h', friction: 5},
-    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h'},
-    { x: 2200, y: 600, width: 180, height: 70, color: '#333', type: 'valve', startY: 600, range: 1000, speed: 1.8, direction: 1},
-    { x: 1350, y: 1500, width: 750, height: 50, color: '#333', type: 'pipe_h'},
-    { x: 950, y: 1500, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
-    { x: 1550, y: 1900, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
-    { x: 2550, y: 2100, width: 250, height: 1550, color: '#333', type: 'pipe_h'},
-    { x: 2750, y: 2100, width: 1550, height: 1550, color: '#333', type: 'pipe_h'},
+    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h', friction: 5 },
+    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 2200, y: 600, width: 180, height: 70, color: '#333', type: 'valve', startY: 600, range: 1000, speed: 1.8, direction: 1 },
+    { x: 1350, y: 1500, width: 750, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 950, y: 1500, width: 250, height: 1550, color: '#333', type: 'pipe_h' },
+    { x: 1550, y: 1900, width: 250, height: 1550, color: '#333', type: 'pipe_h' },
+    { x: 2550, y: 2100, width: 250, height: 1550, color: '#333', type: 'pipe_h' },
+    { x: 2750, y: 2100, width: 1550, height: 1550, color: '#333', type: 'pipe_h' },
 ];
 
 const Mikey = {
@@ -46,39 +46,30 @@ const Mikey = {
     y: 2050,
     width: 50,
     height: 50,
-    color: '#5901a0',
-    name: "Mikey",
+    color: '#ff0000',
+    name: "Rafauel",
     dialogues: [
-        { hovori: "MAČKA", text: "Mňau?" },
-        { hovori: "MAČKA", text: "Teda Halo?" },
-        { hovori: "Donatelo", text: "Ano" },
-        { hovori: "Donatelo", text: "Kto si?" },
-        { hovori: "Donatelo", text: "Som Macka asi neviem nepamatam si na svoje meno" },
-        { hovori: "Donatelo", text: "He He si vtipny ako moj dobry priatel JKP." },
-        { hovori: "Donatelo", text: "Ako si sa o mne dozvedel" },
-        { hovori: "MAČKA", text: "Dr. Rokvel ma poslal" },
-        { hovori: "Donatelo", text: "Trochu som dufal ze jeden z mojich bratov" },
-        { hovori: "MAČKA", text: "Ty mas bratov" },
-        { hovori: "Donatelo", text: "Ano, 3 Lea, Michaela, Raynolda ako ty novodobi umelci" },
-        { hovori: "MAČKA", text: "Ja som mal ties ale neviem co sa stalo" },
-        { hovori: "MAČKA", text: "Dufam ze..." },
-        { hovori: "MAČKA", text: "Alw nic... Nechaj to tak." },
-        { hovori: "MAČKA", text: "Co sa stalo tvojim" },
-        { hovori: "Donatelo", text: "Pohadal som sa snimi" },
-        { hovori: "Donatelo", text: "A oni teda my sme sa...." },
-        { hovori: "Donatelo", text: "Odcudzili" },
-        { hovori: "Donatelo", text: "Kazdopadne. Si jeden z prototypov" },
-        { hovori: "Donatelo", text: "Minule som videl jedneho z vas ako skakal ako divy" },
-        { hovori: "Donatelo", text: "Musis ho aktivovat a budes neporazitelny" },
-        { hovori: "MAČKA", text: "Dakujem za rada...Pockat" },
-        { hovori: "MAČKA", text: "Ako...Ja..?" },
-        { hovori: "Donatelo", text: "Mozno su to tvoji surodenci.." },
-        { hovori: "MAČKA", text: "Neviem dufam alebo nie" },
-        { hovori: "Donatelo", text: "Najdi LEA" },
-        { hovori: "Donatelo", text: "Malby byt tu v meste" },
-        { hovori: "MAČKA", text: "Jasne, chapem" },
-        { hovori: "Donatelo", text: "A......" },
-        { hovori: "Donatelo", text: "Povedz mu ze ma to mrzi" },
+        { hovori: "MAČKA", text: "Mňau? Si to ty Raf?" },
+        { hovori: "Rafauel", text: "Ano a ty si kto?" },
+        { hovori: "MAČKA", text: "No priatel tvojich bratov" },
+        { hovori: "Rafauel", text: "Ako sa im dari" },
+        { hovori: "MAČKA", text: "Celkom sa dari" },
+        { hovori: "Rafauel", text: "Dobre, co chces odo mna" },
+        { hovori: "MAČKA", text: "Ako sa dostat do Cor-u" },
+        { hovori: "Rafauel", text: "To je prilis nebezpecne" },
+        { hovori: "Rafauel", text: "A vlastne ti ani neverim" },
+        { hovori: "MAČKA", text: "Preco nie?" },
+        { hovori: "Rafauel", text: "Taky ako ty to tu znicili" },
+        { hovori: "MAČKA", text: "Ja to napravim" },
+        { hovori: "Rafauel", text: "Okej naharm ti kod od brany" },
+        { hovori: "Rafauel", text: "Aby sa sa k nemu dostal" },
+        { hovori: "Rafauel", text: "A mozno by sa ti hodilo aj trochu si zalietat" },
+        { hovori: "MAČKA", text: "Preco Viem splhat" },
+        { hovori: "Rafauel", text: "Aj na klzkom povrchu ?" },
+        { hovori: "Rafauel", text: "No vidis" },
+        { hovori: "Rafauel", text: "Ked uz budes tam" },
+        { hovori: "Rafauel", text: "Tak si davaj pozor" },
+        { hovori: "Rafauel", text: "A zachran nas vsetkych" },
     ],
     currentLine: 0,
     isTalking: false,
@@ -359,13 +350,13 @@ window.addEventListener('keydown', (e) => {
         } else {
             Mikey.currentLine++;
             if (Mikey.currentLine >= Mikey.dialogues.length) {
-                Mikey.isTalking = false; 
+                Mikey.isTalking = false;
                 zobrazitHUD = true;
                 console.log("Vitaj v mojom hude");
-                const dvere = platforms.find(p => p.id === 'tajne_dvere'); 
+                const dvere = platforms.find(p => p.id === 'tajne_dvere');
                 if (dvere) {
-                    dvere.visible = false; 
-                    dvere.id = 'stienkaprechodna'; 
+                    dvere.visible = false;
+                    dvere.id = 'stienkaprechodna';
                 }
             }
         }
@@ -379,16 +370,16 @@ canvas.addEventListener('click', (e) => {
             Mikey.currentLine = 0;
         } else {
             Mikey.currentLine++;
-            if (Mikey.currentLine >= Mikey.dialogues.length){
+            if (Mikey.currentLine >= Mikey.dialogues.length) {
                 Mikey.isTalking = false;
                 zobrazitHUD = true;
                 console.log("Vitaj v mojom hude");
-                const dvere = platforms.find(p => p.id === 'tajne_dvere'); 
+                const dvere = platforms.find(p => p.id === 'tajne_dvere');
                 if (dvere) {
-                    dvere.visible = false; 
-                    dvere.id = 'stienkaprechodna'; 
+                    dvere.visible = false;
+                    dvere.id = 'stienkaprechodna';
                 }
-            }    
+            }
         }
     }
 });
@@ -399,7 +390,7 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') keys.up = false;
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keys.down = false;
     if (e.key === 't' || e.key === 'T') keys.t = false;
-    
+
     if (e.key === 'u' || e.key === 'U') {
         keys.u = false;
     }
@@ -785,17 +776,17 @@ function animovanie() {
     if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
         c.drawImage(macky.npc, Mikey.x, Mikey.y, Mikey.width, Mikey.height);
     } else {
-        c.fillStyle = Mikey.color; 
+        c.fillStyle = Mikey.color;
         c.fillRect(Mikey.x, Mikey.y, Mikey.width, Mikey.height);
     }
 
-    let dist = Math.sqrt((player.x - Mikey.x)**2 + (player.y - Mikey.y)**2);
+    let dist = Math.sqrt((player.x - Mikey.x) ** 2 + (player.y - Mikey.y) ** 2);
     Mikey.canInteract = dist < 120;
 
     if (Mikey.canInteract && !Mikey.isTalking) {
-        c.fillStyle = "#ffff00"; 
+        c.fillStyle = "#ffff00";
         c.font = "bold 15px Arial";
-        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20); 
+        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20);
     }
 
     function vykonajAkciu(id) {
@@ -830,14 +821,14 @@ function animovanie() {
         abilityUnlocked = true;
 
         c.fillStyle = "rgba(0, 0, 0, 0.85)";
-        c.strokeStyle = isCat ? "#00ff41" : "#5901a0";
+        c.strokeStyle = isCat ? "#00ff41" : "#ff0000";
         c.lineWidth = 3;
         c.beginPath();
         c.roundRect(250, 450, 800, 110, 15);
         c.fill();
         c.stroke();
 
-        c.fillStyle = isCat ? "#00ff41" : "#5901a0";
+        c.fillStyle = isCat ? "#00ff41" : "#ff0000";
         c.font = "bold 20px Courier New";
         c.fillText(dialog.hovori, 280, 480);
 
@@ -899,7 +890,7 @@ function animovanie() {
         c.fillText("• Wall Climb [T + W/S]", barX + 10, barY + 520);
 
         if (abilityUnlocked) {
-            c.fillText("• Lietanie [U]", barX + 10, barY + 540);
+            c.fillText("• Lietanie [U + W]", barX + 10, barY + 540);
         } else {
             c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
         }
