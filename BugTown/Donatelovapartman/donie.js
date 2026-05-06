@@ -314,6 +314,9 @@ window.addEventListener('keydown', (e) => {
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
+     if ((e.key === 'Tab' || e.code === 'Tab')) {
+        window.location.href = "/MenunaTab/tab.html";
+    }
 
     if (e.key.toLowerCase() === 'e' && Donatelo.canInteract) {
         if (!Donatelo.isTalking) {

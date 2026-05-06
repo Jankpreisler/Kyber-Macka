@@ -342,6 +342,9 @@ window.addEventListener('keydown', (e) => {
             keys.u = true;
         }
     }
+     if ((e.key === 'Tab' || e.code === 'Tab')) {
+        window.location.href = "/MenunaTab/tab.html";
+    }
 
     if (e.key.toLowerCase() === 'e' && Mikey.canInteract) {
         if (!Mikey.isTalking) {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="sk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
         * {
             box-sizing: border-box;
         }
+
         body {
             background-color: #05050A;
             color: #00FF9D;
@@ -18,12 +20,14 @@
             flex-direction: column;
             align-items: center;
         }
+
         h1 {
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 30px;
             text-shadow: 0 0 10px #00FF9D;
         }
+
         .container {
             display: flex;
             flex-direction: column;
@@ -31,6 +35,7 @@
             width: 100%;
             max-width: 950px;
         }
+
         .section {
             background: #101018;
             border: 1px solid #333;
@@ -38,6 +43,7 @@
             padding: 20px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
         }
+
         .section-title {
             color: #FFF;
             margin-top: 0;
@@ -47,11 +53,13 @@
             border-bottom: 1px solid #222;
             padding-bottom: 8px;
         }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 15px;
         }
+
         button {
             background-color: #151520;
             color: #00FF9D;
@@ -65,11 +73,13 @@
             transition: all 0.2s ease;
             text-align: center;
         }
+
         button:hover:not(:disabled) {
             background-color: #00FF9D;
             color: #05050A;
             box-shadow: 0 0 10px #00FF9D;
         }
+
         button:disabled {
             background-color: #1a1a1a;
             color: #444;
@@ -77,9 +87,11 @@
             cursor: not-allowed;
             text-shadow: none;
         }
+
         .actions {
             margin-top: 35px;
         }
+
         .reset-btn {
             background-color: #C53030;
             color: #FFF;
@@ -90,14 +102,16 @@
             cursor: pointer;
             transition: background 0.2s ease;
         }
+
         .reset-btn:hover {
             background-color: #E53E3E;
         }
     </style>
 </head>
+
 <body>
 
-    <h1>Cyber Cat - Výber levelu</h1>
+    <h1>Cyber Cat - Zones</h1>
 
     <div class="container">
         <div class="section">
@@ -108,7 +122,8 @@
                 <button id="lvl-3" onclick="selectLevel(3, '../SerWers/Level3/level3.html')">3. Serwers</button>
                 <button id="lvl-4" onclick="selectLevel(4, '../SerWers/Level4/level4.html')">4. Serwers</button>
                 <button id="lvl-5" onclick="selectLevel(5, '../SerWers/Level5/level5.html')">5. Serwers</button>
-                <button id="lvl-6" onclick="selectLevel(6, '../SerWers/Level6-prechod_do_bugtown/Prechod.html')">6. Serwers</button>
+                <button id="lvl-6" onclick="selectLevel(6, '../SerWers/Level6-prechod_do_bugtown/Prechod.html')">6.
+                    Serwers</button>
             </div>
         </div>
 
@@ -126,22 +141,27 @@
         <div class="section">
             <div class="section-title">03. DataBay</div>
             <div class="grid">
-                <button id="lvl-12" onclick="selectLevel(12, '/DataBay/Level1/level1d.js')">1. DataBay</button>
-                <button id="lvl-13" onclick="selectLevel(13, '/DataBay/Level2/level22D.js')">2. DataBay</button>
-                <button id="lvl-14" onclick="selectLevel(14, '/DataBay/Level3/level3D.js')">3. DataBay</button>
-                <button id="lvl-15" onclick="selectLevel(15, '/DataBay/Level4/level4D.js')">4. DataBay</button>
-                <button id="lvl-16" onclick="selectLevel(16, '/DataBay/Level5/level4D.js')">5. DataBay</button>
+                <button id="lvl-12" onclick="selectLevel(12, '../DataBay/Level1/level1d.html')">1. DataBay</button>
+                <button id="lvl-13" onclick="selectLevel(13, '../DataBay/Level2/level22D.html')">2. DataBay</button>
+                <button id="lvl-14" onclick="selectLevel(14, '../DataBay/Level3/level3D.html')">3. DataBay</button>
+                <button id="lvl-15" onclick="selectLevel(15, '../DataBay/Level4/level4D.html')">4. DataBay</button>
+                <button id="lvl-16" onclick="selectLevel(16, '../DataBay/Level5/level4D.html')">5. DataBay</button>
             </div>
         </div>
 
         <div class="section">
             <div class="section-title">04. UploadHighway</div>
             <div class="grid">
-                <button id="lvl-17" onclick="selectLevel(17, 'upload/level1.html')">1. Highway</button>
-                <button id="lvl-18" onclick="selectLevel(18, 'upload/level2.html')">2. Highway</button>
-                <button id="lvl-19" onclick="selectLevel(19, 'upload/level3.html')">3. Highway</button>
-                <button id="lvl-20" onclick="selectLevel(20, 'upload/level4.html')">4. Highway</button>
-                <button id="lvl-21" onclick="selectLevel(21, 'upload/level5.html')">5. Highway</button>
+                <button id="lvl-17" onclick="selectLevel(17, '../UploadHighway/Level1/level1UH.html')">1.
+                    Highway</button>
+                <button id="lvl-18" onclick="selectLevel(18, '../UploadHighway/Level2/level2UH.html')">2.
+                    Highway</button>
+                <button id="lvl-19" onclick="selectLevel(19, '../UploadHighway/Level3/level3UH.html')">3.
+                    Highway</button>
+                <button id="lvl-20" onclick="selectLevel(20, '../UploadHighway/Level1/level1.UH.html')">4.
+                    Highway</button>
+                <button id="lvl-21" onclick="selectLevel(21, '../UploadHighway/Level1/level1.UH.html')">5.
+                    Highway</button>
             </div>
         </div>
     </div>
@@ -152,4 +172,5 @@
 
     <script src="../progresik.js"></script>
 </body>
+
 </html>

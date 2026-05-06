@@ -266,6 +266,9 @@ window.addEventListener('keydown', (e) => {
             if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
         }
     }
+     if ((e.key === 'Tab' || e.code === 'Tab')) {
+        window.location.href = "/MenunaTab/tab.html";
+    }
 });
 
 canvas.addEventListener('click', (e) => {

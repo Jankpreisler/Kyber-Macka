@@ -76,8 +76,8 @@ const keys = {
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
-    x: 3500,
-    y: 1350,
+    x: 50,
+    y: 1850,
     width: 50,
     height: 50,
     dx: 0,
@@ -299,6 +299,9 @@ window.addEventListener('keydown', (e) => {
 
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
+    }
+     if ((e.key === 'Tab' || e.code === 'Tab')) {
+        window.location.href = "/MenunaTab/tab.html";
     }
 });
 

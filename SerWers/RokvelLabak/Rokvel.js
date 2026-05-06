@@ -286,6 +286,9 @@ window.addEventListener('keydown', (e) => {
             if (Rokvel.currentLine >= Rokvel.dialogues.length) Rokvel.isTalking = false;
         }
     }
+     if ((e.key === 'Tab' || e.code === 'Tab')) {
+        window.location.href = "/MenunaTab/tab.html";
+    }
 });
 
 canvas.addEventListener('click', (e) => {

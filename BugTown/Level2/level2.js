@@ -307,6 +307,9 @@ window.addEventListener('keydown', (e) => {
             if (RND.currentLine >= RND.dialogues.length) RND.isTalking = false;
         }
     }
+     if ((e.key === 'Tab' || e.code === 'Tab')) {
+        window.location.href = "/MenunaTab/tab.html";
+    }
 });
 
 canvas.addEventListener('click', (e) => {
