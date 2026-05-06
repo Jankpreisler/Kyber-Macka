@@ -277,25 +277,25 @@ window.addEventListener('keydown', (e) => {
         actualnaakciacici = macky.plazeniedoprava;
     }
 
-    if (e.key.toLowerCase() === 'e' && npc.canInteract) {
-        if (!npc.isTalking) {
-            npc.isTalking = true;
-            npc.currentLine = 0;
+    if (e.key.toLowerCase() === 'e' && Rokvel.canInteract) {
+        if (!Rokvel.isTalking) {
+            Rokvel.isTalking = true;
+            Rokvel.currentLine = 0;
         } else {
-            npc.currentLine++;
-            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
+            Rokvel.currentLine++;
+            if (Rokvel.currentLine >= Rokvel.dialogues.length) Rokvel.isTalking = false;
         }
     }
 });
 
 canvas.addEventListener('click', (e) => {
-    if (npc.canInteract) {
-        if (!npc.isTalking) {
-            npc.isTalking = true;
-            npc.currentLine = 0;
+    if (Rokvel.canInteract) {
+        if (!Rokvel.isTalking) {
+            Rokvel.isTalking = true;
+            Rokvel.currentLine = 0;
         } else {
-            npc.currentLine++;
-            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
+            Rokvel.currentLine++;
+            if (Rokvel.currentLine >= Rokvel.dialogues.length) Rokvel.isTalking = false;
         }
     }
 });

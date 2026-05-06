@@ -1,29 +1,62 @@
 const ProgresManazer = {
-    nacitaj: function() {
-        const data = localStorage.getItem('macacipurrgres');
-        if (data) {
-            return JSON.parse(data);
-        } else {
-            
-            return { odomknute: 1 };
-        }
-    },
+            nacitaj: function() {
+                let data = localStorage.getItem('cyber_cat_progres');
+                return data ? JSON.parse(data) : { odomknute: 1 };
+            },
+            ulozLevel: function(level) {
+                let data = this.nacitaj();
+                if (level >= data.odomknute) {
+                    data.odomknute = level + 1;
+                    localStorage.setItem('cyber_cat_progres', JSON.stringify(data));
+                    renderMenu(); // Obnoví stav tlačidiel po uložení
+                }
+            },
+            resetujProgres: function() {
+                localStorage.removeItem('cyber_cat_progres');
+                window.location.reload();
+            }
+        };
 
-    ulozLevel: function(cisloLevelu) {
-        let aktualnyProgres = this.nacitaj();
-        
-        if (cisloLevelu > aktualnyProgres.odomknute) {
-            aktualnyProgres.odomknute = cisloLevelu;
-            localStorage.setItem('macacipurrgres', JSON.stringify(aktualnyProgres));
-            console.log(`Progres uložený: Level ${cisloLevelu} odomknutý.`);
-        }
-    },
+        function renderMenu() {
+            let progres = ProgresManazer.nacitaj();
 
-    skontrolujPristup: function(cisloLevelu) {
-        let aktualnyProgres = this.nacitaj();
-        if (aktualnyProgres.odomknute < cisloLevelu) {
-            alert("Tento level ešte nemáš odomknutý!");
-            window.location.href = "index.html"; 
+            for (let i = 1; i <= 21; i++) {
+                let btn = document.getElementById('lvl-' + i);
+                if (btn) {
+                    if (i <= progres.odomknute) {
+                        btn.disabled = false;
+                        if (btn.innerText.includes('🔒')) {
+                            btn.innerText = btn.innerText.replace('🔒 ', '');
+                        }
+                    } else {
+                        btn.disabled = true;
+                        if (!btn.innerText.includes('🔒')) {
+                            btn.innerText = '🔒 ' + btn.innerText;
+                        }
+                    }
+                }
+            }
         }
-    }
-};
+
+        // Akcia po kliknutí na tlačidlo levelu
+        function selectLevel(levelNumber, url) {
+            let progres = ProgresManazer.nacitaj();
+
+            if (levelNumber <= progres.odomknute) {
+                // Odstránili sme ukladanie progresu pri kliknutí, 
+                // aby sa levely neodomkli predčasne.
+                
+                // Presmerovanie na zvolený súbor
+                window.location.href = url;
+            } else {
+                alert("Tento level je zamknutý!");
+            }
+        }
+
+        function resetProgress() {
+            if (confirm("Naozaj chcete vymazať všetok postup?")) {
+                ProgresManazer.resetujProgres();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderMenu);

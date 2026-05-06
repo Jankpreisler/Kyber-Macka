@@ -684,6 +684,9 @@ function animovanie() {
     }
 
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(17);
+        }
         window.location.href = "/UploadHighway/Level2/level2UH.html";
     }
 

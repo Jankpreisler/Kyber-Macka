@@ -664,6 +664,9 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(8);
+        }
         window.location.href = "/BugTown/Donatelovapartman/donie.html";
     }
     // 6. Vykreslenie postavy

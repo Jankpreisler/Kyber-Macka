@@ -722,6 +722,9 @@ if (platform.type === 'valve') {
 
     // PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(10);
+        }
         window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
     }
 

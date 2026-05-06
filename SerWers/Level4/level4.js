@@ -397,16 +397,15 @@ function animovanie() {
                     player.chceSaPostavit = false;
                 }
             }
-            if (isTouching(player, exitZone)) {
-                ProgresManazer.ulozLevel(5);
-                window.location.href = "SerWers/Level5/Level5.html";
-            }
         }
         
     });
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(4);
+        }
         window.location.href = "/SerWers/RokvelLabak/Rokvel.html";
     }
 

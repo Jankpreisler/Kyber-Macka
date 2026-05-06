@@ -404,10 +404,7 @@ function animovanie() {
             if (platform.type === 'trigger') {
                 vykonajAkciu(platform.id);
             }
-            if (isTouching(player, exitZone)) {
-                ProgresManazer.ulozLevel(7);
-                window.location.href = "BugTown/Level1/Level1.html";
-            }
+           
         }
     });
 
@@ -445,6 +442,9 @@ function animovanie() {
     
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(6);
+        }
         window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
     }
 

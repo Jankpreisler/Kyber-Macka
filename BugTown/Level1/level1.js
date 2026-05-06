@@ -733,6 +733,10 @@ c.fillRect(0, -900, canvas.width, canvas.height + 1800);
 
     // === Prechod do ďalšieho levelu ===
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(7);
+        }
+        window.location.href = "SerWers/Level2/level2.html";
         window.location.href = "/BugTown/Level2/level2.html";
     }
 

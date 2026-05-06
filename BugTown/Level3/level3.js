@@ -630,6 +630,9 @@ function animovanie() {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(9);
+        }
         window.location.href = "/BugTown/Level4/Level4.html";
     }
     // 6. Vykreslenie postavy

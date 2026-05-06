@@ -822,6 +822,9 @@ function animovanie() {
     }
 
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(14);
+        }
         window.location.href = "/DataBay/Level4/level4D.js";
     }
 

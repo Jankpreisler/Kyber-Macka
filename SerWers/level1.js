@@ -290,10 +290,6 @@ function animovanie() {
                 player.y = platform.y + platform.height;
                 player.dy = 0;
             }
-            if (isTouching(player, exitZone)) {
-                ProgresManazer.ulozLevel(2); // Odomkne level 6 v pamäti
-                window.location.href = "SerWers/Level2/Level2.html";
-            }
         }
     });
 
@@ -308,6 +304,9 @@ function animovanie() {
 
     // 5. PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(1);
+        }
         window.location.href = "SerWers/Level2/level2.html";
     }
 

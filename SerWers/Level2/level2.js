@@ -364,16 +364,15 @@ function animovanie() {
                     player.chceSaPostavit = false;
                 }
             }
-            if (isTouching(player, exitZone)) {
-                ProgresManazer.ulozLevel(3);
-                window.location.href = "SerWers/Level3/Level3.html";
-            }
         }
         
     });
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(2);
+        }
         window.location.href = "/SerWers/Level3/level3.html";
     }
 

@@ -722,6 +722,9 @@ function animovanie() {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(13);
+        }
         window.location.href = "/DataBay/Level3/Level3d.html";
     }
     // 6. Vykreslenie postavy

@@ -475,16 +475,15 @@ function animovanie() {
                     player.chceSaPostavit = false;
                 }
             }
-            if (isTouching(player, exitZone)) {
-                ProgresManazer.ulozLevel(4);
-                window.location.href = "SerWers/Level4/Level4.html";
-            }
         }
         
     });
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
+        if (typeof ProgresManazer !== 'undefined') {
+            ProgresManazer.ulozLevel(3);
+        }
         window.location.href = "/SerWers/Level4/level4.html";
     }
 
