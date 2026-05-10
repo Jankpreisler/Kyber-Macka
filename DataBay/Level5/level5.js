@@ -14,7 +14,7 @@ const gravitacia = 0.4;
 
 const exitZone = {
     x: 3450,
-    y: 2120,
+    y: 9670,
     width: 60,
     height: 80
 };
@@ -28,21 +28,47 @@ const Karera = {
 
 //=== DEFINÍCIA PLATFORIEM ===
 const platforms = [
-    { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
+    { x: 0, y: 3500, width: 1000, height: 20, color: '#050505', type: 'floor' }, //kill
 
     { x: 0, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, //spawn
+  
+  
+    //spodne platformy
+      { x: 150, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, 
+        { x: 300, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, 
+        { x: 450, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, 
+        { x: 600, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, 
+    { x: 750, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, 
+    { x: 900, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, 
 
-  { x: 400, y: 2000, width: 50, height: 1500, color: '#333', type: 'pipe_v' },
-    { x: 700, y: 2000, width: 50, height: 1500, color: '#333', type: 'pipe_v' },
-    { x: 900, y: 1900, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 1100, y: 1900, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 1700, y: 2300, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 2000, y: 2300, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 2200, y: 2300, width: 1000, height: 150, color: '#333', type: 'pipe_h' },
+    //koniec spodnych platforiem
 
-{ x: 3400, y: 2000, width: 100, height: 150, color: '#333', type: 'pipe_v' },
-{ x: 3400, y: 2200, width: 100, height: 150, color: '#333', type: 'pipe_v' },
 
+
+   { x: 150, y: 1820, width: 150, height: 150, color: '#333', type: 'pipe_v' }, 
+   { x: 450, y: 1900, width: 150, height: 100, color: '#333', type: 'pipe_v' }, 
+   { x: 600, y: 1700, width: 150, height: 100, color: '#333', type: 'pipe_v' }, 
+      { x: 800, y: 1600, width: 50, height: 400, color: '#333', type: 'pipe_v' }, 
+   { x: 900, y: 1700, width: 150, height: 100, color: '#333', type: 'pipe_v' }, 
+    { x: 1200, y: 1700, width: 150, height: 100, color: '#333', type: 'pipe_v' }, 
+       { x: 1150, y: 1500, width: 50, height: 500, color: '#333', type: 'pipe_v', visible: false  },  //neviditelna platforma
+//spodok
+    { x: 1050, y: 10000, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 1200, y: 10000, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 1600, y: 10000, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 1900, y: 10000, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 1900, y: 9950, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 2200, y: 9850, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 2500, y: 9750, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 3000, y: 9750, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 3150, y: 9750, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 3300, y: 9750, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+    { x: 3450, y: 9750, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
+
+    { x: 3450, y: 9565, width: 150, height: 100, color: '#333', type: 'pipe_v' }, 
+
+     
+    { x: 0, y: 13000, width: 10000, height: 20, color: '#050505', type: 'floor' }, //kill
 
     { x: 0, y: 100, width: 1, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
     { x: 3500, y: 100, width: 150, height: 200000, color: '#333', type: 'pipe_v' }, //left border
@@ -514,6 +540,8 @@ function animovanie() {
 
 
 
+
+
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
@@ -838,7 +866,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(14);
         }
-        window.location.href = "/DataBay/Level5/level5.js";
+        window.location.href = "/DataBay/Level4/level4D.js";
     }
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
