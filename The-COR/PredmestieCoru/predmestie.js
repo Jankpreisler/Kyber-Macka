@@ -38,15 +38,19 @@ const platforms = [
     { x: 3250, y: 200, width: 200, height: 300, color: '#333', type: 'pipe_h', range: 700, id: 'vetrak2', zapnuty: true},
     { x: 3050, y: 800, width: 750, height: 50, color: '#333', type: 'pipe_h'},
     { x: 3250, y: 750, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false },
+     { x: 5750, y: 170, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo2', isPressed: false },
+     { x: 5050, y: 750, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo1', isPressed: false },
     { x: 3750, y: 200, width: 200, height: 50, color: '#333', type: 'pipe_h'},
     { x: 3650, y: 200, width: 750, height: 50, color: '#333', type: 'pipe_h'},
+    { x: 5250, y: 200, width: 750, height: 50, color: '#333', type: 'pipe_h'},
+    { x: 4450, y: 800, width: 950, height: 50, color: '#333', type: 'pipe_v', visible:true},
 
 ];
 
 
 
 const boxy = [
-    { x: 55555555, y: 1850, width: 50, height: 50, dx: 0, dy: 0, friction: 0.8 },
+    { x: 4600, y: 750, width: 50, height: 50, dx: 0, dy: 0, friction: 0.8 },
 ];
 
 const jamka = {
@@ -83,8 +87,8 @@ const keys = {
 let timeScale = 1.0;
 
 let player = {
-    x: 2300,
-    y: 250,
+    x: 5500,
+    y: 50,
     width: 50,
     height: 50,
     dx: 0,
