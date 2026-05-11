@@ -33,30 +33,37 @@ const platforms = [
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
     { x: 850, y: 1250, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 850, range: 150, speed: 2.8, direction: 1 }, // hybajuce sa plosinky
     { x: 1250, y: 1150, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 1250, range: 150, speed: 2.8, direction: -1 }, // hybajuce sa plosinky
-    { x: 1850, y: 500, width: 150, height: 50, color: '#333', type: 'valve', startY: 500, range: 500, speed: 2.5, direction: 1,  },
-    { x: 2250, y: 500, width: 750, height: 50, color: '#333', type: 'pipe_h'},
-    { x: 3250, y: 200, width: 200, height: 300, color: '#333', type: 'pipe_h', range: 700, id: 'vetrak2', zapnuty: true},
-    { x: 3050, y: 800, width: 750, height: 50, color: '#333', type: 'pipe_h'},
+    { x: 1850, y: 500, width: 150, height: 50, color: '#333', type: 'valve', startY: 500, range: 500, speed: 2.5, direction: 1, },
+    { x: 2250, y: 500, width: 750, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 3250, y: 200, width: 200, height: 300, color: '#333', type: 'pipe_h', range: 700, id: 'vetrak2', zapnuty: true },
+    { x: 3050, y: 800, width: 750, height: 50, color: '#333', type: 'pipe_h' },
     { x: 3250, y: 750, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false },
-     { x: 5750, y: 170, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo2', isPressed: false },
-     { x: 5050, y: 750, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo1', isPressed: false },
-    { x: 3750, y: 200, width: 200, height: 50, color: '#333', type: 'pipe_h'},
-    { x: 3650, y: 200, width: 750, height: 50, color: '#333', type: 'pipe_h'},
-    { x: 5250, y: 200, width: 750, height: 50, color: '#333', type: 'pipe_h'},
-    { x: 4450, y: 800, width: 950, height: 50, color: '#333', type: 'pipe_v', visible:true},
+    { x: 5750, y: 170, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo2', isPressed: false },
+    { x: 5050, y: 750, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo1', isPressed: false, visible: false },
+    { x: 3750, y: 200, width: 200, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 3650, y: 200, width: 750, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 5250, y: 200, width: 750, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 4450, y: 800, width: 1150, height: 50, color: '#333', type: 'pipe_v', visible: false, id:"totajnehnedpozoskoku" },
+    { x: 6250, y: 1500, width: 1050, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 6550, y: 1470, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo4', isPressed: false },
+    { x: 4300, y: 1500, width: 2350, height: 50, color: '#333', type: 'pipe_h', visible: false, id: "poslednepatro" },
+    { x: 4500, y: 1450, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo5', isPressed: false, visible: true, },
+    { x: 6250, y: 800, width: 50, height: 550, color: '#333', type: 'pipe_h' },
+    { x: 8500, y: 800, width: 250, height: 1050, color: '#333', type: 'pipe_h',id:"totonakoniecties", visible:"false" },
+    { x: 8750, y: 800, width: 950, height: 50, color: '#333', type: 'pipe_h',id:"totonakoniec", visible:"false" }, 
 
 ];
 
 
 
 const boxy = [
-    { x: 4600, y: 750, width: 50, height: 50, dx: 0, dy: 0, friction: 0.8 },
+    { x: 4600, y: 500, width: 50, height: 50, dx: 0, dy: 0, friction: 0.8 },
 ];
 
 const jamka = {
-    x: 5555555555555555,
-    y: 1,
-    width: 1,
+    x: 6750,
+    y: 1500,
+    width: 100,
     height: 30,
     aktivna: false
 };
@@ -87,8 +94,8 @@ const keys = {
 let timeScale = 1.0;
 
 let player = {
-    x: 5500,
-    y: 50,
+    x: 50,
+    y: 1150,
     width: 50,
     height: 50,
     dx: 0,
@@ -353,11 +360,14 @@ function nastavViditelnost(id, stav) {
     if (p) {
         p.zapnuty = stav;
     }
+    if (p) {
+        p.visible = stav;
+    }
 }
 
 function resetPlayer() {
     player.x = 50;
-    player.y = 750;
+    player.y = 1150;
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
@@ -422,7 +432,7 @@ function animovanie() {
                 p.x += p.speed * p.direction * timeScale;
                 if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
             }
-            
+
             drawRealPipe(p, false);
         } else if (p.type === 'trigger') {
             drawStyledButton(p, false, p.isPressed);
@@ -675,9 +685,11 @@ function animovanie() {
             }
 
             if (jamka.aktivna) {
-                nastavViditelnost('nakocku', true);
+                nastavViditelnost('totonakoniecties', true);
+                nastavViditelnost('totonakoniec', true);
             } else {
-                nastavViditelnost('nakocku', false);
+                nastavViditelnost('totonakoniecties', false);
+                nastavViditelnost('totonakoniec', false);
             }
         });
 
@@ -726,7 +738,25 @@ function animovanie() {
         if (id === 'tlacidlo3') {
             nastavViditelnost('vetrak2', false);
         }
-       
+         if (id === 'tlacidlo4') {
+           
+              nastavViditelnost('tlacidlo5', false);
+        }
+        if (id === 'tlacidlo2') {
+            nastavViditelnost('tlacidlo1', true);
+             nastavViditelnost('totajnehnedpozoskoku', true);
+            
+        }
+         if (id === 'tlacidlo1') {
+            nastavViditelnost('poslednepatro', true);
+          
+            nastavViditelnost('tlacidlo4', false);
+        }
+         if (id === 'tlacidlo5') {
+           // nastavViditelnost('tlacidlo5', false);
+            nastavViditelnost('tlacidlo4', true);
+        }
+
     }
 
     if (isTouching(player, exitZone)) {
