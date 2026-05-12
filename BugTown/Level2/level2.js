@@ -27,22 +27,21 @@ const platforms = [
     { x: 0, y: 1900, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 3360, y: 1400, width: 1, height: 2000, color: '#333', type: 'pipe_v' }, //left border
-    //{ x: 200, y: 1200, width: 200, height: 100, color: '#333', type: 'pipe_v', range: 400, id: 'vetrak' }, //vetrak c1
     { x: 300, y: 1800, width: 170, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1000, y: 1600, width: 1000, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 1000, y: 1600, width: 1000, height: 70, color: '#333', type: 'wall' },
     { x: 650, y: 1700, width: 180, height: 70, color: '#333', type: 'pipe_v' },
     { x: 300, y: 2500, width: 180, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 800, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1300, y: 2500, width: 280, height: 70, color: '#333', type: 'pipe_v' },// tu bude npc
+    { x: 300, y: 2500, width: 280, height: 70, color: '#333', type: 'wall' },
+    { x: 800, y: 2500, width: 280, height: 70, color: '#333', type: 'wall' },
+    { x: 1300, y: 2500, width: 280, height: 70, color: '#333', type: 'wall' },// tu bude npc
     { x: 2000, y: 1270, width: 280, height: 400, color: '#333', type: 'pipe_v', visible: true, id: 'stienkaprechodna'},
     { x: 2000, y: 1600, width: 280, height: 70, color: '#333', type: 'pipe_v' }, // tajna miska vec v nevideitelnej veci
-    { x: 2280, y: 1600, width: 1080, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 2280, y: 1600, width: 1080, height: 70, color: '#333', type: 'wall' },
     { x: 2000, y: 1200, width: 280, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 2280, y: 1200, width: 780, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1200, y: 1480, width: 380, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1400, y: 1360, width: 380, height: 70, color: '#333', type: 'pipe_v' },
-    { x: 1650, y: 1260, width: 180, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 2280, y: 1200, width: 780, height: 70, color: '#333', type: 'wall' },
+    { x: 1200, y: 1480, width: 380, height: 70, color: '#333', type: 'wall' },
+    { x: 1400, y: 1360, width: 380, height: 70, color: '#333', type: 'wall' },
+    { x: 1650, y: 1260, width: 180, height: 70, color: '#333', type: 'wall' },
     { x: 3200, y: 1580, width: 80, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo3', isPressed: false }, 
     { x: 2270, y: 1050, width: 150, height: 150, type: 'pipe_h', range: 1100, id: 'vetrak2', zapnuty: true, maxForce: 7.2 } //vetrak ktory fuka dolava
 ];
@@ -130,73 +129,136 @@ for (let i = 0; i < 30; i++) {
 // === GRAFICKÉ RUTINY ===
 
 function getBrickPattern() {
-    const p = document.createElement('canvas');
+   const p = document.createElement('canvas');
     const pc = p.getContext('2d');
-    p.width = 32;
-    p.height = 16;
-    pc.fillStyle = '#141a14';
-    pc.fillRect(0, 0, 32, 16);
-    pc.fillStyle = '#0a100a';
-    pc.fillRect(0, 0, 30, 14);
-    pc.fillStyle = '#1a251a';
-    pc.fillRect(1, 1, 28, 12);
+    p.width = 64; p.height = 64;
+
+    pc.fillStyle = '#0d0000'; 
+    pc.fillRect(0, 0, 64, 64);
+
+    // Špina s červeným nádychom
+    pc.fillStyle = 'rgba(50, 0, 0, 0.4)';
+    pc.beginPath();
+    pc.arc(32, 32, 25, 0, Math.PI * 2);
+    pc.fill();
+
+    // Červené mikro-káble v špárach
+    pc.strokeStyle = '#220000';
+    pc.lineWidth = 1;
+    pc.strokeRect(0, 0, 64, 32);
+    
+    pc.strokeStyle = '#660000';
+    pc.beginPath();
+    pc.moveTo(0, 32); pc.lineTo(64, 32);
+    pc.stroke();
+
     return c.createPattern(p, 'repeat');
 }
 const brickPattern = getBrickPattern();
 
 function drawRealPipe(p, isVertical) {
-    c.save();
+   c.save();
     let grad;
 
+    // Gradient pre kovovo-biologický povrch (čierna, tmavočervená, oceľová)
     if (isVertical) {
         grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
     } else {
         grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
     }
 
-    grad.addColorStop(0, '#111');
-    grad.addColorStop(0.2, '#3a403a');
-    grad.addColorStop(0.5, '#222');
-    grad.addColorStop(0.8, '#443020');
-    grad.addColorStop(1, '#050505');
+    grad.addColorStop(0, '#050000');   // Úplne tmavý okraj
+    grad.addColorStop(0.2, '#2b0505'); // Tmavočervená "svalovina"
+    grad.addColorStop(0.5, '#444');    // Kovový odlesk v strede
+    grad.addColorStop(0.8, '#1a0a1a'); // Fialovkastý tieň
+    grad.addColorStop(1, '#000');
 
     c.fillStyle = grad;
-    c.fillRect(p.x, p.y, p.width, p.height);
+    // Telo potrubia/kábla
+    c.beginPath();
+    c.roundRect(p.x, p.y, p.width, p.height, 2);
+    c.fill();
 
-    c.fillStyle = 'rgba(0,0,0,0.4)';
+    // Kybernetické detaily a červené svetlá
     if (isVertical) {
-        for (let i = 10; i < p.height; i += 20) {
-            c.fillRect(p.x + 2, p.y + i, p.width - 4, 2);
+        for (let i = 10; i < p.height; i += 30) {
+            // Kovové svorky (úchyty)
+            c.fillStyle = '#222';
+            c.fillRect(p.x - 2, p.y + i, p.width + 4, 4);
+            
+            // Pulzujúce červené svetielko (ako kontrolka na kábli)
+            let pulse = Math.abs(Math.sin(Date.now() / 500)) * 0.8 + 0.2;
+            c.shadowBlur = 10 * pulse;
+            c.shadowColor = '#ff0000';
+            c.fillStyle = `rgba(255, 0, 0, ${pulse})`;
+            c.fillRect(p.x + p.width / 2 - 2, p.y + i + 1, 4, 2);
+            c.shadowBlur = 0;
         }
+        
+        // Dlhá červená "žila" pretekajúca stredom
+        c.strokeStyle = 'rgba(255, 0, 50, 0.3)';
+        c.lineWidth = 1;
+        c.beginPath();
+        c.moveTo(p.x + p.width/2, p.y);
+        c.lineTo(p.x + p.width/2, p.y + p.height);
+        c.stroke();
+
     } else {
-        for (let i = 10; i < p.width; i += 20) {
-            c.fillRect(p.x + i, p.y + 2, 2, p.height - 4);
+        for (let i = 10; i < p.width; i += 30) {
+            // Kovové svorky
+            c.fillStyle = '#222';
+            c.fillRect(p.x + i, p.y - 2, 4, p.height + 4);
+            
+            // Pulzujúce červené svetielko
+            let pulse = Math.abs(Math.sin(Date.now() / 500)) * 0.8 + 0.2;
+            c.shadowBlur = 10 * pulse;
+            c.shadowColor = '#ff0000';
+            c.fillStyle = `rgba(255, 0, 0, ${pulse})`;
+            c.fillRect(p.x + i + 1, p.y + p.height / 2 - 2, 2, 4);
+            c.shadowBlur = 0;
         }
+
+        // Dlhá červená žila
+        c.strokeStyle = 'rgba(255, 0, 50, 0.3)';
+        c.lineWidth = 1;
+        c.beginPath();
+        c.moveTo(p.x, p.y + p.height/2);
+        c.lineTo(p.x + p.width, p.y + p.height/2);
+        c.stroke();
     }
+
     c.restore();
 }
 
 function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.save();
+    
+    // Vonkajšia žiara (Glow)
+    c.shadowBlur = isHovered ? 15 : 5;
+    c.shadowColor = isPressed ? '#ff0000' : '#4b0082';
 
+    // Telo tlačidla
+    const grad = c.createLinearGradient(btn.x, btn.y, btn.x, btn.y + btn.height);
     if (isPressed) {
-        c.fillStyle = '#004411'; 
+        grad.addColorStop(0, '#660000');
+        grad.addColorStop(1, '#220000');
     } else {
-        c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
+        grad.addColorStop(0, isHovered ? '#2a0044' : '#150022');
+        grad.addColorStop(1, '#000000');
     }
     
-    c.fillRect(btn.x, btn.y, btn.width, btn.height);
+    c.fillStyle = grad;
+    c.beginPath();
+    c.roundRect(btn.x, btn.y, btn.width, btn.height, 4);
+    c.fill();
 
-    c.strokeStyle = isPressed ? '#ff0000' : '#323741';
-    c.lineWidth = isPressed ? 4 : 2; 
-    c.strokeRect(btn.x, btn.y, btn.width, btn.height);
-
-    c.strokeStyle = isPressed ? '#ff0000' : '#1a1d24';
+    // Červené "dátové" linky na tlačidle
+    c.strokeStyle = isPressed ? '#ff0000' : 'rgba(255, 0, 0, 0.2)';
     c.lineWidth = 1;
-    for (let i = btn.y + 8; i < btn.y + btn.height - 5; i += 6) {
+    for (let i = 6; i < btn.height - 6; i += 8) {
         c.beginPath();
-        c.moveTo(btn.x + 15, i);
-        c.lineTo(btn.x + btn.width - 15, i);
+        c.moveTo(btn.x + 5, btn.y + i);
+        c.lineTo(btn.x + btn.width - 5, btn.y + i);
         c.stroke();
     }
 
@@ -205,23 +267,29 @@ function drawStyledButton(btn, isHovered = false, isPressed = false) {
 
 function drawRealServer(p) {
     c.save();
-    c.fillStyle = '#0d0f12';
+    c.fillStyle = '#050000';
     c.fillRect(p.x, p.y, p.width, p.height);
 
-    c.strokeStyle = '#1a1d24';
-    c.lineWidth = 1;
-    for (let i = p.y + 10; i < p.y + p.height; i += 10) {
+    // Červená mriežka
+    c.strokeStyle = '#330000';
+    for (let i = p.y + 5; i < p.y + p.height; i += 8) {
         c.beginPath();
-        c.moveTo(p.x + 10, i);
-        c.lineTo(p.x + p.width - 10, i);
+        c.moveTo(p.x + 5, i);
+        c.lineTo(p.x + p.width - 5, i);
         c.stroke();
     }
 
-    for (let i = p.y + 15; i < p.y + p.height; i += 20) {
-        c.fillStyle = Math.random() > 0.98 ? '#ff0055' : (Math.random() > 0.5 ? '#00ff41' : '#004411');
-        c.fillRect(p.x + 5, i, 4, 3);
+    // Intenzívne červené LEDky
+    for (let i = p.y + 10; i < p.y + p.height; i += 12) {
+        let active = Math.random() > 0.7;
+        c.fillStyle = active ? '#ff0000' : '#220000';
+        if(active) {
+            c.shadowBlur = 5;
+            c.shadowColor = '#ff0000';
+        }
+        c.fillRect(p.x + 4, i, 4, 2);
+        c.shadowBlur = 0;
     }
-
     c.restore();
 }
 
@@ -231,7 +299,7 @@ function drawFog() {
 
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(0, 100, 30, 0.1)');
+        grad.addColorStop(0, 'rgba(150, 0, 0, 0.2)'); // Červený opar
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
@@ -241,7 +309,6 @@ function drawFog() {
 
         p.x += Math.sin(time + p.r) * 0.2;
     });
-
     c.restore();
 }
 
@@ -335,7 +402,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.doprava;
+                actualnaakciacici = macky.dolava;
             } else {
                 player.chceSaPostavit = true;
             }

@@ -20,7 +20,7 @@ const ProgresManazer = {
         function renderMenu() {
             let progres = ProgresManazer.nacitaj();
 
-            for (let i = 1; i <= 21; i++) {
+            for (let i = 1; i <= 23; i++) {
                 let btn = document.getElementById('lvl-' + i);
                 if (btn) {
                     if (i <= progres.odomknute) {
