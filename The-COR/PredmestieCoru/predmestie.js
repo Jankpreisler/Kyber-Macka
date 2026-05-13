@@ -29,7 +29,7 @@ const Karera = {
 // === DEFINÍCIA PLATFORIEM ===
 const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
-    { x: 0, y: 1200, width: 550, height: 230, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 0, y: 1200, width: 550, height: 230, color: '#333', type: 'pipe_h' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
     { x: 850, y: 1250, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 850, range: 150, speed: 2.8, direction: 1 }, // hybajuce sa plosinky
     { x: 1250, y: 1150, width: 180, height: 20, color: '#555', type: 'pipe_h', startX: 1250, range: 150, speed: 2.8, direction: -1 }, // hybajuce sa plosinky
@@ -126,11 +126,11 @@ function getBrickPattern() {
     const pc = p.getContext('2d');
     p.width = 32;
     p.height = 16;
-    pc.fillStyle = '#141a14';
+    pc.fillStyle = '#ffffff';
     pc.fillRect(0, 0, 32, 16);
-    pc.fillStyle = '#0a100a';
+    pc.fillStyle = '#ffffff';
     pc.fillRect(0, 0, 30, 14);
-    pc.fillStyle = '#1a251a';
+    pc.fillStyle = '#ffffff';
     pc.fillRect(1, 1, 28, 12);
     return c.createPattern(p, 'repeat');
 }
@@ -147,11 +147,11 @@ function drawRealPipe(p, isVertical) {
         grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
     }
 
-    grad.addColorStop(0, '#111');
-    grad.addColorStop(0.2, '#3a403a');
-    grad.addColorStop(0.5, '#222');
-    grad.addColorStop(0.8, '#443020');
-    grad.addColorStop(1, '#050505');
+    grad.addColorStop(0, '#ffffff');
+    grad.addColorStop(0.2, '#f5eae2');
+    grad.addColorStop(0.5, '#ffffff');
+    grad.addColorStop(0.8, '#f5eae2');
+    grad.addColorStop(1, '#ffffff');
 
     c.fillStyle = grad;
     c.fillRect(p.x, p.y, p.width, p.height);
@@ -163,7 +163,7 @@ function drawRealPipe(p, isVertical) {
         }
     } else {
         for (let i = 10; i < p.width; i += 20) {
-            c.fillRect(p.x + i, p.y + 2, 2, p.height - 4);
+           
         }
     }
     c.restore();
@@ -172,16 +172,16 @@ function drawRealPipe(p, isVertical) {
 function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.save();
     if (isPressed) {
-        c.fillStyle = '#004411';
+        c.fillStyle = '#989a98';
     } else {
-        c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
+        c.fillStyle = isHovered ? '#64666c' : '#65686e';
     }
     c.fillRect(btn.x, btn.y, btn.width, btn.height);
-    c.strokeStyle = isPressed ? '#04ff00' : '#323741';
+    c.strokeStyle = isPressed ? '#04ff00' : '#eaf1ff';
     c.lineWidth = isPressed ? 4 : 2;
     c.strokeRect(btn.x, btn.y, btn.width, btn.height);
 
-    c.strokeStyle = isPressed ? '#00ff37' : '#1a1d24';
+    c.strokeStyle = isPressed ? '#00ff37' : '#e6eeff';
     c.lineWidth = 1;
     for (let i = btn.y + 8; i < btn.y + btn.height - 5; i += 6) {
         c.beginPath();
@@ -191,27 +191,6 @@ function drawStyledButton(btn, isHovered = false, isPressed = false) {
     }
     c.restore();
 }
-
-function drawRealServer(p) {
-    c.save();
-    c.fillStyle = '#0d0f12';
-    c.fillRect(p.x, p.y, p.width, p.height);
-    c.strokeStyle = '#1a1d24';
-    c.lineWidth = 1;
-    for (let i = p.y + 10; i < p.y + p.height; i += 10) {
-        c.beginPath();
-        c.moveTo(p.x + 10, i);
-        c.lineTo(p.x + p.width - 10, i);
-        c.stroke();
-    }
-
-    for (let i = p.y + 15; i < p.y + p.height; i += 20) {
-        c.fillStyle = Math.random() > 0.98 ? '#ff0055' : (Math.random() > 0.5 ? '#00ff41' : '#004411');
-        c.fillRect(p.x + 5, i, 4, 3);
-    }
-    c.restore();
-}
-
 function drawFog() {
     c.save();
     c.globalCompositeOperation = 'screen';
@@ -444,10 +423,8 @@ function animovanie() {
                     p.direction *= -1;
                 }
             }
-            c.fillStyle = '#400';
+            c.fillStyle = 'rgb(250, 230, 230)';
             c.fillRect(p.x, p.y, p.width, p.height);
-            c.fillStyle = '#600';
-            c.fillRect(p.x + 5, p.y + 20, 10, 10);
         } else if (p.speed) {
             p.x += p.speed * p.direction * timeScale;
             if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
@@ -820,8 +797,8 @@ function animovanie() {
         c.roundRect(barX, barY + 455, 200, 100, 5);
         c.fill();
 
-        c.fillStyle = "#aaa";
-        c.font = "11px Arial";
+        c.fillStyle = "#ffffff";
+        c.font = "bold 11px Arial";
         c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
         c.fillText("• Cyber Rage  [R]", barX + 10, barY + 500);
         c.fillText("• Wall Climb [T + W/S]", barX + 10, barY + 520);
