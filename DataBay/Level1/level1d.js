@@ -12,7 +12,7 @@ let minmana = 0;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 150,
+    x: 4850,
     y: 1800,
     width: 60,
     height: 80
@@ -127,14 +127,14 @@ for (let i = 0; i < 30; i++) {
 function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
-    p.width = 32;
-    p.height = 16;
-    pc.fillStyle = '#141a14';
-    pc.fillRect(0, 0, 32, 16);
-    pc.fillStyle = '#0a100a';
-    pc.fillRect(0, 0, 30, 14);
-    pc.fillStyle = '#1a251a';
-    pc.fillRect(1, 1, 28, 12);
+    p.width = 64; p.height = 64;
+    // Základná farba - "Gunmetal Blue" (oceľová)
+    pc.fillStyle = '#ff7300';
+    pc.fillRect(0, 0, 64, 64);
+    pc.fillStyle = 'rgba(243, 151, 59, 0.3)';
+    pc.beginPath();
+    pc.arc(10, 10, 20, 0, Math.PI * 2);
+    pc.fill();
     return c.createPattern(p, 'repeat');
 }
 
@@ -142,80 +142,42 @@ const brickPattern = getBrickPattern();
 
 function drawRealPipe(p, isVertical) {
     c.save();
-    let grad;
+    // Farba dreva (naplavené drevo - Driftwood)
+    let grad = isVertical 
+        ? c.createLinearGradient(p.x, p.y, p.x + p.width, p.y)
+        : c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
 
-    if (isVertical) {
-        grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
-    } else {
-        grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
-    }
-
-    grad.addColorStop(0, '#111');
-    grad.addColorStop(0.2, '#3a403a');
-    grad.addColorStop(0.5, '#222');
-    grad.addColorStop(0.8, '#443020');
-    grad.addColorStop(1, '#050505');
-
+    grad.addColorStop(0, '#8d6e63'); // Tmavšie hnedé okraje
+    grad.addColorStop(0.5, '#bcaaa4'); // Svetlejší stred (vypálený slnkom)
+    grad.addColorStop(1, '#8d6e63');
     c.fillStyle = grad;
     c.fillRect(p.x, p.y, p.width, p.height);
-
-    c.fillStyle = 'rgba(0,0,0,0.4)';
-    if (isVertical) {
-        for (let i = 10; i < p.height; i += 20) {
-            c.fillRect(p.x + 2, p.y + i, p.width - 4, 2);
-        }
-    } else {
-        for (let i = 10; i < p.width; i += 20) {
-            c.fillRect(p.x + i, p.y + 2, 2, p.height - 4);
-        }
-    }
     c.restore();
 }
 
 function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.save();
 
+    // Základná farba
     if (isPressed) {
-        c.fillStyle = '#004411';
+        c.fillStyle = '#ffcc00'; // Žiarivá žltá pri stlačení
     } else {
-        c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
+        c.fillStyle = isHovered ? '#334455' : '#223344';
     }
-
     c.fillRect(btn.x, btn.y, btn.width, btn.height);
 
-    c.strokeStyle = isPressed ? '#04ff00' : '#323741';
-    c.lineWidth = isPressed ? 4 : 2;
+    // Výstražné pruhy na okrajoch (Hazard Stripes)
+    c.strokeStyle = '#ffcc00';
+    c.lineWidth = 2;
     c.strokeRect(btn.x, btn.y, btn.width, btn.height);
 
-    c.strokeStyle = isPressed ? '#00ff37' : '#1a1d24';
-    c.lineWidth = 1;
-    for (let i = btn.y + 8; i < btn.y + btn.height - 5; i += 6) {
+    // Vnútro tlačidla - industriálny mriežkový vzor
+    c.strokeStyle = isPressed ? '#000' : 'rgba(255, 204, 0, 0.3)';
+    for (let i = 4; i < btn.width; i += 8) {
         c.beginPath();
-        c.moveTo(btn.x + 15, i);
-        c.lineTo(btn.x + btn.width - 15, i);
+        c.moveTo(btn.x + i, btn.y);
+        c.lineTo(btn.x + i, btn.y + btn.height);
         c.stroke();
-    }
-
-    c.restore();
-}
-
-function drawRealServer(p) {
-    c.save();
-    c.fillStyle = '#0d0f12';
-    c.fillRect(p.x, p.y, p.width, p.height);
-
-    c.strokeStyle = '#1a1d24';
-    c.lineWidth = 1;
-    for (let i = p.y + 10; i < p.y + p.height; i += 10) {
-        c.beginPath();
-        c.moveTo(p.x + 10, i);
-        c.lineTo(p.x + p.width - 10, i);
-        c.stroke();
-    }
-
-    for (let i = p.y + 15; i < p.y + p.height; i += 20) {
-        c.fillStyle = Math.random() > 0.98 ? '#ff0055' : (Math.random() > 0.5 ? '#00ff41' : '#004411');
-        c.fillRect(p.x + 5, i, 4, 3);
     }
 
     c.restore();
@@ -227,7 +189,7 @@ function drawFog() {
 
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(0, 100, 30, 0.1)');
+        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)'); 
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
@@ -235,7 +197,7 @@ function drawFog() {
         c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         c.fill();
 
-        p.x += Math.sin(time + p.r) * 0.2;
+        p.x += Math.sin(time + p.r) * 0.15;
     });
 
     c.restore();
@@ -391,9 +353,6 @@ function animovanie() {
             c.fillStyle = sliz;
             c.fillRect(p.x, p.y, p.width, 3);
         }
-        else if (p.type === 'wall') {
-            drawRealServer(p);
-        }
         else if (p.type === 'pipe_v') {
             drawRealPipe(p, true);
         }
@@ -451,12 +410,7 @@ function animovanie() {
             player.isdashing = false;
         }
     }
-    c.fillStyle = 'rgba(0, 150, 255, 0.3)';
-    c.strokeStyle = '#0066cc';
-    c.lineWidth = 2;
-    c.fillRect(exitZone.x, exitZone.y, exitZone.width, exitZone.height);
-    c.strokeRect(exitZone.x, exitZone.y, exitZone.width, exitZone.height);
-
+    
     // 3. Pohyb a fyzik
     if (keys.right) player.dx += 0.8;
     else if (keys.left) player.dx -= 0.8;
@@ -774,7 +728,7 @@ function animovanie() {
         }
 
         // 4. Vykreslenie kocky
-        c.fillStyle = '#8B4513'; // Hnedá farba drevenej debny
+        c.fillStyle = '#00ffee'; // Hnedá farba drevenej debny
         c.fillRect(box.x, box.y, box.width, box.height);
         // Detail na kocku (X-ko ako na debne)
         c.strokeStyle = '#5D2E0A';

@@ -116,7 +116,7 @@ let player = {
 // --- ATMOSFÉRICKÉ EFEKTY ---
 let time = 0;
 let fogParticles = [];
-let windParticles = []; // Toto pridaj
+let windParticles = []; 
 for (let i = 0; i < 30; i++) {
     fogParticles.push({
         x: Math.random() * canvas.width,
@@ -158,75 +158,31 @@ const brickPattern = getBrickPattern();
 
 function drawRealPipe(p, isVertical) {
    c.save();
-    let grad;
+    // Čierny vysoko leštený základ
+    c.fillStyle = '#000';
+    c.fillRect(p.x, p.y, p.width, p.height);
 
-    // Gradient pre kovovo-biologický povrch (čierna, tmavočervená, oceľová)
+    // Bočné žiariace linky (Tron Style)
+    c.shadowBlur = 10;
+    c.shadowColor = '#ff0000';
+    c.fillStyle = '#ff0000';
+
     if (isVertical) {
-        grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
+        c.fillRect(p.x, p.y, 2, p.height); // Ľavá linka
+        c.fillRect(p.x + p.width - 2, p.y, 2, p.height); // Pravá linka
+
+        // Digitálny pulz (bežiaci kód)
+        let offset = (Date.now() / 10) % p.height;
+        c.fillStyle = '#fff'; // Biely záblesk dát
+        c.fillRect(p.x + 2, p.y + offset, p.width - 4, 10);
     } else {
-        grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+        c.fillRect(p.x, p.y, p.width, 2);
+        c.fillRect(p.x, p.y + p.height - 2, p.width, 2);
+
+        let offset = (Date.now() / 10) % p.width;
+        c.fillStyle = '#fff';
+        c.fillRect(p.x + offset, p.y + 2, 10, p.height - 4);
     }
-
-    grad.addColorStop(0, '#050000');   // Úplne tmavý okraj
-    grad.addColorStop(0.2, '#2b0505'); // Tmavočervená "svalovina"
-    grad.addColorStop(0.5, '#444');    // Kovový odlesk v strede
-    grad.addColorStop(0.8, '#1a0a1a'); // Fialovkastý tieň
-    grad.addColorStop(1, '#000');
-
-    c.fillStyle = grad;
-    // Telo potrubia/kábla
-    c.beginPath();
-    c.roundRect(p.x, p.y, p.width, p.height, 2);
-    c.fill();
-
-    // Kybernetické detaily a červené svetlá
-    if (isVertical) {
-        for (let i = 10; i < p.height; i += 30) {
-            // Kovové svorky (úchyty)
-            c.fillStyle = '#222';
-            c.fillRect(p.x - 2, p.y + i, p.width + 4, 4);
-            
-            // Pulzujúce červené svetielko (ako kontrolka na kábli)
-            let pulse = Math.abs(Math.sin(Date.now() / 500)) * 0.8 + 0.2;
-            c.shadowBlur = 10 * pulse;
-            c.shadowColor = '#ff0000';
-            c.fillStyle = `rgba(255, 0, 0, ${pulse})`;
-            c.fillRect(p.x + p.width / 2 - 2, p.y + i + 1, 4, 2);
-            c.shadowBlur = 0;
-        }
-        
-        // Dlhá červená "žila" pretekajúca stredom
-        c.strokeStyle = 'rgba(255, 0, 50, 0.3)';
-        c.lineWidth = 1;
-        c.beginPath();
-        c.moveTo(p.x + p.width/2, p.y);
-        c.lineTo(p.x + p.width/2, p.y + p.height);
-        c.stroke();
-
-    } else {
-        for (let i = 10; i < p.width; i += 30) {
-            // Kovové svorky
-            c.fillStyle = '#222';
-            c.fillRect(p.x + i, p.y - 2, 4, p.height + 4);
-            
-            // Pulzujúce červené svetielko
-            let pulse = Math.abs(Math.sin(Date.now() / 500)) * 0.8 + 0.2;
-            c.shadowBlur = 10 * pulse;
-            c.shadowColor = '#ff0000';
-            c.fillStyle = `rgba(255, 0, 0, ${pulse})`;
-            c.fillRect(p.x + i + 1, p.y + p.height / 2 - 2, 2, 4);
-            c.shadowBlur = 0;
-        }
-
-        // Dlhá červená žila
-        c.strokeStyle = 'rgba(255, 0, 50, 0.3)';
-        c.lineWidth = 1;
-        c.beginPath();
-        c.moveTo(p.x, p.y + p.height/2);
-        c.lineTo(p.x + p.width, p.y + p.height/2);
-        c.stroke();
-    }
-
     c.restore();
 }
 

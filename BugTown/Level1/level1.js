@@ -72,14 +72,12 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction: 2
+    friction:  0.9
 };
 
-// === Atmosféra BUGTOWN (tmavá, zeleno-čierna, červené bugy) ===
 let time = 0;
 let fogParticles = [];
 let windParticles = [];
-
 for (let i = 0; i < 30; i++) {
     fogParticles.push({
         x: Math.random() * canvas.width,
@@ -89,279 +87,136 @@ for (let i = 0; i < 30; i++) {
     });
 }
 
-// === Tehlová textúra (tmavá, nie červená) ===
+// === GRAFICKÉ RUTINY ===
+
 function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
-    p.width = 32;
-    p.height = 16;
+    p.width = 64; p.height = 64;
 
-    pc.fillStyle = '#0a0f0a';
-    pc.fillRect(0, 0, 32, 16);
+    pc.fillStyle = '#0d0000';
+    pc.fillRect(0, 0, 64, 64);
 
-    pc.fillStyle = '#050805';
-    pc.fillRect(0, 0, 30, 14);
+    // Špina s červeným nádychom
+    pc.fillStyle = 'rgba(50, 0, 0, 0.4)';
+    pc.beginPath();
+    pc.arc(32, 32, 25, 0, Math.PI * 2);
+    pc.fill();
 
-    pc.fillStyle = '#111811';
-    pc.fillRect(1, 1, 28, 12);
+    // Červené mikro-káble v špárach
+    pc.strokeStyle = '#220000';
+    pc.lineWidth = 1;
+    pc.strokeRect(0, 0, 64, 32);
+
+    pc.strokeStyle = '#660000';
+    pc.beginPath();
+    pc.moveTo(0, 32); pc.lineTo(64, 32);
+    pc.stroke();
 
     return c.createPattern(p, 'repeat');
 }
 const brickPattern = getBrickPattern();
 
-// === Rúry (tmavé, len jemné červené odlesky) ===
-// === Rúry (tmavé, futuristické, stabilné) ===
 function drawRealPipe(p, isVertical) {
     c.save();
-
-    // --- tmavý kovový gradient ---
-    let grad;
-    if (isVertical) {
-        grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
-    } else {
-        grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
-    }
-
-    grad.addColorStop(0,   '#0b0710');   // veľmi tmavá fialová
-    grad.addColorStop(0.25,'#1a1125');   // jemný kovový odlesk
-    grad.addColorStop(0.5, '#050208');   // stredový tieň
-    grad.addColorStop(0.75,'#1a1125');   // späť odlesk
-    grad.addColorStop(1,   '#0b0710');   // tmavý okraj
-
-    c.fillStyle = grad;
+    // Čierny vysoko leštený základ
+    c.fillStyle = '#000';
     c.fillRect(p.x, p.y, p.width, p.height);
 
-    // --- jemný tmavo-fialový okraj ---
-    c.strokeStyle = 'rgba(120, 40, 180, 0.25)';
-    c.lineWidth = 2.5;
-    c.strokeRect(p.x, p.y, p.width, p.height);
-
-    // --- jemné červené technické linky (pevné, neblikajú) ---
-    c.strokeStyle = 'rgba(255, 0, 40, 0.18)';
-    c.lineWidth = 1;
+    // Bočné žiariace linky (Tron Style)
+    c.shadowBlur = 10;
+    c.shadowColor = '#ff0000';
+    c.fillStyle = '#ff0000';
 
     if (isVertical) {
-        for (let i = p.y + 12; i < p.y + p.height - 12; i += 26) {
-            c.beginPath();
-            c.moveTo(p.x + 4, i);
-            c.lineTo(p.x + p.width - 4, i);
-            c.stroke();
-        }
+        c.fillRect(p.x, p.y, 2, p.height); // Ľavá linka
+        c.fillRect(p.x + p.width - 2, p.y, 2, p.height); // Pravá linka
+
+        // Digitálny pulz (bežiaci kód)
+        let offset = (Date.now() / 10) % p.height;
+        c.fillStyle = '#fff'; // Biely záblesk dát
+        c.fillRect(p.x + 2, p.y + offset, p.width - 4, 10);
     } else {
-        for (let i = p.x + 12; i < p.x + p.width - 12; i += 26) {
-            c.beginPath();
-            c.moveTo(i, p.y + 4);
-            c.lineTo(i, p.y + p.height - 4);
-            c.stroke();
-        }
+        c.fillRect(p.x, p.y, p.width, 2);
+        c.fillRect(p.x, p.y + p.height - 2, p.width, 2);
+
+        let offset = (Date.now() / 10) % p.width;
+        c.fillStyle = '#fff';
+        c.fillRect(p.x + offset, p.y + 2, 10, p.height - 4);
     }
-
-    // --- jemné červené body (pevné, tmavšie) ---
-    const bugPoints = [
-        { ox: 0.25, oy: 0.25 },
-        { ox: 0.7,  oy: 0.35 },
-        { ox: 0.4,  oy: 0.7  },
-        { ox: 0.8,  oy: 0.75 }
-    ];
-
-    bugPoints.forEach(pt => {
-        const bx = p.x + p.width * pt.ox;
-        const by = p.y + p.height * pt.oy;
-        const r = 3;
-
-        let bug = c.createRadialGradient(bx, by, 0, bx, by, r * 2);
-        bug.addColorStop(0, 'rgba(180,0,20,0.8)');
-        bug.addColorStop(0.4, 'rgba(120,0,20,0.4)');
-        bug.addColorStop(1, 'rgba(0,0,0,0)');
-
-        c.fillStyle = bug;
-        c.beginPath();
-        c.arc(bx, by, r * 2, 0, Math.PI * 2);
-        c.fill();
-    });
-
     c.restore();
 }
 
-
-// === Tlačidlo (BUG červené) ===
 function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.save();
 
-    c.fillStyle = isPressed ? '#440000' : (isHovered ? '#2a2a2a' : '#111');
-    c.fillRect(btn.x, btn.y, btn.width, btn.height);
+    // Vonkajšia žiara (Glow)
+    c.shadowBlur = isHovered ? 15 : 5;
+    c.shadowColor = isPressed ? '#ff0000' : '#4b0082';
 
-    c.strokeStyle = isPressed ? '#ff0000' : '#550000';
-    c.lineWidth = isPressed ? 4 : 2;
-    c.strokeRect(btn.x, btn.y, btn.width, btn.height);
+    // Telo tlačidla
+    const grad = c.createLinearGradient(btn.x, btn.y, btn.x, btn.y + btn.height);
+    if (isPressed) {
+        grad.addColorStop(0, '#660000');
+        grad.addColorStop(1, '#220000');
+    } else {
+        grad.addColorStop(0, isHovered ? '#2a0044' : '#150022');
+        grad.addColorStop(1, '#000000');
+    }
 
-    c.strokeStyle = isPressed ? '#ff0000' : '#330000';
+    c.fillStyle = grad;
+    c.beginPath();
+    c.roundRect(btn.x, btn.y, btn.width, btn.height, 4);
+    c.fill();
+
+    // Červené "dátové" linky na tlačidle
+    c.strokeStyle = isPressed ? '#ff0000' : 'rgba(255, 0, 0, 0.2)';
     c.lineWidth = 1;
-    for (let i = btn.y + 8; i < btn.y + btn.height - 5; i += 6) {
+    for (let i = 6; i < btn.height - 6; i += 8) {
         c.beginPath();
-        c.moveTo(btn.x + 15, i);
-        c.lineTo(btn.x + btn.width - 15, i);
+        c.moveTo(btn.x + 5, btn.y + i);
+        c.lineTo(btn.x + btn.width - 5, btn.y + i);
         c.stroke();
     }
 
     c.restore();
 }
 
-// === Server (tmavý, červené error LED) ===
 function drawRealServer(p) {
     c.save();
-    c.fillStyle = '#0d0f12';
+    c.fillStyle = '#050000';
     c.fillRect(p.x, p.y, p.width, p.height);
 
-    c.strokeStyle = '#1a1d24';
-    c.lineWidth = 1;
-    for (let i = p.y + 10; i < p.y + p.height; i += 10) {
+    // Červená mriežka
+    c.strokeStyle = '#330000';
+    for (let i = p.y + 5; i < p.y + p.height; i += 8) {
         c.beginPath();
-        c.moveTo(p.x + 10, i);
-        c.lineTo(p.x + p.width - 10, i);
+        c.moveTo(p.x + 5, i);
+        c.lineTo(p.x + p.width - 5, i);
         c.stroke();
     }
 
-    for (let i = p.y + 15; i < p.y + p.height; i += 20) {
-        c.fillStyle = Math.random() > 0.97 ? '#ff0033' : '#330000';
-        c.fillRect(p.x + 5, i, 4, 3);
-    }
-
-    c.restore();
-}
-
-
-// === BUG MESTO (výraznejšie, neonové, viac vibrat farby) ===
-function drawBugCity() {
-    c.save();
-
-    const baseY = 1600;
-    const cityWidth = 4000;
-
-    // --- Jemné fialové pásy (tmavšie pozadie) ---
-    for (let i = 0; i < 40; i++) {
-        const y = baseY - 600 + i * 30;
-        c.fillStyle = `rgba(140, 80, 255, 0.05)`;
-        c.fillRect(-500, y, cityWidth + 1000, 2);
-    }
-
-    // --- Jemné fialovo-ružové mraky ---
-    for (let i = 0; i < 20; i++) {
-        const cx = (i * 200 + time * 200) % (cityWidth + 400) - 200;
-        const cy = baseY - 300 + Math.sin(i + time) * 80;
-        const r = 140;
-
-        let cloud = c.createRadialGradient(cx, cy, 0, cx, cy, r);
-        cloud.addColorStop(0, 'rgba(200,120,255,0.18)');
-        cloud.addColorStop(1, 'transparent');
-
-        c.fillStyle = cloud;
-        c.beginPath();
-        c.arc(cx, cy, r, 0, Math.PI * 2);
-        c.fill();
-    }
-
-    // --- Budovy (výrazné, neonové, cyberpunk) ---
-    for (let x = -400; x < cityWidth; x += 180) {
-
-        const noise = Math.sin((x + time * 200) / 200);
-        const height = 500 + noise * 120;
-        const y = baseY - height;
-
-        // telo budovy (výraznejšia fialová)
-        let bGrad = c.createLinearGradient(x, y, x, baseY);
-        bGrad.addColorStop(0, 'rgba(90,0,120,0.35)');
-        bGrad.addColorStop(0.4, 'rgba(120,0,160,0.55)');
-        bGrad.addColorStop(1, 'rgba(40,0,60,0.95)');
-        c.fillStyle = bGrad;
-        c.fillRect(x, y, 140, height);
-
-        // neonový obrys
-        c.strokeStyle = 'rgba(255,0,60,0.45)';
-        c.lineWidth = 3;
-        c.strokeRect(x, y, 140, height);
-
-        // okná (výrazné, neonovo červené)
-        const windowSize = 10;
-        const windowGapX = 16;
-        const windowGapY = 18;
-
-        for (let wy = y + 20; wy < baseY - 20; wy += windowGapY) {
-            for (let wx = x + 12; wx < x + 140 - 12; wx += windowGapX) {
-
-                c.fillStyle = 'rgba(255, 40, 80, 0.9)';
-                c.fillRect(wx, wy, windowSize, windowSize);
-
-                // jemný glow okolo okna
-                let glow = c.createRadialGradient(wx + 5, wy + 5, 0, wx + 5, wy + 5, 12);
-                glow.addColorStop(0, 'rgba(255,40,80,0.4)');
-                glow.addColorStop(1, 'transparent');
-
-                c.fillStyle = glow;
-                c.beginPath();
-                c.arc(wx + 5, wy + 5, 12, 0, Math.PI * 2);
-                c.fill();
-            }
+    // Intenzívne červené LEDky
+    for (let i = p.y + 10; i < p.y + p.height; i += 12) {
+        let active = Math.random() > 0.7;
+        c.fillStyle = active ? '#ff0000' : '#220000';
+        if (active) {
+            c.shadowBlur = 5;
+            c.shadowColor = '#ff0000';
         }
-
-        // červené glitch pruhy (pevné, výraznejšie)
-        c.fillStyle = 'rgba(255,0,60,0.25)';
-        const gx = x + 20;
-        c.fillRect(gx, y, 3, height);
-
-        // infekčné uzly (výraznejšie)
-        const bugPoints = [
-            { ox: 0.25, oy: 0.15 },
-            { ox: 0.7,  oy: 0.25 },
-            { ox: 0.4,  oy: 0.55 },
-            { ox: 0.8,  oy: 0.65 }
-        ];
-
-        bugPoints.forEach(pt => {
-            const bx = x + 140 * pt.ox;
-            const by = y + height * pt.oy;
-            const r = 10;
-
-            let bug = c.createRadialGradient(bx, by, 0, bx, by, r * 2);
-            bug.addColorStop(0, 'rgba(255,0,60,1)');
-            bug.addColorStop(0.4, 'rgba(255,80,120,0.7)');
-            bug.addColorStop(1, 'rgba(0,0,0,0)');
-
-            c.fillStyle = bug;
-            c.beginPath();
-            c.arc(bx, by, r * 2, 0, Math.PI * 2);
-            c.fill();
-        });
-
-        // anténa (výraznejšia)
-        c.strokeStyle = 'rgba(255,0,80,0.8)';
-        c.lineWidth = 2;
-        c.beginPath();
-        c.moveTo(x + 70, y);
-        c.lineTo(x + 70, y - 50);
-        c.stroke();
-
-        // neonový bod
-        c.fillStyle = 'rgba(255,0,80,1)';
-        c.beginPath();
-        c.arc(x + 70, y - 55, 4, 0, Math.PI * 2);
-        c.fill();
+        c.fillRect(p.x + 4, i, 4, 2);
+        c.shadowBlur = 0;
     }
-
     c.restore();
 }
 
- 
-
-
-// === Fog (zeleno-čierny digitálny smog) ===
 function drawFog() {
     c.save();
     c.globalCompositeOperation = 'screen';
 
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(0, 255, 80, 0.05)');
+        grad.addColorStop(0, 'rgba(150, 0, 0, 0.2)'); // Červený opar
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
@@ -371,7 +226,6 @@ function drawFog() {
 
         p.x += Math.sin(time + p.r) * 0.2;
     });
-
     c.restore();
 }
 
@@ -426,7 +280,7 @@ window.addEventListener('keydown', (e) => {
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
     }
-     if ((e.key === 'Tab' || e.code === 'Tab')) {
+    if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
     }
 });
@@ -447,6 +301,7 @@ window.addEventListener('keyup', (e) => {
         }
     }
 });
+
 
 // Prepínanie viditeľnosti
 function nastavViditelnost(id, stav) {
@@ -474,18 +329,15 @@ function animovanie() {
     c.save();
     c.translate(-Karera.x, 0 - Karera.y, 0);
 
-// === Pozadie (tmavšie fialovo-modré) ===
-let bgGrad = c.createLinearGradient(0, 900, 0, canvas.height + 900);
-bgGrad.addColorStop(0, '#1d1f4d');   // tmavá modro-fialová
-bgGrad.addColorStop(0.5, '#2a1a55'); // tmavá fialová
-bgGrad.addColorStop(1, '#120a22');   // veľmi tmavá fialová, ale nie čierna
+    // === Pozadie (tmavšie fialovo-modré) ===
+  let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
+    bgGrad.addColorStop(0, '#0a100a');
+    bgGrad.addColorStop(1, '#010501');
+    c.fillStyle = bgGrad;
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
-c.fillStyle = bgGrad;
-c.fillRect(0, -900, canvas.width, canvas.height + 1800);
-
-
-    // BUG MESTO (za platformami, pred tehlami)
-    drawBugCity();
+    c.fillStyle = brickPattern;
+    c.fillRect(0, 0, 30000, 30000)
 
     drawFog();
 
