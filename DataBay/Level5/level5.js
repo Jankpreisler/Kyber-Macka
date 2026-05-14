@@ -433,6 +433,11 @@ window.addEventListener('keyup', (e) => {
             }
         }
     }
+
+    if (e.key === 'Q' || e.key === 'q') {
+        player.isdashing = false;
+        player.dx = 0; 
+    }
 });
 
 function nastavViditelnost(id, stav) {

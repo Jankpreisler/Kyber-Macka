@@ -399,7 +399,6 @@ canvas.addEventListener('click', (e) => {
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') keys.right = false; //doprava
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') keys.left = false; //dolava
-
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { //skrcit sa
 
         if (player.height === 25) {
@@ -411,6 +410,10 @@ window.addEventListener('keyup', (e) => {
                 player.chceSaPostavit = true;
             }
         }
+    }
+    if (e.key === 'Q' || e.key === 'q') {
+        player.isdashing = false;
+        player.dx = 0; 
     }
 });
 
