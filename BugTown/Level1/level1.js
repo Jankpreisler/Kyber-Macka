@@ -559,6 +559,8 @@ function animovanie() {
         }
     });
 
+    
+
     // === Kamera a postavenie ===
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;

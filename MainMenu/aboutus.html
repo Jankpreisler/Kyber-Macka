@@ -1,37 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Cyber-Cat</title>
-    <link rel="stylesheet" href="menu.css">
+
+    <title>Kyber Mačka - About Us</title>
+
+    <link rel="stylesheet" href="aboutus.css">
 </head>
 <body>
 
-    <img class="bckgrnd" src="/asseti/MainMenu_map-onas.png" alt="Hospital Background">
+    <!-- BACKGROUND -->
+    <div class="background-container">
 
-    <div class="menu-overlay">
-       <h1 class="Credits">Credits</h1>
+        <!-- TOP -->
+        <div class="zone zone-top">
+            <div class="server-room">
+                <div class="rack"><div class="leds"></div><div class="label">USR-01</div></div>
+                <div class="rack"><div class="leds"></div><div class="label">USR-02</div></div>
+                <div class="rack"><div class="leds"></div><div class="label">CORE-X</div></div>
+            </div>
+        </div>
 
-       <h1 class="programatoros">Programatori</h1>
-       <h3 class="asd">Jan Kristian Preisler & Matej Kapusniak</h3>
+        <!-- LEFT -->
+        <div class="zone zone-left">
+            <div class="skyline">
+                <div class="building b1"><div class="windows"></div></div>
+                <div class="building b2"><div class="windows"></div></div>
+                <div class="building b3"><div class="windows"></div></div>
+                <div class="building b4"><div class="windows"></div></div>
+            </div>
 
-       <h1 class="dizajneros">Dizaj</h1>
-       <h3 class="matheeeeeeeeeeeeew">Matej Kapusniak</h3>
+            <div class="warning-layer">ABOUT_THE_TEAM</div>
+        </div>
 
-       <h1 class="muzikos">Sountrack</h1>
-       <h3 class="dzenkoooooouuuuuuuuuuuu">Jan Kristian Preisler</h3>
+        <!-- RIGHT -->
+        <div class="zone zone-right">
+            <div class="digital-water"></div>
 
-       <h1 class="testeros">Testeri</h1>
-       <h3 class="testeri">sem potom budu testeri</h3>
+            <div class="data-packets">
+                <div class="packet p1"></div>
+                <div class="packet p2"></div>
+                <div class="packet p3"></div>
+            </div>
+        </div>
 
-       <a class="backcudos" href="javascript:void(0)" onclick="krasneprehadzovanie('menu.html')">Back ---------></a>
+        <!-- BOTTOM -->
+        <div class="zone zone-bottom">
+            <div class="highway">
+                <div class="lane-lines"></div>
+
+                <div class="traffic-flow">
+                    <div class="data-unit v1"></div>
+                    <div class="data-unit v2"></div>
+                    <div class="data-unit v3"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- X LINES -->
+    <div class="x-lines">
+        <div class="line l1"></div>
+        <div class="line l2"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="about-container">
+
+        <div class="about-panel">
+
+            <h1 class="about-title">
+                ABOUT US
+            </h1>
+
+            <div class="content-box">
+
+                <!-- SEM SI DOPLŇ TEXT -->
+
+                <h2></h2>
+
+                <p>
+            <b> Programátori: </b>
+           <p> Matej Kapusniak</p>
+        <p> Ján Kristián Preisler</p>   
+
+
+        <p><b>Dizajn:</b></p>
+<p>Matej Kapusniak,  Ján Kristián Preisler</p>
+
+<p><b>Soundtracky:</b></p>
+<p>Hans Christián Preisler</p>
+
+
+<p><b>Testery:</b></p>
+<p>Marek, Samo, Marek, Marek, Alica, Braňo, Jakub, Matej</p>
+
+                </p>
+
+             
+
+            </div>
+
+            <a
+                href="javascript:void(0)"
+                onclick="krasneprehadzovanie('menu.html')"
+            >
+                <button class="cyber-button">
+                    ← BACK
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- MUSIC -->
     <audio id="bgMusic" loop>
         <source src="/Zvuky/Main title song.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="menu.js"></script>
+    <script src="aboutus.js"></script>
+
 </body>
 </html>
