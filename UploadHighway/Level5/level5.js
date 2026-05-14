@@ -32,12 +32,50 @@ const platforms = [
     { x: 0, y: 800, width: 500, height: 230, color: '#333', type: 'pipe_h' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
     { x: 800, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 800, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 1000, y: 600, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 1200, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 1700, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 100 },
+    { x: 2200, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 2400, y: 400, width: 600, height: 240, color: '#333', type: 'pipe_h', friction: 100 },
+
+
+    //platformy
+
+    { x: 3500, y: 0, width: 50, height: 200, color: '#333', type: 'pipe_v'},
+    { x: 3500, y: 0, width: 800, height: 100, color: '#333', type: 'pipe_h'},
+
+    { x: 3500, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v'},
+    { x: 3500, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v' },
 
 
 
+    { x: 3650, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v'  },
+    { x: 3650, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v'},
+    
 
 
+    { x: 3800, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v'},
+    { x: 3800, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v'},
+    
+
+
+    { x: 3950, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 3950, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v' },
+
+
+
+    { x: 4100, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 4100, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v' },
+
+    { x: 4300, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v'},
+    { x: 4900, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v'},
+
+    { x: 5300, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10},
+    { x: 5600, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10},
+    { x: 5900, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10},
+    { x: 6100, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v'},
+    { x: 6500, y: 400, width: 500, height: 230, color: '#333', type: 'pipe_h'},
+    { x: 7000, y: 200, width: 150, height: 230, color: '#333', type: 'pipe_v'},
 
 ];
 
