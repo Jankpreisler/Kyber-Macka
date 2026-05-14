@@ -1,0 +1,406 @@
+body,
+html{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    font-family:'Courier New', monospace;
+}
+
+/* BACKGROUND */
+
+.background-container{
+    position:absolute;
+    width:100%;
+    height:100%;
+    z-index:1;
+    pointer-events:none;
+}
+
+.zone{
+    position:absolute;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    opacity:0.95;
+}
+
+/* TOP */
+
+.zone-top{
+    background:linear-gradient(to bottom,#001a00,#000);
+    clip-path:polygon(0 0,100% 0,50% 50%);
+}
+
+.server-room{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    padding-top:30px;
+}
+
+.rack{
+    width:45px;
+    height:140px;
+    background:#050505;
+    border:1px solid #004400;
+    position:relative;
+}
+
+.leds{
+    width:100%;
+    height:70%;
+    background:repeating-linear-gradient(#0f0 0 1px,transparent 1px 4px);
+    animation:flicker 0.4s infinite alternate;
+}
+
+.label{
+    color:#0f0;
+    font-size:8px;
+    position:absolute;
+    bottom:5px;
+    width:100%;
+    text-align:center;
+    opacity:0.7;
+}
+
+/* LEFT */
+
+.zone-left{
+    background:linear-gradient(90deg,#1a0000,#000);
+    clip-path:polygon(0 0,0 100%,50% 50%);
+}
+
+.skyline{
+    position:absolute;
+    bottom:0;
+    display:flex;
+    align-items:flex-end;
+    width:100%;
+    height:100%;
+    padding-left:10px;
+}
+
+.building{
+    width:35px;
+    background:#0a0a0a;
+    border-top:2px solid #900;
+    margin-right:8px;
+    position:relative;
+}
+
+.b1{ height:120px; }
+.b2{ height:180px; }
+.b3{ height:140px; }
+.b4{ height:210px; }
+
+.windows{
+    width:100%;
+    height:100%;
+    background:repeating-linear-gradient(#300 0 2px,transparent 2px 8px);
+    opacity:0.3;
+}
+
+.warning-layer{
+    position:absolute;
+    top:30%;
+    left:5%;
+    color:#f00;
+    font-weight:bold;
+    font-size:14px;
+    opacity:0.4;
+    transform:rotate(-15deg);
+}
+
+/* RIGHT */
+
+.zone-right{
+    background:linear-gradient(-90deg,#000b1a,#000);
+    clip-path:polygon(100% 0,100% 100%,50% 50%);
+}
+
+.digital-water{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:40%;
+    background:linear-gradient(transparent,#00f2ff22);
+}
+
+.packet{
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:#00f2ff;
+    border-radius:2px;
+    box-shadow:0 0 10px #00f2ff;
+}
+
+.p1{
+    top:20%;
+    right:10%;
+    animation:float 4s infinite;
+}
+
+.p2{
+    top:50%;
+    right:25%;
+    animation:float 6s infinite reverse;
+}
+
+.p3{
+    top:80%;
+    right:15%;
+    animation:float 5s infinite 1s;
+}
+
+/* BOTTOM */
+
+.zone-bottom{
+    background:linear-gradient(0deg,#0d001a,#000);
+    clip-path:polygon(0 100%,100% 100%,50% 50%);
+}
+
+.highway{
+    position:absolute;
+    width:180px;
+    height:100%;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,0.02);
+    border-left:1px solid #406;
+    border-right:1px solid #406;
+}
+
+.lane-lines{
+    position:absolute;
+    left:50%;
+    width:1px;
+    height:100%;
+    border-left:1px dashed #609;
+    opacity:0.5;
+}
+
+.data-unit{
+    width:8px;
+    height:25px;
+    background:#bc00ff;
+    position:absolute;
+    bottom:-50px;
+    box-shadow:0 0 12px #bc00ff;
+    animation:drive 1.5s infinite linear;
+}
+
+.v1{
+    left:20%;
+    animation-duration:0.8s;
+    background:#00f2ff;
+    box-shadow:0 0 12px #00f2ff;
+}
+
+.v2{
+    left:50%;
+    animation-duration:2s;
+    opacity:0.6;
+}
+
+.v3{
+    left:75%;
+    animation-duration:1.3s;
+}
+
+/* X LINES */
+
+.x-lines .line{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:150vw;
+    height:2px;
+    background:rgba(0,242,255,0.3);
+    z-index:5;
+    pointer-events:none;
+}
+
+.l1{
+    transform:translate(-50%,-50%) rotate(26.5deg);
+}
+
+.l2{
+    transform:translate(-50%,-50%) rotate(-26.5deg);
+}
+
+/* SETTINGS */
+
+.settings-container{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:10;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:100%;
+}
+
+/* odstránenie kruhu */
+#coreCanvas{
+    display:none;
+}
+
+/* PANEL */
+
+.settings-panel{
+    width:360px;
+
+    padding:40px;
+
+    background:rgba(0,0,0,0.7);
+
+    border:1px solid #00f2ff;
+
+    box-shadow:
+        0 0 30px rgba(0,242,255,0.2),
+        inset 0 0 20px rgba(0,242,255,0.08);
+}
+
+.settings-title{
+    color:#fff;
+
+    font-size:58px;
+
+    line-height:0.9;
+
+    margin:0 0 50px 0;
+
+    font-weight:900;
+
+    text-shadow:0 0 20px #00f2ff;
+
+    letter-spacing:-2px;
+}
+
+.setting-box{
+    margin-bottom:40px;
+}
+
+.setting-name{
+    color:#00f2ff;
+
+    margin-bottom:20px;
+
+    font-size:18px;
+
+    letter-spacing:2px;
+}
+
+/* SLIDER */
+
+.volume-slider{
+    width:100%;
+
+    appearance:none;
+
+    height:6px;
+
+    background:#111;
+
+    border:1px solid #00f2ff;
+
+    outline:none;
+}
+
+.volume-slider::-webkit-slider-thumb{
+    appearance:none;
+
+    width:20px;
+
+    height:20px;
+
+    background:#00f2ff;
+
+    border-radius:2px;
+
+    cursor:pointer;
+
+    box-shadow:0 0 15px #00f2ff;
+}
+
+/* BUTTON */
+
+.cyber-button{
+    width:100%;
+
+    background:rgba(0,0,0,0.9);
+
+    color:#00f2ff;
+
+    border:1px solid #00f2ff;
+
+    padding:14px 20px;
+
+    font-family:'Courier New', monospace;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+    letter-spacing:1px;
+}
+
+.cyber-button:hover{
+    background:#00f2ff;
+
+    color:#000;
+
+    box-shadow:0 0 30px #00f2ff;
+
+    transform:scale(1.03);
+}
+
+/* ANIMATIONS */
+
+@keyframes flicker{
+    from{ opacity:0.3; }
+    to{ opacity:0.9; }
+}
+
+@keyframes float{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+}
+
+@keyframes drive{
+    from{ bottom:-100px; }
+    to{ bottom:120%; }
+}
+
+/* MOBILE */
+
+@media(max-width:950px){
+
+    .settings-container{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    #coreCanvas{
+        width:240px;
+        height:240px;
+    }
+
+    .settings-panel{
+        width:85vw;
+    }
+
+    .settings-title{
+        font-size:42px;
+    }
+}

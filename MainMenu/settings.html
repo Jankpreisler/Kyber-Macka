@@ -1,27 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Cyber-Cat</title>
-    <link rel="stylesheet" href="menu.css">
+
+    <title>Kyber Mačka - Settings</title>
+
+    <link rel="stylesheet" href="settings.css">
 </head>
 <body>
 
-    <img class="bckgrnd" src="/asseti/MainMenu_map-settings.png" alt="Hospital Background">
+    <!-- BACKGROUND -->
+    <div class="background-container">
 
-    <div class="menu-overlay">
-        <h1 class="Nastaveneittile">Settings</h1>
-        <h1 class="Volume">Volume</h1>
-        <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.5" class="volumeBar" type="range">
+        <!-- TOP -->
+        <div class="zone zone-top">
+            <div class="server-room">
+                <div class="rack"><div class="leds"></div><div class="label">CFG-01</div></div>
+                <div class="rack"><div class="leds"></div><div class="label">CFG-02</div></div>
+                <div class="rack"><div class="leds"></div><div class="label">SYS-X</div></div>
+            </div>
+        </div>
 
-        <a class="backcudo" href="javascript:void(0)" onclick="krasneprehadzovanie('menu.html')"><--- Back</a>
+        <!-- LEFT -->
+        <div class="zone zone-left">
+            <div class="skyline">
+                <div class="building b1"><div class="windows"></div></div>
+                <div class="building b2"><div class="windows"></div></div>
+                <div class="building b3"><div class="windows"></div></div>
+                <div class="building b4"><div class="windows"></div></div>
+            </div>
+
+            <div class="warning-layer">SYSTEM_SETTINGS</div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="zone zone-right">
+            <div class="digital-water"></div>
+
+            <div class="data-packets">
+                <div class="packet p1"></div>
+                <div class="packet p2"></div>
+                <div class="packet p3"></div>
+            </div>
+        </div>
+
+        <!-- BOTTOM -->
+        <div class="zone zone-bottom">
+            <div class="highway">
+                <div class="lane-lines"></div>
+
+                <div class="traffic-flow">
+                    <div class="data-unit v1"></div>
+                    <div class="data-unit v2"></div>
+                    <div class="data-unit v3"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- X LINES -->
+    <div class="x-lines">
+        <div class="line l1"></div>
+        <div class="line l2"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="settings-container">
+
+        <div class="settings-panel">
+
+            <h1 class="settings-title">
+                SETTINGS
+            </h1>
+
+            <div class="setting-box">
+
+                <h2 class="setting-name">
+                    VOLUME
+                </h2>
+
+                <input
+                    id="volumeControl"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="0.5"
+                    class="volume-slider"
+                >
+
+            </div>
+
+            <a
+                class="back-link"
+                href="javascript:void(0)"
+                onclick="krasneprehadzovanie('menu.html')"
+            >
+                <button class="cyber-button">
+                    ← BACK
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- MUSIC -->
     <audio id="bgMusic" loop>
         <source src="/Zvuky/Main title song.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="menu.js"></script>
+    <script src="settings.js"></script>
 </body>
 </html>

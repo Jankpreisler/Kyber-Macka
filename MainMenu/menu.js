@@ -42,6 +42,13 @@ function krasneprehadzovanie(url) {
 // OPRAVENÉ SPÚŠŤANIE HUDBY
 window.addEventListener('click', () => {
     const music = document.getElementById("bgMusic");
+    const savedVolume = localStorage.getItem("gameVolume");
+
+if(savedVolume !== null){
+    music.volume = savedVolume;
+}else{
+    music.volume = 0.5;
+}
     if (music && music.paused) {
         music.play().then(() => {
             console.log("Hudba úspešne spustená");
