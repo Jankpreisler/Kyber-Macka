@@ -444,9 +444,6 @@ function animovanie() {
         mana += 0.1;
     }
 
-
-
-
     // --- LOGIKA DASHU (DOPLNENIE) ---
     if (player.isdashing) {
 
@@ -454,9 +451,6 @@ function animovanie() {
             player.isdashing = false;
         }
     }
-
-
-
     // 3. Pohyb a fyzik
     if (keys.right) player.dx += 0.8;
     else if (keys.left) player.dx -= 0.8;

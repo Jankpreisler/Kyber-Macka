@@ -6,6 +6,11 @@ let windParticles = [];
 canvas.width = 1300;
 canvas.height = 600;
 
+let zobrazitHUD = true;
+let mana = 100;
+let maximalnaMana = 100;
+let minmana = 0;
+
 const gravitacia = 0.4;
 
 const exitZone = {
@@ -47,14 +52,14 @@ const platforms = [
 
     // --- VETRÁKY (INŠPIRÁCIA Z LEVELU 4) ---
 
-   
+
 
     // Vetrák 2 – horizontálny ťah doľava pri konci levelu
     {
         x: 2950,
         y: 380,
-        width: 150,
-        height: 150,
+        width: 50,
+        height: 50,
         type: 'valve',
         id: 'vetrak5_side',
         range: 900,
@@ -63,80 +68,59 @@ const platforms = [
     }
 ];
 
-// === ENEMY – HOVER DRONES (ŤAŽŠIA VERZIA) ===
 const enemies = [
-    // pôvodní, mierne upravené rýchlosti a rozsahy
     {
-        x: 550,
+        x: 400,
         y: 430,
-        width: 28,
-        height: 28,
-        baseY: 430,
-        amplitude: 12,
+        width: 50,
+        height: 50,
+        baseY: 420,
         phase: 0,
         speed: 1.5,
         dir: 1,
-        leftBound: 480,
-        rightBound: 820,
+        leftBound: 400,
+        rightBound: 500,
         alive: true,
-        startX: 550
+        startX: 400
     },
     {
-        x: 1150,
-        y: 350,
-        width: 28,
-        height: 28,
-        baseY: 350,
-        amplitude: 14,
+        x: 1050,
+        y: 340,
+        width: 50,
+        height: 50,
+        baseY: 340,
         phase: 1.4,
         speed: 1.6,
         dir: -1,
-        leftBound: 1080,
-        rightBound: 1380,
+        leftBound: 1050,
+        rightBound: 1100,
         alive: true,
-        startX: 1150
+        startX: 1050
     },
-    {
-        x: 2000,
-        y: 330,
-        width: 28,
-        height: 28,
-        baseY: 330,
-        amplitude: 16,
-        phase: 2.1,
-        speed: 1.8,
-        dir: 1,
-        leftBound: 1930,
-        rightBound: 2250,
-        alive: true,
-        startX: 2000
-    },
-
+   
     // nový dron – nad prvými schodíkmi
     {
-        x: 650,
-        y: 360,
-        width: 28,
-        height: 28,
-        baseY: 360,
-        amplitude: 18,
+        x: 700,
+        y: 450,
+        width: 50,
+        height: 50,
+        baseY: 380,  
         phase: 0.7,
         speed: 1.9,
         dir: -1,
-        leftBound: 580,
-        rightBound: 880,
+        leftBound: 700,
+        rightBound: 770,
         alive: true,
-        startX: 650
+        startX: 700
     },
 
     // nový dron – nad vyššou plošinou
     {
-        x: 1450,
+        x: 50,
         y: 280,
-        width: 28,
-        height: 28,
+        width: 50,
+        height: 50,
         baseY: 280,
-        amplitude: 20,
         phase: 1.9,
         speed: 2.0,
         dir: 1,
@@ -148,38 +132,27 @@ const enemies = [
 
     // nový dron – pri vetráku 1 (kombinácia vetrák + enemy)
     {
-        x: 1650,
+        x: 1750,
         y: 420,
-        width: 28,
-        height: 28,
-        baseY: 420,
-        amplitude: 22,
+        width: 50,
+        height: 50,
+        baseY: 380,
         phase: 2.7,
         speed: 2.1,
         dir: -1,
-        leftBound: 1550,
-        rightBound: 1900,
+        leftBound: 1750,
+        rightBound: 1850,
         alive: true,
-        startX: 1650
+        startX: 1750
     },
 
     // nový dron – pred koncom, nad poslednými platformami
-    {
-        x: 2450,
-        y: 360,
-        width: 28,
-        height: 28,
-        baseY: 360,
-        amplitude: 18,
-        phase: 3.2,
-        speed: 2.2,
-        dir: 1,
-        leftBound: 2350,
-        rightBound: 2750,
-        alive: true,
-        startX: 2450
-    }
+    
 ];
+
+const enemak = {
+    test: new Image(),
+}
 
 // === TEXTÚRY HRÁČA ===
 const macky = {
@@ -192,12 +165,14 @@ macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 
+enemak.test.src = '../../asseti/pixil-frame-0.png'
+
 let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
 
 // === HRÁČ ===
 let player = {
-    x: 80,
+    x: 50,
     y: 400,
     width: 50,
     height: 50,
@@ -206,8 +181,11 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
+    isdashing: false,
     friction: 0.9,
-    chceSaPostavit: false
+    chceSaPostavit: false,
+    dashspeed: 35,
+    isNahnevany: false,
 };
 
 // --- ATMOSFÉRA ---
@@ -416,7 +394,29 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
     }
-    
+    if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
+        if (player.isdashing == true) return;
+
+        mana -= 20;
+        player.isdashing = true;
+        let smer = 0;
+        if (keys.right) {
+            smer = 1;
+        } else if (keys.left) {
+            smer = -1;
+        } else {
+            smer = (actualnaakciacici === macky.dolava) ? 1 : -1;
+        }
+        player.dx = smer * player.dashspeed;
+    }
+    if (e.key === 'r' || e.key === 'R') {
+        if (mana > 20 && !player.isRaging) {
+            player.isRaging = true;
+        } else {
+            player.isRaging = false; // Opätovné stlačenie vypne mód
+        }
+    }
+
 });
 
 window.addEventListener('keyup', (e) => {
@@ -438,7 +438,11 @@ window.addEventListener('keyup', (e) => {
 
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
+    }
+    if (e.key === 'R' || e.key === 'r') {
+        player.isRaging = false;
+       
     }
 });
 
@@ -483,15 +487,33 @@ function animovanie() {
 
     drawFog();
 
+    if (player.isRaging) {
+        maximalnaMana -= 0.5; 
+        mana -= 0.5; 
+    } else if (mana < maximalnaMana) {
+        mana += 0.1; 
+    }
+
+    // --- LOGIKA DASHU (DOPLNENIE) ---
+    if (player.isdashing) {
+
+        if (Math.abs(player.dx) < 5) {
+            player.isdashing = false;
+        }
+    }
+
     // === ENEMY POHYB ===
     enemies.forEach(e => {
         if (!e.alive) return;
 
         e.x += e.speed * e.dir;
-        if (e.x < e.leftBound || e.x > e.rightBound) e.dir *= -1;
+        if (e.x < e.leftBound || e.x > e.rightBound) 
+        e.dir *= -1;
 
-        e.y = e.baseY + Math.sin(time * 3 + e.phase) * e.amplitude;
+        e.y = e.baseY;
     });
+
+    
 
     // === PLATFORMY ===
     platforms.forEach(p => {
@@ -518,6 +540,17 @@ function animovanie() {
 
     if (player.dx > player.speed) player.dx = player.speed;
     if (player.dx < -player.speed) player.dx = -player.speed;
+
+    if (player.isdashing == true) {
+
+        if (player.dx > player.dashspeed) player.dx = player.dashspeed;
+        if (player.dx < -player.dashspeed) player.dx = -player.dashspeed;
+    }
+    else {
+        if (player.dx > player.speed) player.dx = player.speed;
+        if (player.dx < -player.speed) player.dx = -player.speed;
+        player.dy += gravitacia;
+    }
 
     player.x += player.dx;
     player.dy += gravitacia;
@@ -599,52 +632,54 @@ function animovanie() {
     });
 
     // === GENEROVANIE VETERNÝCH PARTIKLOV ===
-platforms.forEach(p => {
+    platforms.forEach(p => {
 
-    // Vertikálny vetrák (vietor ide hore)
-    if (p.id === 'vetrak5_up' && p.zapnuty) {
-        if (Math.random() > 0.6) {
-            windParticles.push({
-                x: p.x + Math.random() * p.width,
-                y: p.y,
-                speed: Math.random() * 5 + 3,
-                opacity: 1,
-                maxHeight: p.y - p.range
-            });
+        // Vertikálny vetrák (vietor ide hore)
+        if (p.id === 'vetrak5_up' && p.zapnuty) {
+            if (Math.random() > 0.6) {
+                windParticles.push({
+                    x: p.x + Math.random() * p.width,
+                    y: p.y,
+                    speed: Math.random() * 5 + 3,
+                    opacity: 1,
+                    maxHeight: p.y - p.range
+                });
+            }
         }
-    }
 
-    // Horizontálny vetrák (vietor ide doľava)
-    if (p.id === 'vetrak5_side' && p.zapnuty) {
-        if (Math.random() > 0.4) {
-            windParticles.push({
-                x: p.x - Math.random() * p.range,
-                y: p.y + Math.random() * p.height,
-                speed: Math.random() * 5 + 2,
-                opacity: Math.random() * 0.5 + 0.5,
-                direction: 'left',
-                minX: p.x - p.range
-            });
+        // Horizontálny vetrák (vietor ide doľava)
+        if (p.id === 'vetrak5_side' && p.zapnuty) {
+            if (Math.random() > 0.4) {
+                windParticles.push({
+                    x: p.x - Math.random() * p.range,
+                    y: p.y + Math.random() * p.height,
+                    speed: Math.random() * 5 + 2,
+                    opacity: Math.random() * 0.5 + 0.5,
+                    direction: 'left',
+                    minX: p.x - p.range
+                });
+            }
         }
-    }
-});
-
+    });
 
     // === KOLÍZIE S ENEMY ===
     enemies.forEach(e => {
         if (!e.alive) return;
-
+    
         if (isTouching(player, e)) {
-            const playerBottomPrev = prevY + player.height;
-
-            // hráč skočí na enemy
-            if (player.dy > 0 && playerBottomPrev <= e.y) {
-                e.alive = false;
-                player.dy = -player.jumpForce * 0.6;
-            }
-            // hráč dostane zásah
+            if (player.isRaging) {
+                e.alive = false; // Zomrie z každej strany
+                // Voliteľné: jemne hráča odraz, aby cítil náraz
+                player.dx *= -0.5; 
+            } 
             else {
-                resetPlayer();
+                const playerBottomPrev = prevY + player.height;
+                if (player.dy > 0 && playerBottomPrev <= e.y) {
+                    e.alive = false;
+                    player.dy = -player.jumpForce * 0.6;
+                } else {
+                    resetPlayer(); 
+                }
             }
         }
     });
@@ -657,9 +692,7 @@ platforms.forEach(p => {
         const cy = e.y + e.height / 2;
 
         const grad = c.createRadialGradient(cx, cy, 2, cx, cy, 20);
-        grad.addColorStop(0, '#ff4444');
-        grad.addColorStop(0.5, '#aa0022');
-        grad.addColorStop(1, 'black');
+        c.drawImage(enemak.test, e.x, e.y, e.width, e.height);
 
         c.fillStyle = grad;
         c.beginPath();
@@ -675,43 +708,43 @@ platforms.forEach(p => {
         c.fillRect(player.x, player.y, player.width, player.height);
     }
     // === RENDER VETERNÝCH PARTIKLOV ===
-c.save();
-windParticles.forEach((part, index) => {
+    c.save();
+    windParticles.forEach((part, index) => {
 
-    // pohyb
-    if (part.direction === 'left') {
-        part.x -= part.speed;
-    } else {
-        part.y -= part.speed;
-    }
+        // pohyb
+        if (part.direction === 'left') {
+            part.x -= part.speed;
+        } else {
+            part.y -= part.speed;
+        }
 
-    part.opacity -= 0.015;
+        part.opacity -= 0.015;
 
-    // kreslenie
-    c.strokeStyle = `rgba(255, 0, 0, ${part.opacity})`;
-    c.lineWidth = 2;
-    c.beginPath();
+        // kreslenie
+        c.strokeStyle = `rgba(255, 0, 0, ${part.opacity})`;
+        c.lineWidth = 2;
+        c.beginPath();
 
-    if (part.direction === 'left') {
-        c.moveTo(part.x, part.y);
-        c.lineTo(part.x + 15, part.y);
-    } else {
-        c.moveTo(part.x, part.y);
-        c.lineTo(part.x, part.y + 15);
-    }
+        if (part.direction === 'left') {
+            c.moveTo(part.x, part.y);
+            c.lineTo(part.x + 15, part.y);
+        } else {
+            c.moveTo(part.x, part.y);
+            c.lineTo(part.x, part.y + 15);
+        }
 
-    c.stroke();
+        c.stroke();
 
-    // mazanie
-    if (
-        part.opacity <= 0 ||
-        (part.direction === 'left' && part.x < part.minX) ||
-        (!part.direction && part.y < part.maxHeight)
-    ) {
-        windParticles.splice(index, 1);
-    }
-});
-c.restore();
+        // mazanie
+        if (
+            part.opacity <= 0 ||
+            (part.direction === 'left' && part.x < part.minX) ||
+            (!part.direction && part.y < part.maxHeight)
+        ) {
+            windParticles.splice(index, 1);
+        }
+    });
+    c.restore();
 
 
     c.restore();
@@ -722,6 +755,65 @@ c.restore();
             ProgresManazer.ulozLevel(11);
         }
         window.location.href = "/DataBay/Level1/level1.html";
+    }
+    if (zobrazitHUD === true) {
+        c.save();
+
+        const barX = 20;
+        const barY = 20;
+        const barWidth = 250;
+        const barHeight = 30;
+
+        // 1. Pozadie baru (tmavý podklad)
+        c.fillStyle = 'rgba(20, 20, 20, 0.8)';
+        c.beginPath();
+        c.roundRect(barX, barY, barWidth, barHeight, 5);
+        c.fill();
+        c.strokeStyle = '#333';
+        c.lineWidth = 4;
+        c.stroke();
+
+        // 2. Samotný Progress (Výplň many)
+        let percento = mana / maximalnaMana;
+        if (percento < 0) percento = 0; // Ochrana proti zápornej mane
+
+        // Vytvoríme gradient (prechod farieb z tmavomodrej do svetlomodrej)
+        let manaGrad = c.createLinearGradient(barX, 0, barX + barWidth, 0);
+        manaGrad.addColorStop(0, '#0044ff'); // Tmavšia modrá na začiatku
+        manaGrad.addColorStop(1, '#00d4ff'); // Žiarivá azúrová na konci
+
+        c.fillStyle = manaGrad;
+        c.beginPath();
+        // Vykreslíme výplň podľa aktuálnej many
+        c.roundRect(barX + 2, barY + 2, (barWidth - 4) * percento, barHeight - 4, 3);
+        c.fill();
+
+        // 3. Efekt "lesku" na bare (biely prúžok navrchu)
+        c.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        c.fillRect(barX + 2, barY + 2, (barWidth - 4) * percento, (barHeight - 4) / 2);
+
+        // 4. Textové info
+        c.fillStyle = "white";
+        c.font = "bold 13px Courier New";
+        c.shadowColor = "black";
+        c.shadowBlur = 4;
+        c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
+        c.shadowBlur = 0;
+
+        // --- JEDNODUCHÝ INVENTÁR ---
+        c.fillStyle = "rgba(0, 0, 0, 0.6)";
+        c.beginPath();
+        c.roundRect(barX, barY + 455, 200, 100, 5); //nasjkor vyska sirka height invertara zaoblenie
+        c.fill();
+
+        c.fillStyle = "#aaa";
+        c.font = "11px Arial";
+        c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
+        c.fillText("• Cyber Rage  [R]", barX + 10, barY + 500);
+        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 520);
+        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
+
+        c.restore();
     }
 }
 
