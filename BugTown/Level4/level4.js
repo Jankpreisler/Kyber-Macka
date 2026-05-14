@@ -752,7 +752,7 @@ if (platform.type === 'valve') {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(10);
         }
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "../BugTown/Level5/level5.html";
     }
 
     // 6. Vykreslenie postavy

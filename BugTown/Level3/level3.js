@@ -630,7 +630,7 @@ function animovanie() {
                 vykonajAkciu(platform.id);
             }
             if (isTouching(player, exitZone)) {
-                ProgresManazer.ulozLevel(10);
+                ProgresManazer.ulozLevel(9);
                 window.location.href = "BugTown/Level4/Level4.html";
             }
         }

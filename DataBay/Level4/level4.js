@@ -807,7 +807,7 @@ function animovanie() {
 
     if (isTouching(player, exitZone)) {
         if (typeof ProgresManazer !== 'undefined') {
-            ProgresManazer.ulozLevel(14);
+            ProgresManazer.ulozLevel(15);
         }
         window.location.href = "/DataBay/Level5/level5.js";
     }
