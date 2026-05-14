@@ -353,6 +353,13 @@ window.addEventListener('keydown', (e) => {
      if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
     }
+    if (e.key === 'r' || e.key === 'R') {
+        if (mana > 20 && !player.isNahnevany) {
+            player.isRaging = true;
+        } else {
+            player.isRaging = false; // Opätovné stlačenie vypne mód
+        }
+    }
 
     if (e.key.toLowerCase() === 'e' && Mikey.canInteract) {
         if (!Mikey.isTalking) {
@@ -422,6 +429,9 @@ window.addEventListener('keyup', (e) => {
         player.isdashing = false;
         player.dx = 0; 
     }
+    if (e.key === 'R' || e.key === 'r') {
+        player.isRaging = false;
+    }
 });
 
 function nastavViditelnost(id, stav) {
@@ -461,6 +471,8 @@ function animovanie() {
 
     drawFog();
 
+    
+
     if (keys.u && abilityUnlocked && mana > 0) {
         timeScale = 0.3;
         mana -= 0.5;
@@ -469,7 +481,12 @@ function animovanie() {
         if (mana < maximalnaMana) {
             mana += 0.1;
         }
+        else if (player.isRaging) {
+        maximalnaMana -= 0.5;
+        mana -= 0.5;
+        }
     }
+    
 
     if (mana <= 0) {
         keys.u = false;

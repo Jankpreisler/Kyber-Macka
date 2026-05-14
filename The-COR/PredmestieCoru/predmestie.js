@@ -106,7 +106,8 @@ let player = {
     friction: 0.9,
     isdashing: false,
     dashspeed: 35,
-    chceSaPostavit: false
+    chceSaPostavit: false,
+    isRaging: false
 };
 
 let time = 0;
@@ -307,6 +308,14 @@ window.addEventListener('keydown', (e) => {
         window.location.href = "/MenunaTab/tab.html";
     }
 
+    if (e.key === 'r' || e.key === 'R') {
+        if (mana > 20 && !player.isNahnevany) {
+            player.isRaging = true;
+        } else {
+            player.isRaging = false; // Opätovné stlačenie vypne mód
+        }
+    }
+
 
 });
 
@@ -338,6 +347,10 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
         player.dx = 0; 
+    }
+     if (e.key === 'R' || e.key === 'r') {
+        player.isRaging = false;
+       
     }
 });
 
@@ -389,6 +402,10 @@ function animovanie() {
         timeScale = 1.0;
         if (mana < maximalnaMana) {
             mana += 0.1;
+        }
+        else if (player.isRaging) {
+        maximalnaMana -= 0.5;
+        mana -= 0.5;
         }
     }
 

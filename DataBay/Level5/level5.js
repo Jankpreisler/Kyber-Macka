@@ -181,7 +181,8 @@ let player = {
     friction: 0.9,
     isdashing: false,
     dashspeed: 35,
-    chceSaPostavit: false
+    chceSaPostavit: false,
+      isRaging: false,
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -369,6 +370,13 @@ window.addEventListener('keydown', (e) => {
         }
         player.dx = smer * player.dashspeed;
     }
+    if (e.key === 'r' || e.key === 'R') {
+        if (mana > 20 && !player.isNahnevany) {
+            player.isRaging = true;
+        } else {
+            player.isRaging = false; // Opätovné stlačenie vypne mód
+        }
+    }
 
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
@@ -439,6 +447,10 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
         player.dx = 0; 
+    }
+    if (e.key === 'R' || e.key === 'r') {
+        player.isRaging = false;
+       
     }
 });
 
@@ -516,10 +528,6 @@ function animovanie() {
         }
     });
 
-
-
-
-
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
@@ -537,7 +545,11 @@ function animovanie() {
         }
     });
 
-    if (mana < maximalnaMana) {
+    if (player.isRaging) {
+        maximalnaMana -= 0.1;
+        mana -= 0.1;
+    }
+    else if (mana < maximalnaMana) {
         mana += 0.1;
     }
 

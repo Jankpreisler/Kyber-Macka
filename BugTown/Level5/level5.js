@@ -488,11 +488,12 @@ function animovanie() {
 
     drawFog();
 
-    // === LOGIKA CYBER RAGE (Z PRVÉHO KÓDU) ===
+
     if (player.isRaging) {
         maximalnaMana -= 0.5; 
         mana -= 0.5; 
-    } else if (mana < maximalnaMana) {
+    } 
+    else if (mana < maximalnaMana) {
         mana += 0.1; 
     }
 
@@ -639,8 +640,6 @@ function animovanie() {
                 });
             }
         }
-
-        // ===== DRUHÝ VETRÁK (DOĽAVA) =====
         if (p.id === 'vetrak2' && p.zapnuty === true) {
 
             const vnutri =
@@ -757,7 +756,6 @@ function animovanie() {
         }
     });
 
-    // === KOLÍZIE S ENEMY (Z PRVÉHO KÓDU) ===
     enemies.forEach(e => {
         if (!e.alive) return;
     
@@ -768,7 +766,7 @@ function animovanie() {
             } 
             else {
                 const playerBottomPrev = prevY + player.height;
-                // Skok na hlavu
+                
                 if (player.dy > 0 && playerBottomPrev <= e.y) {
                     e.alive = false;
                     player.dy = -player.jumpForce * 0.6;

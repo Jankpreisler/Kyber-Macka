@@ -356,6 +356,14 @@ window.addEventListener('keydown', (e) => {
         player.dx = smer * player.dashspeed;
     }
 
+    if (e.key === 'r' || e.key === 'R') {
+        if (mana > 20 && !player.isNahnevany) {
+            player.isRaging = true;
+        } else {
+            player.isRaging = false; // Opätovné stlačenie vypne mód
+        }
+    }
+
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
     }
@@ -437,6 +445,10 @@ window.addEventListener('keyup', (e) => {
         player.isdashing = false;
         player.dx = 0; 
     }
+
+    if (e.key === 'R' || e.key === 'r') {
+        player.isRaging = false;
+    }
 });
 
 function nastavViditelnost(id, stav) {
@@ -476,14 +488,17 @@ function animovanie() {
 
     drawFog();
 
-    // Spomalenie času
-    if (keys.u && abilityUnlocked && mana > 0) {
+     if (keys.u && abilityUnlocked && mana > 0) {
         timeScale = 0.3;
         mana -= 0.5;
     } else {
         timeScale = 1.0;
         if (mana < maximalnaMana) {
             mana += 0.1;
+        }
+        else if (player.isRaging) {
+        maximalnaMana -= 0.5;
+        mana -= 0.5;
         }
     }
 

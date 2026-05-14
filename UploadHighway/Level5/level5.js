@@ -375,6 +375,13 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
     }
+    if (e.key === 'r' || e.key === 'R') {
+        if (mana > 20 && !player.isNahnevany) {
+            player.isRaging = true;
+        } else {
+            player.isRaging = false; // Opätovné stlačenie vypne mód
+        }
+    }
 
     if (e.key === 'u' || e.key === 'U') {
         if (abilityUnlocked && mana > 0) {
@@ -448,6 +455,15 @@ window.addEventListener('keyup', (e) => {
             }
         }
     }
+
+    if (e.key === 'Q' || e.key === 'q') {
+        player.isdashing = false;
+        player.dx = 0; 
+    }
+
+    if (e.key === 'R' || e.key === 'r') {
+        player.isRaging = false;
+    }
 });
 
 function nastavViditelnost(id, stav) {
@@ -495,6 +511,10 @@ function animovanie() {
         timeScale = 1.0;
         if (mana < maximalnaMana) {
             mana += 0.1;
+        }
+        else if (player.isRaging) {
+        maximalnaMana -= 0.5;
+        mana -= 0.5;
         }
     }
 
