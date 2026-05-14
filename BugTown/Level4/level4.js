@@ -357,6 +357,7 @@ function isTouching(a, b) {
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //doprava
+    if (player.isdashing == true) return;
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }

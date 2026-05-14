@@ -286,6 +286,7 @@ function isTouchingWall(a, b) {
 
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        if (player.isdashing == true) return;
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
@@ -320,6 +321,7 @@ window.addEventListener('keydown', (e) => {
     }
 
     if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
+        if (player.isdashing == true) return;
         mana -= 20;
         player.isdashing = true;
         let smer = 0;

@@ -8,7 +8,7 @@ let zobrazitHUD = true;
 let mana = 100;
 let maximalnaMana = 100;
 let minmana = 0;
-let abilityUnlocked = false;
+let abilityUnlocked = true;
 
 const gravitacia = 0.4;
 
@@ -306,8 +306,9 @@ function isTouchingWall(a, b) {
 
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        if (player.isdashing == true) return;
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+        actualnaakciacici = macky.dolava;    
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
@@ -340,6 +341,8 @@ window.addEventListener('keydown', (e) => {
     }
 
     if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
+        if (player.isdashing == true) return;
+
         mana -= 20;
         player.isdashing = true;
         let smer = 0;
@@ -921,11 +924,9 @@ function animovanie() {
         c.fillText("• Cyber Rage  [R]", barX + 10, barY + 500);
         c.fillText("• Wall Climb [T + W/S]", barX + 10, barY + 520);
 
-        if (abilityUnlocked) {
+        
             c.fillText("• Lietanie [U + W]", barX + 10, barY + 540);
-        } else {
-            c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
-        }
+        
 
         c.restore();
     }

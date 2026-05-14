@@ -267,6 +267,7 @@ function isTouching(a, b) {
 window.addEventListener('keydown', (e) => {
 
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') { // doprava
+        if (player.isdashing == true) return;
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }

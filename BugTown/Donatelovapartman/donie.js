@@ -317,6 +317,7 @@ function isTouching(a, b) {
 window.addEventListener('keydown', (e) => {
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') { //doprava
+        if (player.isdashing == true) return;
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
@@ -360,6 +361,7 @@ window.addEventListener('keydown', (e) => {
         }
     }
      if ((e.key === 'Q' || e.key === 'q' ) && mana >= 20) {
+        if (player.isdashing == true) return;
         mana -= 20;
         player.isdashing = true;
         let smer = 0;
