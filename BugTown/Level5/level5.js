@@ -393,6 +393,7 @@ function mozeSaPostavit() {
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+        if (player.isdashing == true) return;
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
@@ -415,6 +416,7 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
     }
+    
 });
 
 window.addEventListener('keyup', (e) => {

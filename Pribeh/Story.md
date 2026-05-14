@@ -7,3 +7,7 @@ DataBay - Nove mechaniky + nove abilitky - Mikel nam povie o novej abilitke leze
 UploadHigway- NOve mechaniky + posledna op abilitka (treba vymysliet XD) - stretne rafael ten nam poviem kody od coru aby sme vysetkych oslobodili a dotstaneme sa do coru
 
 Cor - tam 3 lvl + 1 BOSS FIGHT po porazeni sa moze rozhodnu ci chceme good ednding a bad ending po porazeni sa zacne cor rutit a vyberieme si ci nahrad nas porblemovy kod a vsetkych oslobodit alebo ujst a prezit lenze vsetci by ostali v otroctve uz navzdy (dozvieme sa v priebehu ze nemozu opustit svoje miesta bez dovolenia coru a ze sa im iba odpojil a nemozu nic urobit.)
+
+
+BugTestery
+Marek Alica Brano Marek Marek  Tomas
