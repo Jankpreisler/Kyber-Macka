@@ -63,8 +63,8 @@ const keys = { right: false, left: false };
 
 // === Hráč ===
 let player = {
-    x: 2000,
-    y: 330,
+    x: 50,
+    y: 950,
     width: 50,
     height: 50,
     dx: 0,
