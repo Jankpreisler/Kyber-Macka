@@ -29,32 +29,11 @@ const Karera = {
 // === DEFINÍCIA PLATFORIEM ===
 const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
-    { x: 0, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 0, y: 800, width: 500, height: 230, color: '#333', type: 'pipe_h' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 500, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 700, y: 500, width: 180, height: 70, color: '#333', type: 'valve', startY: 500, range: 300, speed: 1.8, direction: 1 },
-    { x: 900, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 1100, y: 500, width: 750, height: 50, color: '#333', type: 'pipe_v', speedMultiplier: 20.5},
-    { x: 2000, y: 500, width: 300, height: 50, color: '#333', type: 'pipe_v', friction: 3 },
-    { x: 2600, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v', friction: 0.5 },
-    { x: 3000, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 7000, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    //one try
-    { x: 3400, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
-    { x: 4000, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
-    { x: 4600, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
-    { x: 5200, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
-    { x: 6000, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
-    { x: 6600, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
-    //
-    { x: 7500, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 8000, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 8500, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 9100, y: 100, width: 20, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 9100, y: 400, width: 20, height: 10000, color: '#333', type: 'pipe_v', friction: 100},
-    { x: 9500, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
-    { x: 10000, y: 500, width: 500, height: 230, color: '#333', type: 'pipe_h' },
-    { x: 10500, y: 200, width: 150, height: 550, color: '#333', type: 'pipe_v' },
+    { x: 800, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 800, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+
 
 
 
@@ -428,11 +407,6 @@ window.addEventListener('keyup', (e) => {
                 player.chceSaPostavit = true;
             }
         }
-    }
-
-    if (e.key === 'Q' || e.key === 'q') {
-        player.isdashing = false;
-        player.dx = 0; 
     }
 });
 
