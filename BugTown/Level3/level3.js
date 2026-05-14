@@ -668,7 +668,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(9);
         }
-        window.location.href = "/BugTown/Level4/Level4.html";
+        window.location.href = "/BugTown/Level4/level4.html";
     }
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

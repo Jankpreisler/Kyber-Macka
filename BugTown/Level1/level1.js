@@ -554,7 +554,7 @@ function animovanie() {
             }
             if (isTouching(player, exitZone)) {
                 ProgresManazer.ulozLevel(7);
-                window.location.href = "BugTown/Level2/Level2.html";
+                window.location.href = "BugTown/Level2/level2.html";
             }
         }
     });
