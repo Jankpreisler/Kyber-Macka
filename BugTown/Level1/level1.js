@@ -8,8 +8,8 @@ const gravitacia = 0.4;
 
 // Exit zóna
 const exitZone = {
-    x: 0,
-    y: 450,
+    x: 2400,
+    y: 330,
     width: 60,
     height: 80
 };
@@ -63,8 +63,8 @@ const keys = { right: false, left: false };
 
 // === Hráč ===
 let player = {
-    x: 50,
-    y: 950,
+    x: 2000,
+    y: 330,
     width: 50,
     height: 50,
     dx: 0,
