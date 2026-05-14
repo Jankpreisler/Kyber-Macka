@@ -799,7 +799,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(14);
         }
-        window.location.href = "/DataBay/Level4/level4D.js";
+        window.location.href = "/DataBay/Level4/level4.js";
     }
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

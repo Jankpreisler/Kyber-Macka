@@ -714,7 +714,7 @@ c.restore();
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(11);
         }
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "/DataBay/Level1/level1.html";
     }
 }
 

@@ -51,7 +51,7 @@ const platforms = [
       { x: 800, y: 1600, width: 50, height: 400, color: '#333', type: 'pipe_v' }, 
    { x: 900, y: 1700, width: 150, height: 100, color: '#333', type: 'pipe_v' }, 
     { x: 1200, y: 1700, width: 150, height: 100, color: '#333', type: 'pipe_v' }, 
-       { x: 1150, y: 1500, width: 50, height: 500, color: '#333', type: 'pipe_v', visible: false  },  //neviditelna platforma
+       { x: 1150, y: 1500, width: 50, height: 500, color: '#333', visible: true  },  //neviditelna platforma
 //spodok
     { x: 1050, y: 10000, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
     { x: 1200, y: 10000, width: 150, height: 10000, color: '#333', type: 'pipe_v' }, 
@@ -837,7 +837,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(16);
         }
-        window.location.href = "/DataBay/Level4/level4D.js";
+        window.location.href = "/UploadHighway/Level1/level1UH.html";
     }
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
