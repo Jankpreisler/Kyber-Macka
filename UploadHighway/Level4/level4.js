@@ -29,20 +29,40 @@ const Karera = {
 // === DEFINÍCIA PLATFORIEM ===
 const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
-    { x: 0, y: 800, width: 750, height: 230, color: '#333', type: 'pipe_v' }, //spawn
+    { x: 0, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h', friction: 5 },
-    { x: 1050, y: 700, width: 750, height: 50, color: '#333', type: 'pipe_h' },
-    { x: 2200, y: 600, width: 180, height: 70, color: '#333', type: 'valve', startY: 600, range: 1000, speed: 1.8, direction: 1 },
-    { x: 1350, y: 1500, width: 750, height: 50, color: '#333', type: 'pipe_h' },
-    { x: 950, y: 1500, width: 250, height: 1550, color: '#333', type: 'pipe_h' },
-    { x: 1550, y: 1900, width: 250, height: 1550, color: '#333', type: 'pipe_h' },
-    { x: 2550, y: 2100, width: 250, height: 1550, color: '#333', type: 'pipe_h' },
-    { x: 2750, y: 2100, width: 1550, height: 1550, color: '#333', type: 'pipe_h' },
+    { x: 500, y: 800, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 700, y: 500, width: 180, height: 70, color: '#333', type: 'valve', startY: 500, range: 300, speed: 1.8, direction: 1 },
+    { x: 900, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 1100, y: 500, width: 750, height: 50, color: '#333', type: 'pipe_v', speedMultiplier: 20.5},
+    { x: 2000, y: 500, width: 300, height: 50, color: '#333', type: 'pipe_v', friction: 3 },
+    { x: 2600, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v', friction: 0.5 },
+    { x: 3000, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 7000, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    //one try
+    { x: 3400, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 4000, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 4600, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 5200, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 6000, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 6600, y: 500, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    //
+    { x: 7500, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 8000, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 8500, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 9100, y: 100, width: 20, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 9100, y: 400, width: 20, height: 10000, color: '#333', type: 'pipe_v', friction: 100},
+    { x: 9500, y: 500, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 10000, y: 500, width: 500, height: 230, color: '#333', type: 'pipe_h' },
+    { x: 10500, y: 200, width: 150, height: 550, color: '#333', type: 'pipe_v' },
+
+
+
+
+
 ];
 
 const Mikey = {
-    x: 2800,
     y: 2050,
     width: 50,
     height: 50,
@@ -114,7 +134,7 @@ const keys = {
 let timeScale = 1.0;
 
 let player = {
-    x: 50,
+    x: 0,
     y: 750,
     width: 50,
     height: 50,
@@ -807,7 +827,7 @@ function animovanie() {
 
     if (isTouching(player, exitZone)) {
          if (typeof ProgresManazer !== 'undefined') {
-            ProgresManazer.ulozLevel(19);
+            ProgresManazer.ulozLevel(20);
         }
 
         window.location.href = "/UploadHighway/Level4/level4.html";
