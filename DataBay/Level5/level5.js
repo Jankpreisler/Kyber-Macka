@@ -550,8 +550,10 @@ function animovanie() {
 
 
     // 3. Pohyb a fyzika
-    if (keys.right) player.dx += 0.8;
-    else if (keys.left) player.dx -= 0.8;
+     if (!player.isdashing) {
+        if (keys.right) player.dx += 0.8;
+        else if (keys.left) player.dx -= 0.8;
+    }
 
     player.dx *= player.friction;
 

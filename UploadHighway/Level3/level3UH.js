@@ -286,35 +286,41 @@ function isTouchingWall(a, b) {
 
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-        if (player.isdashing == true) return;
+        if (player.isdashing ) return;
         keys.right = true;
         actualnaakciacici = macky.dolava;
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+         if (player.isdashing) return;
         keys.left = true;
         actualnaakciacici = macky.doprava;
     }
 
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+         if (player.isdashing == true) return;
         keys.up = true;
     }
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+         if (player.isdashing == true) return;
         keys.down = true;
     }
 
     if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
+         if (player.isdashing == true) return;
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
 
     if ((e.code === 'Backspace') && player.grounded) {
+         if (player.isdashing == true) return;
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
 
     if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) {
+         if (player.isdashing == true) return;
         player.height = 25;
         player.grounded = false;
         actualnaakciacici = macky.plazeniedoprava;
@@ -455,7 +461,6 @@ function animovanie() {
 
     drawFog();
 
-    // Spomalenie času
     if (keys.u && abilityUnlocked && mana > 0) {
         timeScale = 0.3;
         mana -= 0.5;
@@ -544,8 +549,10 @@ function animovanie() {
         }
     });
 
-    if (keys.right) player.dx += 0.8 * timeScale;
-    else if (keys.left) player.dx -= 0.8 * timeScale;
+    if (!player.isdashing) {
+        if (keys.right) player.dx += 0.8 * timeScale;
+        else if (keys.left) player.dx -= 0.8 * timeScale;
+    }
 
     player.dx *= activeFriction;
 

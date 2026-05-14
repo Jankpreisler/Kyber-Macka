@@ -76,7 +76,7 @@ const enemies = [
         height: 50,
         baseY: 420,
         phase: 0,
-        speed: 1.5,
+        speed: 1,
         dir: 1,
         leftBound: 400,
         rightBound: 500,
@@ -90,7 +90,7 @@ const enemies = [
         height: 50,
         baseY: 340,
         phase: 1.4,
-        speed: 1.6,
+        speed: 1,
         dir: -1,
         leftBound: 1050,
         rightBound: 1100,
@@ -106,7 +106,7 @@ const enemies = [
         height: 50,
         baseY: 380,  
         phase: 0.7,
-        speed: 1.9,
+        speed: 1,
         dir: -1,
         leftBound: 700,
         rightBound: 770,
@@ -122,7 +122,7 @@ const enemies = [
         height: 50,
         baseY: 280,
         phase: 1.9,
-        speed: 2.0,
+        speed: 2,
         dir: 1,
         leftBound: 1380,
         rightBound: 1680,
@@ -138,7 +138,7 @@ const enemies = [
         height: 50,
         baseY: 380,
         phase: 2.7,
-        speed: 2.1,
+        speed: 1,
         dir: -1,
         leftBound: 1750,
         rightBound: 1850,
@@ -185,7 +185,7 @@ let player = {
     friction: 0.9,
     chceSaPostavit: false,
     dashspeed: 35,
-    isNahnevany: false,
+    isRaging: false,
 };
 
 // --- ATMOSFÉRA ---
@@ -410,7 +410,7 @@ window.addEventListener('keydown', (e) => {
         player.dx = smer * player.dashspeed;
     }
     if (e.key === 'r' || e.key === 'R') {
-        if (mana > 20 && !player.isRaging) {
+        if (mana > 20 && !player.isNahnevany) {
             player.isRaging = true;
         } else {
             player.isRaging = false; // Opätovné stlačenie vypne mód
@@ -468,14 +468,15 @@ function animovanie() {
     requestAnimationFrame(animovanie);
     time += 0.01;
 
-    const prevY = player.y;
+    const prevY = player.y; // Potrebné pre správnu detekciu skoku na hlavu enemy
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
     c.save();
     c.translate(-Karera.x, -Karera.y);
 
-    // === POZADIE ===
+
+    // 1. Pozadie
     let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
     bgGrad.addColorStop(0, '#0a100a');
     bgGrad.addColorStop(1, '#010501');
@@ -483,10 +484,11 @@ function animovanie() {
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 10000, 3000);
+    c.fillRect(0, 0, 30000, 30000);
 
     drawFog();
 
+    // === LOGIKA CYBER RAGE (Z PRVÉHO KÓDU) ===
     if (player.isRaging) {
         maximalnaMana -= 0.5; 
         mana -= 0.5; 
@@ -494,32 +496,21 @@ function animovanie() {
         mana += 0.1; 
     }
 
-    // --- LOGIKA DASHU (DOPLNENIE) ---
-    if (player.isdashing) {
-
-        if (Math.abs(player.dx) < 5) {
-            player.isdashing = false;
-        }
-    }
-
-    // === ENEMY POHYB ===
-    enemies.forEach(e => {
-        if (!e.alive) return;
-
-        e.x += e.speed * e.dir;
-        if (e.x < e.leftBound || e.x > e.rightBound) 
-        e.dir *= -1;
-
-        e.y = e.baseY;
-    });
-
-    
-
-    // === PLATFORMY ===
+    // 2. Vykreslenie objektov
     platforms.forEach(p => {
-        if (p.type === 'ground') {
+        if (p.visible === false) return;
+        if (p.type === 'floor') {
             c.fillStyle = '#000';
             c.fillRect(p.x, p.y, p.width, p.height);
+
+            let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
+            sliz.addColorStop(0, '#000000');
+            sliz.addColorStop(1, 'transparent');
+            c.fillStyle = sliz;
+            c.fillRect(p.x, p.y, p.width, 3);
+        }
+        else if (p.type === 'wall') {
+            drawRealServer(p);
         }
         else if (p.type === 'pipe_v') {
             drawRealPipe(p, true);
@@ -527,22 +518,84 @@ function animovanie() {
         else if (p.type === 'pipe_h') {
             drawRealPipe(p, false);
         }
-        else if (p.type === 'wall') {
-            drawRealServer(p);
+        else if (p.type === 'trigger') {
+            drawStyledButton(p, false, p.isPressed);
+        }
+        else if (p.type === 'valve') {
+            c.save();
+            c.translate(p.x + p.width / 2, p.y + p.height / 2);
+            c.shadowBlur = 15;
+            c.shadowColor = '#ff0000';
+            c.strokeStyle = '#ff0000';
+            c.lineWidth = 2;
+            c.strokeRect(-p.width / 2, -p.height / 2, p.width, p.height);
+            c.fillStyle = '#000';
+            c.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+            c.shadowBlur = 0; // Vypnutie žiary pre vnútorné detaily
+            c.strokeStyle = 'rgba(255, 0, 0, 0.6)';
+            c.lineWidth = 1;
+            c.restore();
+        }
+        else if (p.speed) {
+            p.x += p.speed * p.direction;
+            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
+            if (p.hasRope) drawRopes(p);
+
+        }
+        else {
+            c.fillStyle = 'transparent';
+            c.fillRect(p.x, p.y, p.width, p.height);
+        }
+
+    });
+    
+    // Funguje nedotykat sa nikdydw
+    platforms.forEach(p => {
+        if (p.speed) {
+            if (p.type === 'valve') {
+                // Vertikálny pohyb pre ventil/plošinu
+                p.y += p.speed * p.direction;
+                // Ak narazí na hranicu rozsahu (startY + range), otočí smer
+                if (p.y > p.startY + p.range || p.y < p.startY) {
+                    p.direction *= -1;
+                }
+            } else {
+                // Horizontálny pohyb pre ostatné plošiny
+                p.x += p.speed * p.direction;
+                if (p.x > p.startX + p.range || p.x < p.startX) {
+                    p.direction *= -1;
+                }
+            }
         }
     });
 
-    // === POHYB HRÁČA ===
-    if (keys.right) player.dx += 0.8;
-    else if (keys.left) player.dx -= 0.8;
+    // === ENEMY POHYB (Z PRVÉHO KÓDU) ===
+    enemies.forEach(e => {
+        if (!e.alive) return;
 
+        e.x += e.speed * e.dir;
+        if (e.x < e.leftBound || e.x > e.rightBound) 
+            e.dir *= -1;
+
+        e.y = e.baseY;
+    });
+
+    // --- LOGIKA DASHU (DOPLNENIE) ---
+    if (player.isdashing) {
+        if (Math.abs(player.dx) < 5) {
+            player.isdashing = false;
+        }
+    }
+    
+    // 3. Pohyb a fyzika hráča
+    if (!player.isdashing) {
+        if (keys.right) player.dx += 0.8;
+        else if (keys.left) player.dx -= 0.8;
+    }
     player.dx *= player.friction;
 
-    if (player.dx > player.speed) player.dx = player.speed;
-    if (player.dx < -player.speed) player.dx = -player.speed;
-
+    // Limit maximálnej rýchlosti hráča
     if (player.isdashing == true) {
-
         if (player.dx > player.dashspeed) player.dx = player.dashspeed;
         if (player.dx < -player.dashspeed) player.dx = -player.dashspeed;
     }
@@ -553,89 +606,29 @@ function animovanie() {
     }
 
     player.x += player.dx;
-    player.dy += gravitacia;
     player.y += player.dy;
     player.grounded = false;
 
-    // === KAMERA ===
-    Karera.x = player.x - canvas.width / 2;
-    Karera.y = player.y - canvas.height / 2;
-
-    if (Karera.x < 0) Karera.x = 0;
-    if (Karera.y < 0) Karera.y = 0;
-
-    // === KOLÍZIE S PLATFORMAMI ===
-    platforms.forEach(platform => {
-        if (
-            player.x < platform.x + platform.width &&
-            player.x + player.width > platform.x &&
-            player.y < platform.y + platform.height &&
-            player.y + player.height > platform.y
-        ) {
-            // pristátie na platforme
-            if (player.dy > 0 && prevY + player.height <= platform.y) {
-                player.y = platform.y - player.height;
-                player.dy = 0;
-                player.grounded = true;
-            }
-            // náraz z prava
-            else if (player.dx > 0) {
-                player.x = platform.x - player.width;
-                player.dx = 0;
-            }
-            // náraz z ľava
-            else if (player.dx < 0) {
-                player.x = platform.x + platform.width;
-                player.dx = 0;
-            }
-            // náraz zospodu
-            else if (player.dy < 0) {
-                player.y = platform.y + platform.height;
-                player.dy = 0;
-            }
-        }
-    });
-
-    // === VETRÁKY – FYZIKA ===
+    // --- LOGIKA A VIZUÁL VETRÁKA ---
     platforms.forEach(p => {
-        // vertikálny vetrák
-        if (p.id === 'vetrak5_up' && p.zapnuty) {
-            const vnutri =
+
+        // ===== PRVÝ VETRÁK (HORE) =====
+        if (p.id === 'vetrak') {
+            if (
                 player.x + player.width > p.x &&
                 player.x < p.x + p.width &&
-                player.y + player.height > p.y &&
-                player.y < p.y + p.height + p.range;
-
-            if (vnutri) {
-                let sila = 0.6;
-                if (player.y > p.y - p.range * 0.5) sila = 1.0;
-                if (player.y > p.y - p.range * 0.2) sila = 1.4;
-
-                player.dy -= sila;
-                if (player.dy < -p.maxForce) player.dy = -p.maxForce;
+                player.y + player.height > p.y - p.range &&
+                player.y + player.height <= p.y
+            ) {
+                let vzdialenostOdVetráka = p.y - (player.y + player.height);
+                if (vzdialenostOdVetráka > p.range * 0.8) {
+                    player.dy -= 0.35;
+                } else {
+                    player.dy -= 0.8;
+                }
+                if (player.dy < -5) player.dy = -5;
             }
-        }
 
-        // horizontálny vetrák
-        if (p.id === 'vetrak5_side' && p.zapnuty) {
-            const vnutri =
-                player.y + player.height > p.y &&
-                player.y < p.y + p.height &&
-                player.x < p.x &&
-                player.x + player.width > p.x - p.range;
-
-            if (vnutri) {
-                player.dx -= 0.7;
-                if (player.dx < -p.maxForce) player.dx = -p.maxForce;
-            }
-        }
-    });
-
-    // === GENEROVANIE VETERNÝCH PARTIKLOV ===
-    platforms.forEach(p => {
-
-        // Vertikálny vetrák (vietor ide hore)
-        if (p.id === 'vetrak5_up' && p.zapnuty) {
             if (Math.random() > 0.6) {
                 windParticles.push({
                     x: p.x + Math.random() * p.width,
@@ -647,33 +640,135 @@ function animovanie() {
             }
         }
 
-        // Horizontálny vetrák (vietor ide doľava)
-        if (p.id === 'vetrak5_side' && p.zapnuty) {
-            if (Math.random() > 0.4) {
+        // ===== DRUHÝ VETRÁK (DOĽAVA) =====
+        if (p.id === 'vetrak2' && p.zapnuty === true) {
+
+            const vnutri =
+                player.y + player.height > p.y &&
+                player.y < p.y + p.height &&
+                player.x < p.x &&
+                player.x + player.width > p.x - p.range;
+
+            if (vnutri) {
+                player.dx -= 0.67;
+            }
+
+            if (Math.random() > 0.4) { 
                 windParticles.push({
                     x: p.x - Math.random() * p.range,
                     y: p.y + Math.random() * p.height,
                     speed: Math.random() * 5 + 2,
-                    opacity: Math.random() * 0.5 + 0.5,
+                    opacity: Math.random() * 0.5 + 0.5, 
                     direction: 'left',
                     minX: p.x - p.range
                 });
             }
         }
+
     });
 
-    // === KOLÍZIE S ENEMY ===
+    c.save();
+    windParticles.forEach((part, index) => {
+
+        // smer
+        if (part.direction === 'left') {
+            part.x -= part.speed;
+        } else {
+            part.y -= part.speed;
+        }
+
+        part.opacity -= 0.015;
+
+        c.strokeStyle = `rgba(255, 0, 0, ${part.opacity})`;
+        c.lineWidth = 2;
+        c.beginPath();
+
+        if (part.direction === 'left') {
+            c.moveTo(part.x, part.y);
+            c.lineTo(part.x + 15, part.y);
+        } else {
+            c.moveTo(part.x, part.y);
+            c.lineTo(part.x, part.y + 15);
+        }
+
+        c.stroke();
+
+        if (
+            part.opacity <= 0 ||
+            (part.direction === 'left' && part.x < part.minX) ||
+            (!part.direction && part.y < part.maxHeight)
+        ) {
+            windParticles.splice(index, 1);
+        }
+
+    });
+    c.restore();
+
+    // 4. Kolízie s platformami
+    platforms.forEach(platform => {
+        if (platform.id === "stienkaprechodna") return;
+        if (platform.id === "vetrak2") return;
+        if (platform.visible === false) return;
+        if (
+            player.x < platform.x + platform.width &&
+            player.x + player.width > platform.x &&
+            player.y < platform.y + platform.height &&
+            player.y + player.height > platform.y
+        ) {
+            if (platform.type === 'floor') {
+                resetPlayer();
+                return; 
+            }
+
+            // dopad zhora
+            if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
+                player.y = platform.y - player.height;
+                player.dy = 0;
+                player.grounded = true;
+
+                if (platform.type === 'valve' && platform.speed) {
+                    player.y += platform.speed * platform.direction;
+                }
+                else if (platform.type === 'pipe_h' && platform.speed) {
+                    player.x += platform.speed * platform.direction;
+                }
+            }
+
+            // náraz sprava do steny
+            else if (player.dx > 0 && (player.x + player.width - player.dx) <= platform.x) {
+                player.x = platform.x - player.width;
+                player.dx = 0; 
+            }
+
+            // náraz zľava do steny
+            else if (player.dx < 0 && (player.x - player.dx) >= platform.x + platform.width) {
+                player.x = platform.x + platform.width;
+                player.dx = 0; 
+            }
+
+            // náraz hlavou zdola
+            else if (player.dy < 0 && (player.y - player.dy) >= platform.y + platform.height) {
+                player.y = platform.y + platform.height;
+                player.dy = 0;
+            }
+            if (platform.type === 'trigger') {
+                vykonajAkciu(platform.id);
+            }
+        }
+    });
+
+    // === KOLÍZIE S ENEMY (Z PRVÉHO KÓDU) ===
     enemies.forEach(e => {
         if (!e.alive) return;
     
         if (isTouching(player, e)) {
             if (player.isRaging) {
-                e.alive = false; // Zomrie z každej strany
-                // Voliteľné: jemne hráča odraz, aby cítil náraz
+                e.alive = false; // Zomrie z každej strany počas Cyber Rage
                 player.dx *= -0.5; 
             } 
             else {
                 const playerBottomPrev = prevY + player.height;
+                // Skok na hlavu
                 if (player.dy > 0 && playerBottomPrev <= e.y) {
                     e.alive = false;
                     player.dy = -player.jumpForce * 0.6;
@@ -684,7 +779,7 @@ function animovanie() {
         }
     });
 
-    // === RENDER ENEMY ===
+    // === RENDER ENEMY (Z PRVÉHO KÓDU) ===
     enemies.forEach(e => {
         if (!e.alive) return;
 
@@ -700,62 +795,51 @@ function animovanie() {
         c.fill();
     });
 
-    // === HRÁČ ===
-    if (actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'yellow';
-        c.fillRect(player.x, player.y, player.width, player.height);
+    // === 5. KAMERA A POSTAVENIE SA ===
+    Karera.x = player.x - canvas.width / 2;
+    Karera.y = player.y - canvas.height / 2;
+
+    if (Karera.y < 0) Karera.y = 0;
+    if (Karera.x < 0) Karera.x = 0;
+
+    if (player.height === 25 && player.chceSaPostavit) {
+        if (mozeSaPostavit()) {
+            player.height = 50;
+            player.y -= 25;
+            player.chceSaPostavit = false;
+            actualnaakciacici = macky.doprava;
+        }
     }
-    // === RENDER VETERNÝCH PARTIKLOV ===
-    c.save();
-    windParticles.forEach((part, index) => {
 
-        // pohyb
-        if (part.direction === 'left') {
-            part.x -= part.speed;
-        } else {
-            part.y -= part.speed;
+    function vykonajAkciu(id) {
+        const btn = platforms.find(p => p.id === id);
+        if (btn) btn.isPressed = true;
+
+        if (id === 'tlacidlo3') {
+            nastavViditelnost('vetrak2', false); 
+            console.log("Cesta je voľná!");
         }
+    }
 
-        part.opacity -= 0.015;
-
-        // kreslenie
-        c.strokeStyle = `rgba(255, 0, 0, ${part.opacity})`;
-        c.lineWidth = 2;
-        c.beginPath();
-
-        if (part.direction === 'left') {
-            c.moveTo(part.x, part.y);
-            c.lineTo(part.x + 15, part.y);
-        } else {
-            c.moveTo(part.x, part.y);
-            c.lineTo(part.x, part.y + 15);
-        }
-
-        c.stroke();
-
-        // mazanie
-        if (
-            part.opacity <= 0 ||
-            (part.direction === 'left' && part.x < part.minX) ||
-            (!part.direction && part.y < part.maxHeight)
-        ) {
-            windParticles.splice(index, 1);
-        }
-    });
-    c.restore();
-
-
-    c.restore();
-
-    // === EXIT ===
+    // PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
         if (typeof ProgresManazer !== 'undefined') {
-            ProgresManazer.ulozLevel(11);
+            ProgresManazer.ulozLevel(9);
         }
-        window.location.href = "/DataBay/Level1/level1.html";
+        window.location.href = "/BugTown/Level4/level4.html";
     }
+
+    // 6. Vykreslenie postavy
+    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
+        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
+    } else {
+        c.fillStyle = 'red';
+        c.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    c.restore();
+
+    // === VYKRESLENIE HUD ===
     if (zobrazitHUD === true) {
         c.save();
 
@@ -775,20 +859,18 @@ function animovanie() {
 
         // 2. Samotný Progress (Výplň many)
         let percento = mana / maximalnaMana;
-        if (percento < 0) percento = 0; // Ochrana proti zápornej mane
+        if (percento < 0) percento = 0; 
 
-        // Vytvoríme gradient (prechod farieb z tmavomodrej do svetlomodrej)
         let manaGrad = c.createLinearGradient(barX, 0, barX + barWidth, 0);
-        manaGrad.addColorStop(0, '#0044ff'); // Tmavšia modrá na začiatku
-        manaGrad.addColorStop(1, '#00d4ff'); // Žiarivá azúrová na konci
+        manaGrad.addColorStop(0, '#0044ff'); 
+        manaGrad.addColorStop(1, '#00d4ff'); 
 
         c.fillStyle = manaGrad;
         c.beginPath();
-        // Vykreslíme výplň podľa aktuálnej many
         c.roundRect(barX + 2, barY + 2, (barWidth - 4) * percento, barHeight - 4, 3);
         c.fill();
 
-        // 3. Efekt "lesku" na bare (biely prúžok navrchu)
+        // 3. Efekt "lesku" na bare
         c.fillStyle = 'rgba(255, 255, 255, 0.1)';
         c.fillRect(barX + 2, barY + 2, (barWidth - 4) * percento, (barHeight - 4) / 2);
 
@@ -803,13 +885,14 @@ function animovanie() {
         // --- JEDNODUCHÝ INVENTÁR ---
         c.fillStyle = "rgba(0, 0, 0, 0.6)";
         c.beginPath();
-        c.roundRect(barX, barY + 455, 200, 100, 5); //nasjkor vyska sirka height invertara zaoblenie
+        c.roundRect(barX, barY + 455, 200, 100, 5); 
         c.fill();
 
         c.fillStyle = "#aaa";
         c.font = "11px Arial";
         c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
-        c.fillText("• Cyber Rage  [R]", barX + 10, barY + 500);
+        // Ak je aktívny Rage, vykreslí sa v inventári (zmenené z "Error 404 [LOCKED]" podľa kódu 1)
+        c.fillText(player.isRaging ? "• Cyber Rage  [R]" : "• Cyber Rage  [R]", barX + 10, barY + 500);
         c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 520);
         c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
 

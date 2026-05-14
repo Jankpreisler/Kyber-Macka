@@ -473,8 +473,10 @@ function animovanie() {
         }
     });
 
-    if (keys.right) player.dx += 0.8 * timeScale;
-    else if (keys.left) player.dx -= 0.8 * timeScale;
+   if (!player.isdashing) {
+        if (keys.right) player.dx += 0.8 * timeScale;
+        else if (keys.left) player.dx -= 0.8 * timeScale;
+    }
 
     player.dx *= activeFriction;
 

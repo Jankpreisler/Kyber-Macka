@@ -8,7 +8,7 @@ let zobrazitHUD = true;
 let mana = 100;
 let maximalnaMana = 100;
 let minmana = 0;
-let abilityUnlocked = false;
+let abilityUnlocked = true;
 
 const gravitacia = 0.4;
 
@@ -576,8 +576,10 @@ function animovanie() {
         }
     });
 
-    if (keys.right) player.dx += 0.8 * timeScale;
-    else if (keys.left) player.dx -= 0.8 * timeScale;
+   if (!player.isdashing) {
+        if (keys.right) player.dx += 0.8 * timeScale;
+        else if (keys.left) player.dx -= 0.8 * timeScale;
+    }
 
     player.dx *= activeFriction;
 
