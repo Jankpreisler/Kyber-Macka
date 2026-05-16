@@ -2,5 +2,4 @@
 2. Sountrack zrobit
 3. Pridat texturu aby sme rosirily zony
 4. Pridat random utociace npc
-5. Dokoncit Main menu
 6. Pathnut bugy
