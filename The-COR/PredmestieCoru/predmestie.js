@@ -49,8 +49,9 @@ const platforms = [
     { x: 4300, y: 1500, width: 2350, height: 50, color: '#333', type: 'pipe_h', visible: false, id: "poslednepatro" },
     { x: 4500, y: 1450, width: 100, height: 50, color: '#333', type: 'trigger', id: 'tlacidlo5', isPressed: false, visible: true, },
     { x: 6250, y: 800, width: 50, height: 550, color: '#333', type: 'pipe_h' },
-    { x: 8500, y: 800, width: 250, height: 1050, color: '#333', type: 'pipe_h',id:"totonakoniecties", visible:"false" },
-    { x: 8750, y: 800, width: 950, height: 50, color: '#333', type: 'pipe_h',id:"totonakoniec", visible:"false" }, 
+    { x: 8500, y: 800, width: 250, height: 1050, color: '#333', type: 'pipe_h',id:"totonakoniecties", visible:false },
+    { x: 8750, y: 800, width: 950, height: 50, color: '#333', type: 'pipe_h',id:"totonakoniec", visible:false }, 
+    { x: 7000, y: 1500, width: 1050, height: 50, color: '#333', type: 'pipe_h', id: "plosinka", visible: false },
 
 ];
 
@@ -67,6 +68,18 @@ const jamka = {
     height: 30,
     aktivna: false
 };
+
+const zadavac = {
+    x: 7000,
+    y: 1450,
+    width: 60,
+    height: 60,
+    spravnykodik: "31975",
+    kodzadany:"",
+    jeodomknuty: false,
+    jeprinom: false,
+
+}
 
 const macky = {
     dolava: new Image(),
@@ -105,7 +118,7 @@ let player = {
     grounded: false,
     friction: 0.9,
     isdashing: false,
-    dashspeed: 35,
+    dashspeed: 45,
     chceSaPostavit: false,
     isRaging: false
 };
@@ -312,9 +325,24 @@ window.addEventListener('keydown', (e) => {
         if (mana > 20 && !player.isNahnevany) {
             player.isRaging = true;
         } else {
-            player.isRaging = false; // Opätovné stlačenie vypne mód
+            player.isRaging = false; 
         }
     }
+
+    if (zadavac.jeprinom && !zadavac.jeodomknuty) {
+    if (e.key >= '0' && e.key <= '9' && zadavac.kodzadany.length < 5) {
+        zadavac.kodzadany += e.key;
+        
+        if (zadavac.kodzadany === zadavac.spravnykodik) {
+            zadavac.jeodomknutyomknuty = true;
+            nastavViditelnost('plosinka', true); 
+        }
+    }
+    
+    if (e.key === 'Escape') {
+        zadavac.kodzadany = "";
+    }
+}
 
 
 });
@@ -725,6 +753,34 @@ function animovanie() {
         c.strokeStyle = '#5D2E0A';
         c.strokeRect(box.x + 5, box.y + 5, box.width - 10, box.height - 10);
     });
+
+    //toto na ten odomkinac
+    zadavac.jeprinom = isTouching(player, zadavac);
+    c.fillStyle = zadavac.jeodomknuty ? '#00ff41' : '#444'; // Zelený ak je odomknutý, šedý ak zamknutý
+    c.fillRect(zadavac.x, zadavac.y, zadavac.width, zadavac.height);
+
+    c.fillStyle = '#000';
+    c.fillRect(zadavac.x + 5, zadavac.y + 10, zadavac.width - 10, 25);
+
+    c.fillStyle = '#00ff41';
+    c.font = "bold 12px Courier New";
+    c.textAlign = "center";
+
+    if (zadavac.jeodomknuty) {
+        c.fillText("OPEN", zadavac.x + zadavac.width / 2, zadavac.y + 26);
+    } else {
+        let zobrazenyText = zadavac.kodzadany.padEnd(4, '_');
+        c.fillText(zobrazenyText, zadavac.x + zadavac.width / 2, zadavac.y + 26);
+    }
+    c.textAlign = "left"; 
+
+    if (zadavac.jeprinom && !zadavac.jeodomknuty) {
+        c.fillStyle = '#000000';
+        c.font = "11px Arial";
+        c.fillText("ZADAJ KÓD (0-9)", zadavac.x - 15, zadavac.y - 25);
+        c.fillText("[Esc] na reset", zadavac.x - 10, zadavac.y - 10);
+    }
+    
 
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
