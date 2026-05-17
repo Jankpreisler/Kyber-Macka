@@ -541,6 +541,9 @@ function animovanie() {
     player.dy += gravitacia;
     player.y += player.dy;
     player.grounded = false;
+    facingRight = (actualnaakciacici === macky.dolava);
+DashTrail.update(player, player.isdashing, facingRight);
+DashTrail.updateDeath();
 
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
@@ -695,10 +698,26 @@ if (platform.type === 'valve') {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return;
-            }
+            
+          if (platform.type === 'floor') {
+
+    // === DEATH ANIMATION ===
+    DashTrail.triggerDeath(player);
+
+    player.width = 0;
+    player.height = 0;
+    player.dx = 0;
+    player.dy = 0;
+
+    setTimeout(() => {
+        player.width = 50;
+        player.height = 50;
+        resetPlayer();
+    }, 350);
+
+    return;
+}
+
 
             if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
                 player.y = platform.y - player.height;
@@ -761,6 +780,8 @@ if (platform.type === 'valve') {
         }
         window.location.href = "../BugTown/Level5/level5.html";
     }
+    DashTrail.drawDeath(c);
+    DashTrail.draw(c);
 
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

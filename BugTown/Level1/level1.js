@@ -413,6 +413,10 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
+    facingRight = (actualnaakciacici === macky.dolava);
+DashTrail.update(player, player.isdashing, facingRight);
+DashTrail.updateDeath();
+
     // kamera
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
@@ -520,10 +524,24 @@ function animovanie() {
             player.y + player.height > platform.y
         ) {
             // podlaha = smrť
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return;
-            }
+          if (platform.type === 'floor') {
+
+    // === DEATH ANIMATION ===
+    DashTrail.triggerDeath(player);
+
+    player.width = 0;
+    player.height = 0;
+    player.dx = 0;
+    player.dy = 0;
+
+    setTimeout(() => {
+        player.width = 50;
+        player.height = 50;
+        resetPlayer();
+    }, 350);
+
+    return;
+}
 
             // dopad zhora
             if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
@@ -598,6 +616,9 @@ function animovanie() {
         window.location.href = "SerWers/Level2/level2.html";
         window.location.href = "/BugTown/Level2/level2.html";
     }
+
+    DashTrail.draw(c);
+DashTrail.drawDeath(c);
 
     // === Postava ===
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

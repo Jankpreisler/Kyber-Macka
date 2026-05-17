@@ -1,5 +1,6 @@
 const canvas = document.getElementById('gameCanvas');
 const c = canvas.getContext('2d');
+let facingRight = true;
 
 canvas.width = 1300; // na normal leevely
 canvas.height = 600;
@@ -573,6 +574,11 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
+facingRight = (actualnaakciacici === macky.dolava);
+DashTrail.update(player, player.isdashing, facingRight);
+DashTrail.updateDeath();
+
+
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
 
@@ -679,10 +685,25 @@ function animovanie() {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return;
-            }
+        if (platform.type === 'floor') {
+
+    // === DEATH ANIMATION ===
+    DashTrail.triggerDeath(player);
+
+    player.width = 0;
+    player.height = 0;
+    player.dx = 0;
+    player.dy = 0;
+
+    setTimeout(() => {
+        player.width = 50;
+        player.height = 50;
+        resetPlayer();
+    }, 350);
+
+    return;
+}
+
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
                 player.y = platform.y - player.height;
@@ -825,6 +846,9 @@ function animovanie() {
         }
         window.location.href = "/DataBay/Level4/level4.js";
     }
+
+    DashTrail.draw(c);
+DashTrail.drawDeath(c);
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
         c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
