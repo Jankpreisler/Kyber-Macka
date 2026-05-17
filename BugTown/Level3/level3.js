@@ -78,7 +78,7 @@ let player = {
     isdashing: false,
     dashspeed: 35,
 };
-
+damagesystem(player);
 // --- ATMOSFÉRICKÉ EFEKTY ---
 let time = 0;
 let fogParticles = [];
@@ -689,6 +689,7 @@ function animovanie() {
         const barY = 20;
         const barWidth = 250;
         const barHeight = 30;
+       
 
         // 1. Pozadie baru (tmavý podklad)
         c.fillStyle = 'rgba(20, 20, 20, 0.8)';
@@ -717,6 +718,8 @@ function animovanie() {
         // 3. Efekt "lesku" na bare (biely prúžok navrchu)
         c.fillStyle = 'rgba(255, 255, 255, 0.1)';
         c.fillRect(barX + 2, barY + 2, (barWidth - 4) * percento, (barHeight - 4) / 2);
+
+        Damageudelovator.vykresliHPBar(player);
 
         // 4. Textové info
         c.fillStyle = "white";

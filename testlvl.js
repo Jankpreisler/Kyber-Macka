@@ -7,6 +7,26 @@ canvas.height = 600;
 const gravitacia = 0.4;
 const keys = { right: false, left: false };
 
+// === SYSTÉM ČASTÍC (PIXELOVÝ EFEKT) ===
+let particles = [];
+
+function vytvorRozpadNaPixely(startX, startY, farba) {
+    const pocetPixelov = 40; // Koľko kúskov z robota odletí
+    for (let i = 0; i < pocetPixelov; i++) {
+        particles.push({
+            x: startX + Math.random() * 50, // Rozptyl po šírke robota
+            y: startY + Math.random() * 50, // Rozptyl po výške robota
+            size: Math.random() * 4 + 2,    // Veľkosť pixelu (2 až 6 px)
+            // Náhodná rýchlosť do všetkých strán
+            dx: (Math.random() - 0.5) * 8, 
+            dy: (Math.random() - 0.5) * 8 - 2, // Mierne vystrelenie nahor
+            alpha: 1,                       // Priehľadnosť (začína na 100%)
+            decay: Math.random() * 0.02 + 0.015, // Ako rýchlo pixel zmizne
+            color: farba
+        });
+    }
+}
+
 // === NAČÍTANIE OBRÁZKOV ===
 const macky = {
     dolava: new Image(),
@@ -26,7 +46,6 @@ const currentLevel = {
     playerStart: { x: 50, y: 400 },
     exitZone: { x: 1180, y: 40, width: 100, height: 120 },
     
-    // NPC ROBOT S DETEKČNÝM DOSAHOM
     npc: {
         x: 450,
         y: 450,
@@ -46,11 +65,11 @@ const currentLevel = {
         isTalking: false,
         canInteract: false,
         
-        // Vlastnosti pre útok a detekciu
         isHostile: false,
+        isDead: false, 
         speed: 2,
         damage: 20,
-        detectionRange: 350 // DOSAH DETEKCIE V PIXELOCH
+        detectionRange: 350 
     },
 
     enemies: [
@@ -107,10 +126,12 @@ let player = {
         this.height = 50;
         this.hp = this.maxHp;
         
-        // Reset robota pri smrti mačky
+        particles = []; // Vyčistíme staré pixely pri resete
+        
         currentLevel.npc.x = 450;
         currentLevel.npc.y = 450;
         currentLevel.npc.isHostile = false;
+        currentLevel.npc.isDead = false; 
         currentLevel.npc.currentLine = 0;
         currentLevel.npc.isTalking = false;
     },
@@ -119,7 +140,7 @@ let player = {
         if (Date.now() < this.invincibleTimer) return;
 
         this.hp -= amount;
-        this.invincibleTimer = Date.now() + 800; // 800ms nesmrteľnosť
+        this.invincibleTimer = Date.now() + 800; 
 
         if (this.hp <= 0) {
             this.reset();
@@ -177,12 +198,24 @@ let player = {
             }
         });
 
-        // Kolízia s NPC (ak útočí)
+        // === ZNIČENIE ROBOTA A SPUSTENIE ANIMÁCIE ===
         const npc = currentLevel.npc;
-        if (npc.isHostile) {
+        if (!npc.isDead) { 
             if (this.x < npc.x + npc.width && this.x + this.width > npc.x &&
                 this.y < npc.y + npc.height && this.y + this.height > npc.y) {
-                this.takeDamage(npc.damage);
+                
+                if (this.dy > 0 && (this.y + this.height - this.dy) <= npc.y + 15) {
+                    npc.isDead = true;         
+                    npc.isHostile = false;     
+                    npc.isTalking = false;     
+                    this.dy = -this.jumpForce * 0.8; 
+
+                    // TU SPÚŠŤAME EFEKT: Vezmeme pozíciu robota a jeho typickú ružovo/fialovú farbu
+                    vytvorRozpadNaPixely(npc.x, npc.y, '#ff00ff'); 
+
+                } else if (npc.isHostile) {
+                    this.takeDamage(npc.damage);
+                }
             }
         }
 
@@ -192,9 +225,8 @@ let player = {
             this.chceSaPostavit = false;
         }
 
-        // Interakcia s NPC funguje len vtedy, ak po tebe práve nejde
         let dist = Math.sqrt((this.x - npc.x)**2 + (this.y - npc.y)**2);
-        npc.canInteract = (dist < 120) && !npc.isHostile; 
+        npc.canInteract = (dist < 120) && !npc.isHostile && !npc.isDead; 
         if (!npc.canInteract) npc.isTalking = false;
     },
 
@@ -312,72 +344,88 @@ function animovanie() {
         }
     });
 
-    // === LOGIKA DETEKCIE A UTÚKU NPC ROBOTA ===
+    // === LOGIKA DETEKCIE A ÚTOKU NPC ROBOTA ===
     const n = currentLevel.npc;
     
-    // Výpočet vzdialenosti medzi mačkou a robotom
-    let vzdialenostODMacki = Math.sqrt((player.x - n.x)**2 + (player.y - n.y)**2);
+    if (!n.isDead) {
+        let vzdialenostODMacki = Math.sqrt((player.x - n.x)**2 + (player.y - n.y)**2);
 
-    if (vzdialenostODMacki < n.detectionRange) {
-        n.isHostile = true;
-        n.isTalking = false; // Preruší dialóg, ak hráč vbehne príliš blízko a spustí agro
-        
-        // Prenasledovanie mačky (AI)
-        if (n.x < player.x) n.x += n.speed;
-        if (n.x > player.x) n.x -= n.speed;
-        if (n.y < player.y) n.y += n.speed;
-        if (n.y > player.y) n.y -= n.speed;
-    } else {
-        // Ak mačka odbehne ďalej ako 350 pixelov, robot ju stratí a upokojí sa
-        n.isHostile = false;
-    }
+        if (vzdialenostODMacki < n.detectionRange) {
+            n.isHostile = true;
+            n.isTalking = false; 
+            
+            if (n.x < player.x) n.x += n.speed;
+            if (n.x > player.x) n.x -= n.speed;
+            
+        } else {
+            n.isHostile = false;
+        }
 
-    // VIZUÁLNY KRUH DOSAHU DETEKCIE (Dá sa vymazať, ak ho v hre nechceš vidieť)
-    c.strokeStyle = n.isHostile ? 'rgba(255, 0, 0, 0.25)' : 'rgba(0, 255, 255, 0.1)';
-    c.lineWidth = 2;
-    c.beginPath();
-    c.arc(n.x + n.width/2, n.y + n.height/2, n.detectionRange, 0, Math.PI * 2);
-    c.stroke();
-
-    // Vykreslenie NPC robota
-    if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
-        c.drawImage(macky.npc, n.x, n.y, n.width, n.height);
-    } else {
-        c.fillStyle = n.isHostile ? '#ff0055' : n.color;
-        c.fillRect(n.x, n.y, n.width, n.height);
-    }
-
-    // Výkričník nad NPC (len ak neútočí a nehovorí)
-    if (n.canInteract && !n.isTalking && !n.isHostile) {
-        c.fillStyle = "#ffff00";
-        c.font = "bold 26px Arial";
-        c.fillText("!", n.x + n.width/2 - 5, n.y - 15);
-    }
-
-    // Dialógový systém
-    if (n.isTalking) {
-        const line = n.dialogues[n.currentLine];
-        const isCat = (line.hovori === "MAČKA");
-
-        c.fillStyle = "rgba(10, 10, 10, 0.95)";
-        c.strokeStyle = isCat ? "#00ff00" : "#00ffff"; 
-        c.lineWidth = 3;
+        c.strokeStyle = n.isHostile ? 'rgba(255, 0, 0, 0.25)' : 'rgba(0, 255, 255, 0.1)';
+        c.lineWidth = 2;
         c.beginPath();
-        c.roundRect(250, 460, 800, 110, 15);
-        c.fill();
+        c.arc(n.x + n.width/2, n.y + n.height/2, n.detectionRange, 0, Math.PI * 2);
         c.stroke();
 
-        c.fillStyle = isCat ? "#00ff00" : "#00ffff";
-        c.font = "bold 18px Courier New";
-        c.fillText(line.hovori, 280, 490);
-        
-        c.fillStyle = "white";
-        c.font = "20px Arial";
-        c.fillText(line.text, 280, 525);
+        if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
+            c.drawImage(macky.npc, n.x, n.y, n.width, n.height);
+        } else {
+            c.fillStyle = n.isHostile ? '#ff0055' : n.color;
+            c.fillRect(n.x, n.y, n.width, n.height);
+        }
 
-        c.fillStyle = "#666";
-        c.font = "12px Arial";
-        c.fillText("Stlač [E]...", 1000, 555);
+        if (n.canInteract && !n.isTalking && !n.isHostile) {
+            c.fillStyle = "#ffff00";
+            c.font = "bold 26px Arial";
+            c.fillText("!", n.x + n.width/2 - 5, n.y - 15);
+        }
+
+        if (n.isTalking) {
+            const line = n.dialogues[n.currentLine];
+            const isCat = (line.hovori === "MAČKA");
+
+            c.fillStyle = "rgba(10, 10, 10, 0.95)";
+            c.strokeStyle = isCat ? "#00ff00" : "#00ffff"; 
+            c.lineWidth = 3;
+            c.beginPath();
+            c.roundRect(250, 460, 800, 110, 15);
+            c.fill();
+            c.stroke();
+
+            c.fillStyle = isCat ? "#00ff00" : "#00ffff";
+            c.font = "bold 18px Courier New";
+            c.fillText(line.hovori, 280, 490);
+            
+            c.fillStyle = "white";
+            c.font = "20px Arial";
+            c.fillText(line.text, 280, 525);
+
+            c.fillStyle = "#666";
+            c.font = "12px Arial";
+            c.fillText("Stlač [E]...", 1000, 555);
+        }
+    }
+
+    // === UPDATE A VYKRESLENIE PIXELOVÝCH ČASTÍC ===
+    // Prechádzame pole od konca, aby sme bezpečne mazali zmiznuté časti
+    for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i];
+        p.x += p.dx;
+        p.y += p.dy;
+        p.alpha -= p.decay; // Pixel pomaly mizne
+
+        // Ak už pixel úplne vybledol, vymažeme ho z pamäte
+        if (p.alpha <= 0) {
+            particles.splice(i, 1);
+            continue;
+        }
+
+        // Vykreslenie pixelu s aktuálnou priehľadnosťou (alpha)
+        c.save();
+        c.globalAlpha = p.alpha;
+        c.fillStyle = p.color;
+        c.fillRect(p.x, p.y, p.size, p.size);
+        c.restore();
     }
 
     // Exit zóna
