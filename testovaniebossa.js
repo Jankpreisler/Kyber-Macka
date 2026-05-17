@@ -485,10 +485,10 @@ function updateBoss() {
             player.dy = -15; // Odraz hráča do výšky
             player.y = boss.y - player.height;
             
-            // Poškodenie a posun fázy nastane LEN vtedy, ak je boss v stave prehriatia
+            
             if (boss.isOverheated) {
                 boss.hp--;
-                boss.vlna++; // Úspešný zásah posúva bossa do ďalšej fázy
+                boss.vlna++; 
                 resetPlayer();
                 
                 if (boss.vlna > 3) boss.vlna = 3; // Strop fáz je fixne 3

@@ -5,13 +5,13 @@ function damagesystem(player) {
 }
 
 const Damageudelovator = {
-    uberHP: function (player, hodnota, resetFunkcia) {
+    uberHP: function (player, hodnota, resetPlayer) {
         if (player.hp > 0) {
             player.hp -= hodnota;
 
             if (player.hp <= 0) {
                 player.hp = player.maxhp
-                resetFunkcia();
+                resetPlayer();
             }
 
         }

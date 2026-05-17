@@ -36,7 +36,7 @@ const platforms = [
     { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 1100, y: 1100, width: 2550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-     { x: 2300, y: 500, width: 500, height: 150, color: '#333', type: 'pipe_h' },
+     { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
 
 ];
 
@@ -109,6 +109,24 @@ let player = {
 };
 
 damagesystem(player);
+
+let boss = {
+    x: 2400,         
+    y: 700,         
+    width: 250,
+    height: 250,
+    hp: 5,                  
+    vlna: 1,
+    jeAktivny: true,
+    timerUtoku: 0,
+    timerFazy: 0,           
+    maxCasFazy: 5400,        
+    farba: '#ff0055'
+};
+
+let bossLasery = [];
+let bossProjektily = [];
+let docasnePlosinky = []; 
 
 let time = 0;
 let fogParticles = [];
@@ -388,6 +406,202 @@ function resetPlayer() {
     actualnaakciacici = macky.doprava;
 }
 
+function updateBoss() {
+    if (!boss.jeAktivny) return;
+
+    const bossSpawnX = 1000;
+    const bossSpawnY = 1120;
+
+    
+    if (boss.isOverheated === undefined) boss.isOverheated = false;
+    if (boss.overheatTimer === undefined) boss.overheatTimer = 0;
+
+    if (!boss.isOverheated) {
+        
+        boss.timerFazy += 1 * timeScale;
+        
+        if (boss.timerFazy > boss.maxCasFazy) {
+            boss.isOverheated = true;
+            boss.overheatTimer = 0;
+            bossLasery = [];
+            bossProjektily = [];
+            docasnePlosinky = []; 
+        }
+    } else {
+        boss.overheatTimer += 1 * timeScale;
+        
+        if (boss.overheatTimer > 600) {
+            boss.isOverheated = false;
+            boss.timerFazy = 0;
+            boss.timerUtoku = 0;
+        }
+    }
+
+    if (boss.isOverheated) {
+        boss.farba = '#555555';
+    } else {
+        // Návrat k pôvodným farbám fáz po reboote alebo postupe
+        if (boss.vlna === 1) boss.farba = '#ff0055';
+        else if (boss.vlna === 2) boss.farba = '#a200ff';
+        else if (boss.vlna === 3) boss.farba = '#ff5500';
+    }
+
+    // Vykreslenie tela bossa
+    c.fillStyle = boss.farba;
+    c.fillRect(boss.x, boss.y, boss.width, boss.height);
+
+    // --- KOLÍZIA HRÁČA S BOSSOM ---
+    if (isTouching(player, boss)) {
+        // Kontrola skoku na hlavu
+        if (player.dy > 0 && player.y + player.height - player.dy <= boss.y + 15) {
+            player.dy = -15; // Odraz hráča do výšky
+            player.y = boss.y - player.height;
+            
+            
+            if (boss.isOverheated) {
+                boss.hp--;
+                boss.vlna++; 
+                resetPlayer();
+                
+                if (boss.vlna > 3) boss.vlna = 3; // Strop fáz je fixne 3
+                
+                // Ukončenie prehriatia a reset časovačov pre novú fázu
+                boss.isOverheated = false;
+                boss.timerFazy = 0;
+                boss.timerUtoku = 0;
+
+                // Reset pozície pre istotu
+                boss.x = bossSpawnX;
+                boss.y = bossSpawnY;
+                
+                if (boss.hp <= 0) {
+                    boss.jeAktivny = false; // Definitívna smrť bossa
+                }
+            }
+        } else {
+            // Ak do neho narazíš z boku, uberie ti to život/odhodí ťa to iba vtedy, ak NIE JE prehriaty
+            if (!boss.isOverheated) {
+                player.x -= 60; 
+            }
+        }
+    }
+
+    if (!boss.isOverheated) {
+        if (boss.vlna === 1) {
+            boss.timerUtoku += 1 * timeScale;
+            if (boss.timerUtoku > 100) {
+                let nahodnaVyskaLasera = boss.y + Math.random() * (boss.height - 15);
+                bossLasery.push({
+                    x: boss.x + 75,
+                    y: nahodnaVyskaLasera,
+                    width: 150,
+                    height: 15,
+                    speed: 10,
+                    
+                    
+                });
+                boss.timerUtoku = 0;
+            }
+        }
+
+        // === 2. VLNA: SPAWNOVANIE PLOŠINIEK ===
+        if (boss.vlna === 2) {
+            boss.timerUtoku += 1 * timeScale;
+            if (boss.timerUtoku > 120) {
+                docasnePlosinky = []; 
+                for(let i = 0; i < 3; i++) {
+                    docasnePlosinky.push({
+                        x: boss.x - 200 - (i * 200),
+                        y: boss.y + 30 + (Math.random() * 60 - 30), 
+                        width: 100,
+                        height: 20,
+                        type: 'pipe_h'
+                    });
+                }
+                boss.timerUtoku = 0;
+            }
+        }
+
+        // === 3. VLNA: HÁDZANIE PROJEKTILOV A MIZNUTIE PLOŠINIEK ===
+        if (boss.vlna === 3) {
+            boss.timerUtoku += 1 * timeScale;
+            if (boss.timerUtoku > 60) {
+                let uhol = Math.atan2((player.y + player.height/2) - (boss.y + 40), (player.x + player.width/2) - boss.x);
+                bossProjektily.push({
+                    x: boss.x,
+                    y: boss.y + 40,
+                    radius: 15,
+                    dx: Math.cos(uhol) * 6,
+                    dy: Math.sin(uhol) * 6
+                });
+                boss.timerUtoku = 0;
+            }
+
+            platforms.forEach(p => {
+                if (p.type !== 'floor' && isTouching(player, p)) {
+                    if (p.viditelnostTimer === undefined) p.viditelnostTimer = 100;
+                    p.viditelnostTimer -= 1 * timeScale;
+                    if (p.viditelnostTimer <= 0) {
+                        p.visible = false; 
+                    }
+                }
+            });
+        }
+    }
+
+    docasnePlosinky.forEach(p => {
+        c.fillStyle = '#aa00ff';
+        c.fillRect(p.x, p.y, p.width, p.height);
+        
+        if (player.x < p.x + p.width && player.x + player.width > p.x &&
+            player.dy >= 0 && player.y + player.height <= p.y + 15 && 
+            player.y + player.height + player.dy >= p.y) {
+            
+            player.y = p.y - player.height;
+            player.dy = 0;
+            player.grounded = true;
+        }
+    });
+
+    for (let i = bossLasery.length - 1; i >= 0; i--) {
+        let l = bossLasery[i];
+        l.x += l.speed * timeScale;
+        
+        c.fillStyle = '#ff0000';
+        c.shadowColor = "red";
+        c.shadowBlur = 15;
+        c.fillRect(l.x, l.y, l.width, l.height);
+        c.shadowBlur = 0; 
+
+        if (isTouching(player, l)) {
+            player.x -= 20; 
+            resetPlayer();
+        }
+        if (l.x < -1000) bossLasery.splice(i, 1);
+    }
+
+    for (let i = bossProjektily.length - 1; i >= 0; i--) {
+        let pr = bossProjektily[i];
+        pr.x += pr.dx * timeScale;
+        pr.y += pr.dy * timeScale;
+        
+        c.beginPath();
+        c.arc(pr.x, pr.y, pr.radius, 0, Math.PI * 2);
+        c.fillStyle = '#ff9900';
+        c.fill();
+        c.closePath();
+
+        if (pr.x > player.x && pr.x < player.x + player.width && 
+            pr.y > player.y && pr.y < player.y + player.height) {
+            bossProjektily.splice(i, 1);
+            continue;
+        }
+        if (pr.x < -1000 || pr.x > 15000 || pr.y > 5000) {
+            bossProjektily.splice(i, 1);
+        }
+    }
+}
+
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
     requestAnimationFrame(animovanie);
@@ -483,6 +697,8 @@ function animovanie() {
             player.isdashing = false;
         }
     }
+
+      updateBoss();
 
     let activeFriction = player.friction;
     let activeSpeed = player.speed;
