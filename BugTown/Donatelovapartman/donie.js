@@ -568,6 +568,10 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
+    facingRight = (actualnaakciacici === macky.dolava);
+DashTrail.update(player, player.isdashing, facingRight);
+DashTrail.updateDeath();
+
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
 
@@ -703,10 +707,25 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return; // Ukončíme kontrolu pre túto platformu
-            }
+           if (platform.type === 'floor') {
+
+    // === DEATH ANIMATION ===
+    DashTrail.triggerDeath(player);
+
+    player.width = 0;
+    player.height = 0;
+    player.dx = 0;
+    player.dy = 0;
+
+    setTimeout(() => {
+        player.width = 50;
+        player.height = 50;
+        resetPlayer();
+    }, 350);
+
+    return;
+}
+
 
             // dopad zhora
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
@@ -776,6 +795,8 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
     if (isTouching(player, exitZone)) {
         window.location.href = "/BugTown/Level3/level3.html";
     }
+    DashTrail.draw(c);
+DashTrail.drawDeath(c);
     // 6. Vykreslenie postavy
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
         c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);

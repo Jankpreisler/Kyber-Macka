@@ -637,6 +637,19 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
+// zistenie smeru mačky
+const facingRight = (actualnaakciacici === macky.dolava);
+DashTrail.update(player, player.isdashing, facingRight);
+if (keys.u) DashTrail.startFly(player);
+
+
+const isFlying = keys.u && abilityUnlocked;
+DashTrail.updateFly(isFlying, player);
+
+
+DashTrail.updateDeath();
+
+
     platforms.forEach(p => {
         if (p.id === 'vetrak' && p.zapnuty === true) {
             if (
@@ -731,10 +744,36 @@ function animovanie() {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return;
-            }
+
+            
+if (platform.type === 'floor') {
+
+    // spusti animáciu rozbitia
+    DashTrail.triggerDeath(player);
+
+    // mačka zmizne
+    player.width = 0;
+    player.height = 0;
+
+    // mačka sa prestane hýbať
+    player.dx = 0;
+    player.dy = 0;
+
+    // zamrzne vo vzduchu
+    // (necháme ju na pozícii, kde zomrela)
+    
+    setTimeout(() => {
+        // obnovíme veľkosť mačky
+        player.width = 50;
+        player.height = 50;
+
+        resetPlayer();
+    }, 250);
+
+    return;
+}
+
+
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
                 player.y = platform.y - player.height;
@@ -873,6 +912,11 @@ function animovanie() {
 
         window.location.href = "/UploadHighway/Level4/level4.html";
     }
+  
+DashTrail.draw(c);
+DashTrail.drawFly(c);
+DashTrail.drawDeath(c);
+
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
         c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);

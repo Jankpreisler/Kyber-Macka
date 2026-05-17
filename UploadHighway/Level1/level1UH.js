@@ -495,6 +495,12 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
+    // DASH TRAIL
+const facingRight = (actualnaakciacici === macky.dolava);
+DashTrail.update(player, player.isdashing, facingRight);
+DashTrail.updateDeath();
+
+
     // Logika ventilátora
     platforms.forEach(p => {
         if (p.id === 'vetrak') {
@@ -592,10 +598,28 @@ function animovanie() {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return;
-            }
+         if (platform.type === 'floor') {
+
+    // Spusti animáciu rozbitia
+    if (typeof DashTrail !== "undefined" && DashTrail.triggerDeath) {
+        DashTrail.triggerDeath(player);
+    }
+
+
+    player.width = 0;
+    player.height = 0;
+
+    player.dx = 0;
+    player.dy = 0;
+
+    setTimeout(() => {
+        player.width = 50;
+        player.height = 50;
+        resetPlayer();
+    }, 250);
+
+    return;
+}
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
                 player.y = platform.y - player.height;
@@ -714,6 +738,9 @@ function animovanie() {
         }
         window.location.href = "/UploadHighway/Level2/level2UH.html";
     }
+DashTrail.draw(c);
+DashTrail.drawDeath(c);
+
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
         c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
