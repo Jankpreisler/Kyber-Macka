@@ -31,14 +31,14 @@ const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 7500, y: 1200, width: 1050, height: 230, color: '#333', type: 'pipe_h' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 6300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"faza" }, //1 skok
-    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"faza" }, //1 skok
-    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"faza" }, //1 skok
+    { x: 6300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "faza" }, //1 skok
+    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "faza" }, //1 skok
+    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "faza" }, //1 skok
     { x: 0, y: 1100, width: 3550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
     { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-    { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v' },
-   // { x:0, y: 200, width: 3200, height: 150, color: '#333', type: 'pipe_h' },
+    // { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v' },
+    { x: 0, y: 200, width: 3200, height: 150, color: '#333', type: 'pipe_h' },
 ];
 
 
@@ -111,23 +111,59 @@ let player = {
 
 damagesystem(player);
 
+const Donatelo = {
+    x: 2800,
+    y: 1020,
+    width: 50,
+    height: 50,
+    color: '#5901a0',
+    name: "Donatelo",
+    currentLine: 0,
+    isTalking: false,
+    canInteract: false,
+};
+
+const GoodEnding = {
+    x: 700,
+    y: 1020,
+    width: 50,
+    height: 100,
+    color: '#5901a0',
+    name: "asd",
+    currentLine: 0,
+    isTalking: false,
+    canInteract: false,
+};
+
+const BadEnding = {
+    x: 2200,
+    y: 1020,
+    width: 200,
+    height: 50,
+    color: '#5901a0',
+    name: "asda",
+    currentLine: 0,
+    isTalking: false,
+    canInteract: false,
+};
+
 let boss = {
-    x: 2400,         
-    y: 700,         
+    x: 2400,
+    y: 700,
     width: 250,
     height: 250,
-    hp: 5,                  
-    vlna: 3,
-    jeAktivny: true,
+    hp: 5,
+    vlna: 2,
+    jeAktivny: false,
     timerUtoku: 0,
-    timerFazy: 0,           
-    maxCasFazy: 6000,        
+    timerFazy: 0,
+    maxCasFazy: 6000,
     farba: '#ff0055'
 };
 
 let bossLasery = [];
 let bossProjektily = [];
-let docasnePlosinky = []; 
+let docasnePlosinky = [];
 
 let time = 0;
 let fogParticles = [];
@@ -334,6 +370,31 @@ window.addEventListener('keydown', (e) => {
             player.isRaging = false;
         }
     }
+    if (e.key.toLowerCase() === 'e' && Donatelo.canInteract) {
+        if (!Donatelo.isTalking) {
+            Donatelo.isTalking = true;
+
+            boss.jeAktivny = true
+
+            resetPlayer()
+        }
+        
+    }
+    if (e.key.toLowerCase() === 'e' && GoodEnding.canInteract) {
+        if (!GoodEnding.isTalking) {
+            GoodEnding.isTalking = true;
+            resetPlayer()
+            
+        }
+    }
+     if (e.key.toLowerCase() === 'e' && BadEnding.canInteract) {
+        if (!BadEnding.isTalking) {
+            BadEnding.isTalking = true;
+            resetPlayer()
+            
+        }
+    }
+    
 
     if (zadavac.jeprinom && !zadavac.jeodomknuty) {
         if (e.key >= '0' && e.key <= '9' && zadavac.kodzadany.length < 5) {
@@ -351,6 +412,27 @@ window.addEventListener('keydown', (e) => {
     }
 
 
+});
+canvas.addEventListener('click', (e) => {
+    if (Donatelo.canInteract) {
+        if (!Donatelo.isTalking) {
+            Donatelo.isTalking = true;
+            boss.jeAktivny = true
+            resetPlayer()
+        } 
+    }
+    if (GoodEnding.canInteract) {
+        if (!GoodEnding.isTalking) {
+            GoodEnding.isTalking = true;
+            resetPlayer()
+        } 
+    }
+    if (BadEnding.canInteract) {
+        if (!BadEnding.isTalking) {
+            BadEnding.isTalking = true;
+            resetPlayer()
+        } 
+    }
 });
 
 
@@ -410,24 +492,24 @@ function updateBoss() {
     const bossSpawnX = 1000;
     const bossSpawnY = 1120;
 
-    
+
     if (boss.isOverheated === undefined) boss.isOverheated = false;
     if (boss.overheatTimer === undefined) boss.overheatTimer = 0;
 
     if (!boss.isOverheated) {
-        
+
         boss.timerFazy += 1 * timeScale;
-        
+
         if (boss.timerFazy > boss.maxCasFazy) {
             boss.isOverheated = true;
             boss.overheatTimer = 0;
             bossLasery = [];
             bossProjektily = [];
-            docasnePlosinky = []; 
+            docasnePlosinky = [];
         }
     } else {
         boss.overheatTimer += 1 * timeScale;
-        
+
         if (boss.overheatTimer > 600) {
             boss.isOverheated = false;
             boss.timerFazy = 0;
@@ -456,10 +538,10 @@ function updateBoss() {
             player.y = boss.y - player.height;
             if (boss.isOverheated) {
                 boss.hp--;
-                boss.vlna++; 
+                boss.vlna++;
                 resetPlayer();
-                if (boss.vlna > 3) boss.vlna = 3; 
-                
+                if (boss.vlna > 3) boss.vlna = 3;
+
                 // Ukončenie prehriatia a reset časovačov pre novú fázu
                 boss.isOverheated = false;
                 boss.timerFazy = 0;
@@ -468,15 +550,15 @@ function updateBoss() {
                 // Reset pozície pre istotu
                 boss.x = bossSpawnX;
                 boss.y = bossSpawnY;
-                
-                
+
+
                 if (boss.hp <= 0) {
                     boss.jeAktivny = false; // Definitívna smrť bossa
                 }
             }
         } else {
             if (!boss.isOverheated) {
-                player.x -= 60; 
+                player.x -= 60;
             }
         }
     }
@@ -503,10 +585,10 @@ function updateBoss() {
             nastavViditelnost("faza", false);
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
-                for(let i = 0; i < 25; i++) {
+                for (let i = 0; i < 25; i++) {
                     docasnePlosinky.push({
                         x: boss.x + 350 + (i * 200),
-                        y: boss.y + 70 + (Math.random() * 320 - 90), 
+                        y: boss.y + 70 + (Math.random() * 320 - 90),
                         width: 150,
                         height: 20,
                         type: 'pipe_h'
@@ -522,10 +604,10 @@ function updateBoss() {
             nastavViditelnost("faza", false);
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
-                for(let i = 0; i < 25; i++) {
+                for (let i = 0; i < 25; i++) {
                     docasnePlosinky.push({
                         x: boss.x + 350 + (i * 200),
-                        y: boss.y + 70 + (Math.random() * 320 - 90), 
+                        y: boss.y + 70 + (Math.random() * 320 - 90),
                         width: 150,
                         height: 20,
                         type: 'pipe_h'
@@ -548,7 +630,7 @@ function updateBoss() {
                     if (p.viditelnostTimer === undefined) p.viditelnostTimer = 100;
                     p.viditelnostTimer -= 1 * timeScale;
                     if (p.viditelnostTimer <= 0) {
-                        p.visible = false; 
+                        p.visible = false;
                     }
                 }
             });
@@ -558,32 +640,32 @@ function updateBoss() {
     docasnePlosinky.forEach(p => {
         c.fillStyle = '#aa00ff';
         c.fillRect(p.x, p.y, p.width, p.height);
-        
+
         if (player.x < p.x + p.width && player.x + player.width > p.x &&
-            player.dy >= 0 && player.y + player.height <= p.y + 15 && 
+            player.dy >= 0 && player.y + player.height <= p.y + 15 &&
             player.y + player.height + player.dy >= p.y) {
-            
+
             player.y = p.y - player.height;
             player.dy = 0;
             player.grounded = true;
         }
     });
 
-        //lasery
+    //lasery
     for (let i = bossLasery.length - 1; i >= 0; i--) {
         let l = bossLasery[i];
         l.x += l.speed * timeScale;
-        
+
         c.fillStyle = '#ff0000';
         c.shadowColor = "red";
         c.shadowBlur = 15;
         c.fillRect(l.x, l.y, l.width, l.height);
-        c.shadowBlur = 0; 
+        c.shadowBlur = 0;
 
         if (isTouching(player, l)) {
-            player.x -= 20; 
+            player.x -= 20;
             resetPlayer();
-            
+
         }
         if (l.x < -1000) bossLasery.splice(i, 1);
     }
@@ -592,14 +674,14 @@ function updateBoss() {
         let pr = bossProjektily[i];
         pr.x += pr.dx * timeScale;
         pr.y += pr.dy * timeScale;
-        
+
         c.beginPath();
         c.arc(pr.x, pr.y, pr.radius, 0, Math.PI * 2);
         c.fillStyle = '#ff9900';
         c.fill();
         c.closePath();
 
-        if (pr.x > player.x && pr.x < player.x + player.width && 
+        if (pr.x > player.x && pr.x < player.x + player.width &&
             pr.y > player.y && pr.y < player.y + player.height) {
             bossProjektily.splice(i, 1);
             continue;
@@ -706,7 +788,7 @@ function animovanie() {
         }
     }
 
-      
+
 
     let activeFriction = player.friction;
     let activeSpeed = player.speed;
@@ -1000,7 +1082,58 @@ function animovanie() {
     if (Karera.x < 0) Karera.x = 0;
 
 
+    // totok
+    if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
+        c.drawImage(macky.npc, Donatelo.x, Donatelo.y, Donatelo.width, Donatelo.height);
+    } else {
+        c.fillStyle = Donatelo.color;
+        c.fillRect(Donatelo.x, Donatelo.y, Donatelo.width, Donatelo.height);
+    }
 
+    let dist = Math.sqrt((player.x - Donatelo.x) ** 2 + (player.y - Donatelo.y) ** 2);
+    Donatelo.canInteract = dist < 120;
+
+    if (Donatelo.canInteract && !Donatelo.isTalking) {
+        c.fillStyle = "#000000";
+        c.font = "bold 15px Arial";
+        c.fillText("Stlac E na aktivaciu Boss-a", player.x + 20, player.y - 20);
+    }
+
+        // nefunkcne viacere npc
+    if (macky.doprava.complete && macky.doprava.naturalWidth !== 0) {
+        c.drawImage(macky.doprava, GoodEnding.x, GoodEnding.y, GoodEnding.width, GoodEnding.height);
+    } else {
+        c.fillStyle = GoodEnding.color;
+        c.fillRect(GoodEnding.x, GoodEnding.y, GoodEnding.width, GoodEnding.height);
+    }
+
+    let dista = Math.sqrt((player.x - GoodEnding.x) ** 2 + (player.y - GoodEnding.y) ** 2);
+    GoodEnding.canInteract = dista < 120;
+
+    if (GoodEnding.canInteract && !GoodEnding.isTalking) {
+        c.fillStyle = "#000000";
+        c.font = "bold 15px Arial";
+        c.fillText("Stlac E na aktivaciu Boss-a", player.x + 20, player.y - 20);
+    }
+
+    //
+    if (macky.doprava.complete && macky.doprava.naturalWidth !== 0) {
+        c.drawImage(macky.doprava, BadEnding.x, BadEnding.y, BadEnding.width, BadEnding.height);
+    } else {
+        c.fillStyle = BadEnding.color;
+        c.fillRect(BadEnding.x, BadEnding.y, BadEnding.width, BadEnding.height);
+    }
+
+    let distan = Math.sqrt((player.x - BadEnding.x) ** 2 + (player.y - BadEnding.y) ** 2);
+    BadEnding.canInteract = distan < 120;
+
+    if (BadEnding.canInteract && !BadEnding.isTalking) {
+        c.fillStyle = "#000000";
+        c.font = "bold 15px Arial";
+        c.fillText("Opustit The Cot", player.x + 20, player.y - 20);
+    }
+
+    
     function vykonajAkciu(id) {
         const btn = platforms.find(p => p.id === id);
         if (btn) btn.isPressed = true;
@@ -1045,6 +1178,7 @@ function animovanie() {
     }
     updateBoss();
     c.restore();
+
 
 
 
