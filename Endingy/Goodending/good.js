@@ -14,7 +14,7 @@ const obrazky = [
             console.log(aktualnyIndex);
 
             if (aktualnyIndex === 3) {
-                window.location.href = "/MenunaTab/tab.html";
+                window.location.href = "/Endingy/Credits/Credits.html";
                 console.log("Som tu");
 
             }
