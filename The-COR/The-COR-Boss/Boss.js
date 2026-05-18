@@ -31,12 +31,14 @@ const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 7500, y: 1200, width: 1050, height: 230, color: '#333', type: 'pipe_h' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 6300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"1faza" }, //1 skok
-    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"1faza" }, //1 skok
-    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"1faza" }, //1 skok
-    { x: 1100, y: 1100, width: 2550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
+    { x: 6300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"faza" }, //1 skok
+    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"faza" }, //1 skok
+    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"faza" }, //1 skok
+    { x: 0, y: 1100, width: 3550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
     { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
+    { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v' },
+   // { x:0, y: 200, width: 3200, height: 150, color: '#333', type: 'pipe_h' },
 ];
 
 
@@ -115,7 +117,7 @@ let boss = {
     width: 250,
     height: 250,
     hp: 5,                  
-    vlna: 2,
+    vlna: 3,
     jeAktivny: true,
     timerUtoku: 0,
     timerFazy: 0,           
@@ -389,9 +391,6 @@ window.addEventListener('keyup', (e) => {
 function nastavViditelnost(id, stav) {
     const p = platforms.find(obj => obj.id === id);
     if (p) {
-        p.zapnuty = stav;
-    }
-    if (p) {
         p.visible = stav;
     }
 }
@@ -501,7 +500,7 @@ function updateBoss() {
         // === 2. VLNA: SPAWNOVANIE PLOŠINIEK ===
         if (boss.vlna === 2) {
             boss.timerUtoku += 1 * timeScale;
-            nastavViditelnost("1faza", false);
+            nastavViditelnost("faza", false);
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
                 for(let i = 0; i < 25; i++) {
@@ -520,8 +519,7 @@ function updateBoss() {
         // === 3. VLNA: HÁDZANIE PROJEKTILOV A MIZNUTIE PLOŠINIEK ===
         if (boss.vlna === 3) {
             boss.timerUtoku += 1 * timeScale;
-            nastavViditelnost("1faza", false);
-             nastavViditelnost("1faza", false);
+            nastavViditelnost("faza", false);
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
                 for(let i = 0; i < 25; i++) {
