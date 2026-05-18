@@ -383,14 +383,14 @@ window.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'e' && GoodEnding.canInteract) {
         if (!GoodEnding.isTalking) {
             GoodEnding.isTalking = true;
-            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+            window.location.href = "/Endingy/Goodending/good.html";
             
         }
     }
      if (e.key.toLowerCase() === 'e' && BadEnding.canInteract) {
         if (!BadEnding.isTalking) {
             BadEnding.isTalking = true;
-            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+            window.location.href = "/Endingy/Badending/bad.html";
             
         }
     }
@@ -424,13 +424,13 @@ canvas.addEventListener('click', (e) => {
     if (GoodEnding.canInteract) {
         if (!GoodEnding.isTalking) {
             GoodEnding.isTalking = true;
-            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+            window.location.href = "/Endingy/Goodending/good.html";
         } 
     }
     if (BadEnding.canInteract) {
         if (!BadEnding.isTalking) {
             BadEnding.isTalking = true;
-            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+            window.location.href = "/Endingy/Badending/bad.html";
         } 
     }
 });
