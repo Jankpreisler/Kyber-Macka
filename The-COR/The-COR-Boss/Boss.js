@@ -31,13 +31,12 @@ const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 7500, y: 1200, width: 1050, height: 230, color: '#333', type: 'pipe_h' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 6300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
-    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
-    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
+    { x: 6300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"1faza" }, //1 skok
+    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"1faza" }, //1 skok
+    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id:"1faza" }, //1 skok
     { x: 1100, y: 1100, width: 2550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-     { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-
+    { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
 ];
 
 
@@ -116,11 +115,11 @@ let boss = {
     width: 250,
     height: 250,
     hp: 5,                  
-    vlna: 1,
+    vlna: 2,
     jeAktivny: true,
     timerUtoku: 0,
     timerFazy: 0,           
-    maxCasFazy: 5400,        
+    maxCasFazy: 6000,        
     farba: '#ff0055'
 };
 
@@ -456,14 +455,11 @@ function updateBoss() {
         if (player.dy > 0 && player.y + player.height - player.dy <= boss.y + 15) {
             player.dy = -15; // Odraz hráča do výšky
             player.y = boss.y - player.height;
-            
-            
             if (boss.isOverheated) {
                 boss.hp--;
                 boss.vlna++; 
                 resetPlayer();
-                
-                if (boss.vlna > 3) boss.vlna = 3; // Strop fáz je fixne 3
+                if (boss.vlna > 3) boss.vlna = 3; 
                 
                 // Ukončenie prehriatia a reset časovačov pre novú fázu
                 boss.isOverheated = false;
@@ -474,12 +470,12 @@ function updateBoss() {
                 boss.x = bossSpawnX;
                 boss.y = bossSpawnY;
                 
+                
                 if (boss.hp <= 0) {
                     boss.jeAktivny = false; // Definitívna smrť bossa
                 }
             }
         } else {
-            // Ak do neho narazíš z boku, uberie ti to život/odhodí ťa to iba vtedy, ak NIE JE prehriaty
             if (!boss.isOverheated) {
                 player.x -= 60; 
             }
@@ -497,8 +493,6 @@ function updateBoss() {
                     width: 150,
                     height: 15,
                     speed: 10,
-                    
-                    
                 });
                 boss.timerUtoku = 0;
             }
@@ -507,13 +501,14 @@ function updateBoss() {
         // === 2. VLNA: SPAWNOVANIE PLOŠINIEK ===
         if (boss.vlna === 2) {
             boss.timerUtoku += 1 * timeScale;
+            nastavViditelnost("1faza", false);
             if (boss.timerUtoku > 120) {
-                docasnePlosinky = []; 
-                for(let i = 0; i < 3; i++) {
+                docasnePlosinky = [];
+                for(let i = 0; i < 25; i++) {
                     docasnePlosinky.push({
-                        x: boss.x - 200 - (i * 200),
-                        y: boss.y + 30 + (Math.random() * 60 - 30), 
-                        width: 100,
+                        x: boss.x + 350 + (i * 200),
+                        y: boss.y + 70 + (Math.random() * 320 - 90), 
+                        width: 150,
                         height: 20,
                         type: 'pipe_h'
                     });
@@ -525,15 +520,28 @@ function updateBoss() {
         // === 3. VLNA: HÁDZANIE PROJEKTILOV A MIZNUTIE PLOŠINIEK ===
         if (boss.vlna === 3) {
             boss.timerUtoku += 1 * timeScale;
-            if (boss.timerUtoku > 60) {
-                let uhol = Math.atan2((player.y + player.height/2) - (boss.y + 40), (player.x + player.width/2) - boss.x);
-                bossProjektily.push({
-                    x: boss.x,
-                    y: boss.y + 40,
-                    radius: 15,
-                    dx: Math.cos(uhol) * 6,
-                    dy: Math.sin(uhol) * 6
+            nastavViditelnost("1faza", false);
+             nastavViditelnost("1faza", false);
+            if (boss.timerUtoku > 120) {
+                docasnePlosinky = [];
+                for(let i = 0; i < 25; i++) {
+                    docasnePlosinky.push({
+                        x: boss.x + 350 + (i * 200),
+                        y: boss.y + 70 + (Math.random() * 320 - 90), 
+                        width: 150,
+                        height: 20,
+                        type: 'pipe_h'
+                    });
+                }
+                let nahodnaVyskaLasera = boss.y + Math.random() * (boss.height - 15);
+                bossLasery.push({
+                    x: boss.x + 75,
+                    y: nahodnaVyskaLasera,
+                    width: 150,
+                    height: 15,
+                    speed: 10,
                 });
+                boss.timerUtoku = 0;
                 boss.timerUtoku = 0;
             }
 
@@ -563,6 +571,7 @@ function updateBoss() {
         }
     });
 
+        //lasery
     for (let i = bossLasery.length - 1; i >= 0; i--) {
         let l = bossLasery[i];
         l.x += l.speed * timeScale;
@@ -576,6 +585,7 @@ function updateBoss() {
         if (isTouching(player, l)) {
             player.x -= 20; 
             resetPlayer();
+            
         }
         if (l.x < -1000) bossLasery.splice(i, 1);
     }
@@ -698,7 +708,7 @@ function animovanie() {
         }
     }
 
-      updateBoss();
+      
 
     let activeFriction = player.friction;
     let activeSpeed = player.speed;
@@ -1035,7 +1045,7 @@ function animovanie() {
         c.fillStyle = 'red';
         c.fillRect(player.x, player.y, player.width, player.height);
     }
-
+    updateBoss();
     c.restore();
 
 
