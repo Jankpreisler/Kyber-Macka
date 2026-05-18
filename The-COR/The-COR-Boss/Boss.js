@@ -124,10 +124,10 @@ const Donatelo = {
 };
 
 const GoodEnding = {
-    x: 700,
-    y: 1020,
-    width: 50,
-    height: 100,
+    x: 900,
+    y: 1050,
+    width: 200,
+    height: 50,
     color: '#5901a0',
     name: "asd",
     currentLine: 0,
@@ -136,10 +136,10 @@ const GoodEnding = {
 };
 
 const BadEnding = {
-    x: 2200,
-    y: 1020,
-    width: 200,
-    height: 50,
+    x: 0,
+    y: 1000,
+    width: 20,
+    height: 100,
     color: '#5901a0',
     name: "asda",
     currentLine: 0,
@@ -383,14 +383,14 @@ window.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'e' && GoodEnding.canInteract) {
         if (!GoodEnding.isTalking) {
             GoodEnding.isTalking = true;
-            resetPlayer()
+            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
             
         }
     }
      if (e.key.toLowerCase() === 'e' && BadEnding.canInteract) {
         if (!BadEnding.isTalking) {
             BadEnding.isTalking = true;
-            resetPlayer()
+            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
             
         }
     }
@@ -424,13 +424,13 @@ canvas.addEventListener('click', (e) => {
     if (GoodEnding.canInteract) {
         if (!GoodEnding.isTalking) {
             GoodEnding.isTalking = true;
-            resetPlayer()
+            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
         } 
     }
     if (BadEnding.canInteract) {
         if (!BadEnding.isTalking) {
             BadEnding.isTalking = true;
-            resetPlayer()
+            window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
         } 
     }
 });
@@ -1113,7 +1113,7 @@ function animovanie() {
     if (GoodEnding.canInteract && !GoodEnding.isTalking) {
         c.fillStyle = "#000000";
         c.font = "bold 15px Arial";
-        c.fillText("Stlac E na aktivaciu Boss-a", player.x + 20, player.y - 20);
+        c.fillText("Obetovat sa a zachranit vsetkych", player.x + 20, player.y - 20);
     }
 
     //
@@ -1166,8 +1166,6 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(22);
         }
-
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
     }
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
