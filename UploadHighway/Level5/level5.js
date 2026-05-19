@@ -640,6 +640,8 @@ function animovanie() {
 // zistenie smeru mačky
 const facingRight = (actualnaakciacici === macky.dolava);
 DashTrail.update(player, player.isdashing, facingRight);
+DashTrail.updateRageAura(player.isRaging, player);
+
 if (keys.u) DashTrail.startFly(player);
 
 
@@ -914,6 +916,7 @@ if (platform.type === 'floor') {
     }
   
 DashTrail.draw(c);
+DashTrail.drawRageAura(c);
 DashTrail.drawFly(c);
 DashTrail.drawDeath(c);
 

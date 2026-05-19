@@ -499,6 +499,8 @@ function animovanie() {
 const facingRight = (actualnaakciacici === macky.dolava);
 DashTrail.update(player, player.isdashing, facingRight);
 DashTrail.updateDeath();
+DashTrail.updateRageAura(player.isRaging, player);  //TENTO RIADOK === #1
+
 
 
     // Logika ventilátora
@@ -740,6 +742,8 @@ DashTrail.updateDeath();
     }
 DashTrail.draw(c);
 DashTrail.drawDeath(c);
+DashTrail.drawRageAura(c); // TOTO JE RIADOK === #2
+
 
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

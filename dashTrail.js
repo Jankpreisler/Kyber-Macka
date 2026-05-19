@@ -129,15 +129,173 @@
     }
 
 
-    window.DashTrail = {
-        update,
-        draw,
-        updateFly,
-        drawFly,
-        startFly,
-        triggerDeath,
-        updateDeath,
-        drawDeath
-    };
+window.DashTrail = {
+    update,
+    draw,
+    updateFly,
+    drawFly,
+    startFly,
+    triggerDeath,
+    updateDeath,
+    drawDeath,
+    updateRageAura,
+    drawRageAura
+};
+
 
 })();
+
+//================== RAGE ===================
+
+// AURA
+const rageAura = [];
+const RAGE_AURA_LIFE = 22;
+
+// PULZ
+const ragePulse = [];
+const RAGE_PULSE_LIFE = 18;
+
+// ISKRY
+const rageSparks = [];
+const RAGE_SPARK_LIFE = 14;
+
+// SHOCKWAVE
+const rageShockwaves = [];
+const RAGE_SHOCKWAVE_LIFE = 25;
+
+
+function spawnRageAura(player) {
+    rageAura.push({
+        x: player.x + player.width / 2,
+        y: player.y + player.height / 2,
+        r: Math.random() * 20 + 35,
+        life: RAGE_AURA_LIFE
+    });
+}
+
+function spawnRagePulse(player) {
+    ragePulse.push({
+        x: player.x + player.width / 2,
+        y: player.y + player.height / 2,
+        r: 10,
+        life: RAGE_PULSE_LIFE
+    });
+}
+
+function spawnRageSpark(player) {
+    rageSparks.push({
+        x: player.x + player.width / 2,
+        y: player.y + player.height / 2,
+        dx: (Math.random() - 0.5) * 10,
+        dy: (Math.random() - 0.5) * 10,
+        life: RAGE_SPARK_LIFE
+    });
+}
+
+function spawnRageShockwave(player) {
+    rageShockwaves.push({
+        x: player.x + player.width / 2,
+        y: player.y + player.height / 2,
+        r: 5,
+        life: RAGE_SHOCKWAVE_LIFE
+    });
+}
+
+
+function updateRageAura(isRaging, player) {
+    if (isRaging) {
+        spawnRageAura(player);
+
+        if (Math.random() > 0.7) spawnRagePulse(player);
+        if (Math.random() > 0.6) spawnRageSpark(player);
+        if (Math.random() > 0.92) spawnRageShockwave(player);
+    }
+
+    // AURA
+    for (let i = rageAura.length - 1; i >= 0; i--) {
+        const a = rageAura[i];
+        a.life--;
+        a.r += 0.9;
+        if (a.life <= 0) rageAura.splice(i, 1);
+    }
+
+    // PULSE
+    for (let i = ragePulse.length - 1; i >= 0; i--) {
+        const p = ragePulse[i];
+        p.life--;
+        p.r += 2.2;
+        if (p.life <= 0) ragePulse.splice(i, 1);
+    }
+
+    // SPARKS
+    for (let i = rageSparks.length - 1; i >= 0; i--) {
+        const s = rageSparks[i];
+        s.x += s.dx;
+        s.y += s.dy;
+        s.life--;
+        if (s.life <= 0) rageSparks.splice(i, 1);
+    }
+
+    // SHOCKWAVE
+    for (let i = rageShockwaves.length - 1; i >= 0; i--) {
+        const sw = rageShockwaves[i];
+        sw.life--;
+        sw.r += 3.5;
+        if (sw.life <= 0) rageShockwaves.splice(i, 1);
+    }
+}
+
+
+function drawRageAura(ctx) {
+
+    // AURA
+    rageAura.forEach(a => {
+        const alpha = a.life / RAGE_AURA_LIFE;
+
+        const grad = ctx.createRadialGradient(
+            a.x, a.y, 0,
+            a.x, a.y, a.r
+        );
+
+        grad.addColorStop(0, `rgba(0, 200, 255, ${0.45 * alpha})`);
+        grad.addColorStop(0.5, `rgba(0, 120, 255, ${0.25 * alpha})`);
+        grad.addColorStop(1, `rgba(0, 80, 255, 0)`);
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    // PULSE
+    ragePulse.forEach(p => {
+        const alpha = p.life / RAGE_PULSE_LIFE;
+
+        ctx.strokeStyle = `rgba(0, 255, 255, ${alpha})`;
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.stroke();
+    });
+
+    // SPARKS
+    rageSparks.forEach(s => {
+        const alpha = s.life / RAGE_SPARK_LIFE;
+
+        ctx.fillStyle = `rgba(0, 255, 255, ${alpha})`;
+        ctx.fillRect(s.x, s.y, 4, 4);
+    });
+
+    // SHOCKWAVE
+    rageShockwaves.forEach(sw => {
+        const alpha = sw.life / RAGE_SHOCKWAVE_LIFE;
+
+        ctx.strokeStyle = `rgba(0, 180, 255, ${alpha})`;
+        ctx.lineWidth = 6;
+
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+        ctx.stroke();
+    });
+}

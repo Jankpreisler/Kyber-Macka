@@ -503,6 +503,7 @@ function animovanie() {
     const facingRight = (actualnaakciacici === macky.dolava);
 DashTrail.update(player, player.isdashing, facingRight);
 DashTrail.updateDeath();
+DashTrail.updateRageAura(player.isRaging, player); 
 
 
 
@@ -745,6 +746,8 @@ DashTrail.updateDeath();
 
     DashTrail.draw(c);
 DashTrail.drawDeath(c);
+DashTrail.drawRageAura(c);
+
 
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {

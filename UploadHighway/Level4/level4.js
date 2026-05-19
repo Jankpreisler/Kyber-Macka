@@ -628,6 +628,10 @@ function animovanie() {
 
 facingRight = (actualnaakciacici === macky.dolava);
 DashTrail.update(player, player.isdashing, facingRight);
+DashTrail.updateRageAura(player.isRaging, player);
+
+
+
 const isFlying = keys.u && abilityUnlocked;
 DashTrail.updateFly(isFlying, player);
 DashTrail.updateDeath();
@@ -886,6 +890,7 @@ DashTrail.updateDeath();
     }
     DashTrail.draw(c);
 DashTrail.drawFly(c);
+DashTrail.drawRageAura(c);
 DashTrail.drawDeath(c);
 
 
