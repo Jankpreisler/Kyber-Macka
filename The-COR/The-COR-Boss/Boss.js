@@ -37,7 +37,7 @@ const platforms = [
     { x: 0, y: 1100, width: 3550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
     { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-    // { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v' },
+    { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v', id:"stenazacorom", visible:true },
     { x: 0, y: 200, width: 3200, height: 150, color: '#333', type: 'pipe_h' },
 ];
 
@@ -93,8 +93,8 @@ const keys = {
 let timeScale = 1.0;
 
 let player = {
-    x: 2200,
-    y: 150,
+    x: 3200,
+    y: 1050,
     width: 50,
     height: 50,
     dx: 0,
@@ -108,6 +108,15 @@ let player = {
     chceSaPostavit: false,
     isRaging: false
 };
+
+function pobosssovz() {
+    player.x = 3200;
+    player.y = 1050;
+    player.dx = 0;
+    player.dy = 0;
+    player.height = 50;
+    actualnaakciacici = macky.doprava;
+}
 
 damagesystem(player);
 
@@ -153,8 +162,8 @@ let boss = {
     width: 250,
     height: 250,
     hp: 5,
-    vlna: 2,
-    jeAktivny: false,
+    vlna: 3,
+    jeAktivny: true,
     timerUtoku: 0,
     timerFazy: 0,
     maxCasFazy: 6000,
@@ -181,8 +190,6 @@ function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
     p.width = 32;
-    p.height = 16;
-    pc.fillStyle = '#ffffff';
     pc.fillRect(0, 0, 32, 16);
     pc.fillStyle = '#ffffff';
     pc.fillRect(0, 0, 30, 14);
@@ -489,8 +496,8 @@ function resetPlayer() {
 function updateBoss() {
     if (!boss.jeAktivny) return;
 
-    const bossSpawnX = 1000;
-    const bossSpawnY = 1120;
+    const bossSpawnX = 2400;
+    const bossSpawnY = 700;
 
 
     if (boss.isOverheated === undefined) boss.isOverheated = false;
@@ -539,9 +546,21 @@ function updateBoss() {
             if (boss.isOverheated) {
                 boss.hp--;
                 boss.vlna++;
-                resetPlayer();
-                if (boss.vlna > 3) boss.vlna = 3;
+                
+                if (boss.vlna > 3){
+                    resetPlayer();
+                }
+                
 
+                if(boss.vlna === 4){
+                    console.log("asd");
+                    nastavViditelnost("faza", true)
+                    nastavViditelnost("stenazacorom", false)
+                    pobosssovz();
+                    
+
+                }
+            
                 // Ukončenie prehriatia a reset časovačov pre novú fázu
                 boss.isOverheated = false;
                 boss.timerFazy = 0;
@@ -550,7 +569,7 @@ function updateBoss() {
                 // Reset pozície pre istotu
                 boss.x = bossSpawnX;
                 boss.y = bossSpawnY;
-
+               
 
                 if (boss.hp <= 0) {
                     boss.jeAktivny = false; // Definitívna smrť bossa
@@ -583,6 +602,7 @@ function updateBoss() {
         if (boss.vlna === 2) {
             boss.timerUtoku += 1 * timeScale;
             nastavViditelnost("faza", false);
+           boss.jeAktivny = true;
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
                 for (let i = 0; i < 25; i++) {
@@ -602,6 +622,7 @@ function updateBoss() {
         if (boss.vlna === 3) {
             boss.timerUtoku += 1 * timeScale;
             nastavViditelnost("faza", false);
+            boss.jeAktivny = true;
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
                 for (let i = 0; i < 25; i++) {
