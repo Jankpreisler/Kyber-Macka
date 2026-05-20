@@ -2,6 +2,8 @@ function damagesystem(player) {
     player.hp = 100;
     player.maxhp = 100;
     player.isRaging = false;
+    player.jeNezranitelny = false;
+    player.casNezranitelnosti = 0;
 }
 
 const Damageudelovator = {
@@ -16,6 +18,17 @@ const Damageudelovator = {
 
         }
 
+    },
+
+    aktualizujNezranitelnost: function(player) {
+        if (player.jeNezranitelny) {
+            player.casNezranitelnosti--;
+            
+            // Keď čas vyprší, hráč môže opäť dostať hit
+            if (player.casNezranitelnosti <= 0) {
+                player.jeNezranitelny = false;
+            }
+        }
     },
 
     aktualizujRageMana: function (player, stavMana, stavMaxMana) {

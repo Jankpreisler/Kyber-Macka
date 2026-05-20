@@ -34,18 +34,18 @@ const platforms = [
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 1300, y: 1900, width: 150, height: 2000, color: '#333', type: 'pipe_v' },
     { x: 1900, y: 1900, width: 5550, height: 2000, color: '#333', type: 'pipe_v' },
-    { x: 200, y: 1900, width: 1750, height: 50, color: '#333', type: 'pipe_h', visible:false, id:"kockotlac" },
+    { x: 200, y: 1900, width: 1750, height: 50, color: '#333', type: 'pipe_h', visible: false, id: "kockotlac" },
     { x: 3700, y: 1400, width: 200, height: 1050, color: '#333', type: 'pipe_v', visible: true, id: "nazovlol" },
     { x: 2800, y: 1750, width: 250, height: 50, color: '#333', type: 'pipe_v' },
     { x: 3100, y: 1600, width: 250, height: 50, color: '#333', type: 'pipe_v' },
     { x: 2500, y: 1600, width: 250, height: 50, color: '#333', type: 'pipe_v' },
-    { x: 2500, y: 1250, width: 250, height: 250, color: '#333', type: 'pipe_v', visible: false, id:"blokiblok" }, // blokada na ten skok
+    { x: 2500, y: 1250, width: 250, height: 250, color: '#333', type: 'pipe_v', visible: false, id: "blokiblok" }, // blokada na ten skok
     { x: 100, y: 1500, width: 2450, height: 50, color: '#333', type: 'pipe_v' },
-   { x: 3450, y: 1500, width: 250, height: 50, color: '#333', type: 'pipe_v', visible: false, id:"skokotvorovy" },
-    { x: 3700, y: 1350, width: 1750, height: 50, color: '#333', type: 'pipe_h', visible:true,  id: "pred" },
-   { x: 4300, y: 1400, width: 200, height: 1050, color: '#333', type: 'pipe_v', visible:true,  id: "druhedvere" },
-    { x: 4800, y: 1400, width: 200, height: 1050, color: '#333', type: 'pipe_v' , visible: true, id: "poslednedvere"},
-    
+    { x: 3450, y: 1500, width: 250, height: 50, color: '#333', type: 'pipe_v', visible: false, id: "skokotvorovy" },
+    { x: 3700, y: 1350, width: 1750, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "pred" },
+    { x: 4300, y: 1400, width: 200, height: 1050, color: '#333', type: 'pipe_v', visible: true, id: "druhedvere" },
+    { x: 4800, y: 1400, width: 200, height: 1050, color: '#333', type: 'pipe_v', visible: true, id: "poslednedvere" },
+
 ];
 
 const boxy = [
@@ -109,31 +109,37 @@ let player = {
     isdashing: false,
     dashspeed: 35,
     isRaging: false,
+    hp: 100,
+    maxhp: 100,
+    jeNezranitelny: false,
+    casNezranitelnosti: 0,
+    isDead: false,
+   
 };
 
 const utocnici = [
     {
-        x: 1200,             
-        y: 1850,           
+        x: 2500,
+        y: 1850,
         width: 50,
         height: 50,
-        startX: 1200,        
-        range: 300,          
-        speed: 2,            
-        direction: 1,        
-        detectionRange: 250, 
-        isHostile: false,    
+        startX: 3000,
+        range: 300,
+        speed: 2,
+        direction: 1,
+        detectionRange: 250,
+        isHostile: false,
         hp: 50,
         isDead: false,
-        damage: 15,          
-        color: '#ff0055'     
+        damage: 15,
+        color: '#ff0055'
     },
     {
         x: 2300,
-        y: 1450,
+        y: 1850,
         width: 50,
         height: 50,
-        startX: 2300,
+        startX: 3000,
         range: 200,
         speed: 2.5,
         direction: -1,
@@ -148,24 +154,21 @@ const utocnici = [
 
 function aktualizujUtocnikov() {
     utocnici.forEach(en => {
-        if (en.isDead) return; // Mŕtve entity ignorujeme
+        if (en.isDead) return;
 
-        // Spočítame vzdialenosť medzi týmto nepriateľom a hráčom (Pythagorova veta)
         let vzdialenostOdHraca = Math.sqrt((player.x - en.x) ** 2 + (player.y - en.y) ** 2);
 
         if (vzdialenostOdHraca < en.detectionRange) {
-            // Hráč je blízko -> REŽIM AGRESIVITY (Prenasledovanie)
             en.isHostile = true;
 
             if (en.x < player.x) {
-                en.x += en.speed * 1.5; // Pri prenasledovaní môže mierne zrýchliť
+                en.x += en.speed * 1.5;
                 en.direction = 1;
             } else if (en.x > player.x) {
                 en.x -= en.speed * 1.5;
                 en.direction = -1;
             }
         } else {
-            // Hráč je ďaleko -> REŽIM HLIADKOVANIA (Chodí hore-dole)
             en.isHostile = false;
             en.x += en.speed * en.direction;
 
@@ -175,26 +178,40 @@ function aktualizujUtocnikov() {
             }
         }
 
-        // --- KOLÍZIA S HRÁČOM (Útok) ---
         if (
             player.x < en.x + en.width &&
             player.x + player.width > en.x &&
             player.y < en.y + en.height &&
             player.y + player.height > en.y
         ) {
-            // Tu môžeš volať tvoju funkciu na ubratie života, napr. player.takeDamage(en.damage);
-            // Pre ukážku spustíme tvoju smrť, ak ťa chytí:
-            if (!player.isdashing) { // Ak hráč práve nedashuje (napr. útok dashom)
-                console.log("Nepriateľ ťa dostal!");
-                DashTrail.triggerDeath(player);
-                player.width = 0; player.height = 0;
-                player.dx = 0; player.dy = 0;
-            } else {
-                // Ak hráč do nepriateľa vrazil počas Dashu, môže ho zničiť!
-                en.isDead = true;
-                if (typeof vytvorRozpadNaPixely === 'function') {
-                    vytvorRozpadNaPixely(en.x, en.y, '#ff0055'); // Pixelový rozpad z 1. skriptu
+            const playerPadal = player.dy > 0;
+            const jeZhora =
+                player.y + player.height - player.dy <= en.y + 10;
+
+            if (playerPadal && jeZhora) {
+                en.hp -= 50;
+                player.dy = -8;
+                player.grounded = false;
+
+                // smrť enemyho
+                if (en.hp <= 0) {
+                    en.isDead = true;
+                    DashTrail.triggerDeath(player);
                 }
+                
+                return;
+            }
+            if (!player.jeNezranitelny) {
+
+                player.jeNezranitelny = true;
+                player.casNezranitelnosti = 60;
+
+                Damageudelovator.uberHP(
+                    player,
+                    en.damage,
+                    resetPlayer,
+                    DashTrail.triggerDeath(player)
+                );
             }
         }
     });
@@ -219,13 +236,6 @@ function vykresliUtocnikov() {
             // Ak nemáš asset, vykreslí sa pekne svietiaci obdĺžnik podľa stavu
             c.fillStyle = en.isHostile ? '#ff0055' : '#8800aa';
             c.fillRect(en.x, en.y, en.width, en.height);
-        }
-
-        // Malá vychytávka: Výkričník nad hlavou, keď útočí
-        if (en.isHostile) {
-            c.fillStyle = "#ff0055";
-            c.font = "bold 20px Arial";
-            c.fillText("!", en.x + en.width / 2 - 4, en.y - 10);
         }
     });
 }
@@ -264,7 +274,7 @@ const brickPattern = getBrickPattern();
 function drawRealPipe(p, isVertical) {
     c.save();
     // Farba dreva (naplavené drevo - Driftwood)
-    let grad = isVertical 
+    let grad = isVertical
         ? c.createLinearGradient(p.x, p.y, p.x + p.width, p.y)
         : c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
 
@@ -310,7 +320,7 @@ function drawFog() {
 
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)'); 
+        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)');
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
@@ -431,7 +441,7 @@ window.addEventListener('keyup', (e) => {
     }
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
     if (e.key === 'R' || e.key === 'r') {
         player.isRaging = false;
@@ -451,6 +461,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
+    damagesystem(player);
     actualnaakciacici = macky.dolava;
     utocnici.forEach(en => {
         en.x = en.startX;
@@ -469,7 +480,7 @@ function animovanie() {
     c.save();
     c.translate(-Karera.x, 0 - Karera.y, 0);
 
-    
+
 
     // 1. Pozadie
     let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
@@ -484,6 +495,8 @@ function animovanie() {
     drawFog();
     aktualizujUtocnikov();
     vykresliUtocnikov();
+
+    Damageudelovator.aktualizujNezranitelnost(player);
 
 
     // 2. Vykreslenie objektov
@@ -546,13 +559,14 @@ function animovanie() {
         }
     });
 
-    if (player.isRaging){
+    if (player.isRaging) {
         maximalnaMana -= 0.5;
         mana -= 0.5;
     }
     else if (mana < maximalnaMana) {
         mana += 0.1;
     }
+
 
     // --- LOGIKA DASHU ---
     if (player.isdashing) {
@@ -561,7 +575,7 @@ function animovanie() {
             player.isdashing = false;
         }
     }
-    
+
     // 3. Pohyb a fyzik
     if (!player.isdashing) {
         if (keys.right) player.dx += 0.8;
@@ -587,8 +601,8 @@ function animovanie() {
     player.grounded = false;
 
     facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateDeath();
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateDeath();
 
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
@@ -707,24 +721,24 @@ DashTrail.updateDeath();
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-        if (platform.type === 'floor') {
+            if (platform.type === 'floor') {
 
-    // === DEATH ANIMATION ===
-    DashTrail.triggerDeath(player);
+                // === DEATH ANIMATION ===
+                DashTrail.triggerDeath(player);
 
-    player.width = 0;
-    player.height = 0;
-    player.dx = 0;
-    player.dy = 0;
+                player.width = 0;
+                player.height = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 350);
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 350);
 
-    return;
-}
+                return;
+            }
 
 
             // dopad zhora
@@ -765,7 +779,7 @@ DashTrail.updateDeath();
     });
 
     boxy.forEach(box => {
-       
+
         box.dy += gravitacia;
         box.y += box.dy;
         box.x += box.dx;
@@ -796,16 +810,16 @@ DashTrail.updateDeath();
 
             if (stredKockyX > jamka.x && stredKockyX < jamka.x + jamka.width) {
                 if (box.y + box.height >= jamka.y) {
-        
+
                     jamka.aktivna = true;
                 }
             }
 
             if (jamka.aktivna) {
                 nastavViditelnost('nazovlol', false);
-                nastavViditelnost('blokiblok', true); 
+                nastavViditelnost('blokiblok', true);
             }
-            else{
+            else {
                 nastavViditelnost('nazovlol', true);
                 nastavViditelnost('blokiblok', false);
             }
@@ -816,37 +830,37 @@ DashTrail.updateDeath();
 
             if (stredKockyX > jamka2.x && stredKockyX < jamka2.x + jamka2.width) {
                 if (box.y + box.height >= jamka2.y) {
-        
+
                     jamka2.aktivna = true;
                 }
             }
 
             if (jamka2.aktivna) {
                 nastavViditelnost('druhedvere', false);
-                nastavViditelnost('skokotvorovy', true); 
+                nastavViditelnost('skokotvorovy', true);
             }
-            else{
-               nastavViditelnost('druhedvere', true);
-                nastavViditelnost('skokotvorovy', false); 
+            else {
+                nastavViditelnost('druhedvere', true);
+                nastavViditelnost('skokotvorovy', false);
             }
         });
 
-        
+
         boxy.forEach(box => {
             let stredKockyX = box.x + box.width / 2;
 
             if (stredKockyX > jamka3.x && stredKockyX < jamka3.x + jamka3.width) {
                 if (box.y + box.height >= jamka3.y) {
-        
+
                     jamka3.aktivna = true;
                 }
             }
 
             if (jamka3.aktivna) {
-                 nastavViditelnost('poslednedvere', false);
+                nastavViditelnost('poslednedvere', false);
             }
-            else{
-               nastavViditelnost('poslednedvere', true);
+            else {
+                nastavViditelnost('poslednedvere', true);
             }
         });
 
@@ -943,8 +957,8 @@ DashTrail.updateDeath();
     }
 
     DashTrail.draw(c);
-DashTrail.drawDeath(c);
-    // 6. Vykreslenie postavy
+    DashTrail.drawDeath(c);
+
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
         c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
     } else {
@@ -997,6 +1011,8 @@ DashTrail.drawDeath(c);
         c.shadowBlur = 4;
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
+
+        Damageudelovator.vykresliHPBar(player);
 
         // --- JEDNODUCHÝ INVENTÁR ---
         c.fillStyle = "rgba(0, 0, 0, 0.6)";
