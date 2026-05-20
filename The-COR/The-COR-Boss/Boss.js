@@ -37,7 +37,7 @@ const platforms = [
     { x: 0, y: 1100, width: 3550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
     { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-    { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v', id:"stenazacorom", visible:true },
+    //{ x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v', id:"stenazacorom", visible:true },
     { x: 0, y: 200, width: 3200, height: 150, color: '#333', type: 'pipe_h' },
 ];
 
@@ -72,12 +72,16 @@ const macky = {
     doprava: new Image(),
     plazeniedoprava: new Image(),
     npc: new Image(),
+    good: new Image(),
+    bad: new Image(),
 };
 
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
-macky.npc.src = '../../asseti/rokwel.png';
+macky.npc.src = '../../asseti/Aktivator.png';
+macky.good.src = '../../asseti/Tablet.png';
+macky.bad.src = '../../asseti/Odchod_Prec.png';
 
 let actualnaakciacici = macky.doprava;
 
@@ -93,8 +97,8 @@ const keys = {
 let timeScale = 1.0;
 
 let player = {
-    x: 8000,
-    y: 1150,
+    x: 2000,
+    y: 50,
     width: 50,
     height: 50,
     dx: 0,
@@ -122,9 +126,9 @@ damagesystem(player);
 
 const Donatelo = {
     x: 2800,
-    y: 1020,
-    width: 50,
-    height: 50,
+    y: 950,
+    width: 100,
+    height: 150,
     color: '#5901a0',
     name: "Donatelo",
     currentLine: 0,
@@ -134,9 +138,9 @@ const Donatelo = {
 
 const GoodEnding = {
     x: 900,
-    y: 1050,
+    y: 1000,
     width: 200,
-    height: 50,
+    height: 100,
     color: '#5901a0',
     name: "asd",
     currentLine: 0,
@@ -147,7 +151,7 @@ const GoodEnding = {
 const BadEnding = {
     x: 0,
     y: 1000,
-    width: 20,
+    width: 80,
     height: 100,
     color: '#5901a0',
     name: "asda",
@@ -1121,8 +1125,8 @@ function animovanie() {
     }
 
         // nefunkcne viacere npc
-    if (macky.doprava.complete && macky.doprava.naturalWidth !== 0) {
-        c.drawImage(macky.doprava, GoodEnding.x, GoodEnding.y, GoodEnding.width, GoodEnding.height);
+    if (macky.good.complete && macky.good.naturalWidth !== 0) {
+        c.drawImage(macky.good, GoodEnding.x, GoodEnding.y, GoodEnding.width, GoodEnding.height);
     } else {
         c.fillStyle = GoodEnding.color;
         c.fillRect(GoodEnding.x, GoodEnding.y, GoodEnding.width, GoodEnding.height);
@@ -1138,8 +1142,8 @@ function animovanie() {
     }
 
     //
-    if (macky.doprava.complete && macky.doprava.naturalWidth !== 0) {
-        c.drawImage(macky.doprava, BadEnding.x, BadEnding.y, BadEnding.width, BadEnding.height);
+    if (macky.bad.complete && macky.bad.naturalWidth !== 0) {
+        c.drawImage(macky.bad, BadEnding.x, BadEnding.y, BadEnding.width, BadEnding.height);
     } else {
         c.fillStyle = BadEnding.color;
         c.fillRect(BadEnding.x, BadEnding.y, BadEnding.width, BadEnding.height);
