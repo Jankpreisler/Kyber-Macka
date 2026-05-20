@@ -161,26 +161,33 @@ function drawRealPipe(p, isVertical) {
 
 function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.save();
+
     if (isPressed) {
-        c.fillStyle = '#004411';
+        c.fillStyle = '#0d1bff';
     } else {
         c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
     }
+
     c.fillRect(btn.x, btn.y, btn.width, btn.height);
-    c.strokeStyle = isPressed ? '#04ff00' : '#323741';
+
+    c.strokeStyle = isPressed ? '#4f7dff' : '#323741';
     c.lineWidth = isPressed ? 4 : 2;
     c.strokeRect(btn.x, btn.y, btn.width, btn.height);
 
-    c.strokeStyle = isPressed ? '#00ff37' : '#1a1d24';
+    c.strokeStyle = isPressed ? 'rgba(120,180,255,0.5)' : '#1a1d24';
     c.lineWidth = 1;
+
     for (let i = btn.y + 8; i < btn.y + btn.height - 5; i += 6) {
         c.beginPath();
         c.moveTo(btn.x + 15, i);
         c.lineTo(btn.x + btn.width - 15, i);
         c.stroke();
     }
+
     c.restore();
 }
+ c.restore();
+
 
 function drawRealServer(p) {
     c.save();
@@ -372,54 +379,104 @@ function animovanie() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
+
+
+let bg = c.createLinearGradient(0, 0, 0, canvas.height);
+bg.addColorStop(0, '#0a0d14');
+bg.addColorStop(1, '#0f1622');
+
+c.fillStyle = bg;
+c.fillRect(0, 0, canvas.width, canvas.height);
+
+let glow = c.createRadialGradient(
+    canvas.width / 2, canvas.height / 3, 50,
+    canvas.width / 2, canvas.height / 3, 600
+);
+glow.addColorStop(0, 'rgba(80,120,200,0.15)');
+glow.addColorStop(1, 'transparent');
+
+c.fillStyle = glow;
+c.fillRect(0, 0, canvas.width, canvas.height);
+
+c.save();
+c.globalCompositeOperation = 'screen';
+fogParticles.forEach(p => {
+    let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+    fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
+    fogGrad.addColorStop(1, 'transparent');
+
+    c.fillStyle = fogGrad;
+    c.beginPath();
+    c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    c.fill();
+
+    p.x += Math.sin(time + p.r) * 0.15;
+});
+c.restore();
+
+
     c.save();
     c.translate(-Karera.x, 0 - Karera.y);
 
-    let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
-    bgGrad.addColorStop(0, '#0a100a');
-    bgGrad.addColorStop(1, '#010501');
-    c.fillStyle = bgGrad;
-    c.fillRect(0, 0, canvas.width, canvas.height);
+  
+platforms.forEach(p => {
+    if (p.visible === false) return;
+    if (p.type === 'trigger') {
+    drawStyledButton(p, false, p.isPressed);
+    return; 
+}
 
-    c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 30000, 30000);
+    const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
+    const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
+    const jeNormalna = p.friction === undefined;
 
-    drawFog();
+    c.save();
 
-    platforms.forEach(p => {
-        if (p.visible === false) return;
+    // NORMALNA PLATFORMA
+    if (jeNormalna) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
+        grad.addColorStop(0, '#0b1220');
+        grad.addColorStop(1, '#132544');
 
-        if (p.type === 'floor') {
-            c.fillStyle = '#000';
-            c.fillRect(p.x, p.y, p.width, p.height);
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
 
-            let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
-            sliz.addColorStop(0, '#000000');
-            sliz.addColorStop(1, 'transparent');
-            c.fillStyle = sliz;
-            c.fillRect(p.x, p.y, p.width, 3);
-        } else if (p.type === 'wall') {
-            drawRealServer(p);
-        } else if (p.type === 'pipe_v') {
-            drawRealPipe(p, true);
-        } else if (p.type === 'pipe_h') {
-            drawRealPipe(p, false);
-        } else if (p.type === 'trigger') {
-            drawStyledButton(p, false, p.isPressed);
-        } else if (p.type === 'valve') {
-            c.fillStyle = '#400';
-            c.fillRect(p.x, p.y, p.width, p.height);
-            c.fillStyle = '#600';
-            c.fillRect(p.x + 5, p.y + 20, 10, 10);
-        } else if (p.speed) {
-            p.x += p.speed * p.direction;
-            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
-            if (p.hasRope) drawRopes(p);
-        } else {
-            c.fillStyle = 'transparent';
-            c.fillRect(p.x, p.y, p.width, p.height);
-        }
-    });
+        c.shadowColor = 'rgba(80,150,255,0.35)';
+        c.shadowBlur = 18;
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    // SPOMALOVACIA
+    else if (jeSpomalovacia) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
+        grad.addColorStop(0, '#06080f');
+        grad.addColorStop(1, '#0d1524');
+
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
+
+        c.fillStyle = 'rgba(0,0,0,0.25)';
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    // ZRYCHLOVACIA
+    else if (jeZrychlovacia) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+        grad.addColorStop(0, '#1a4fff');
+        grad.addColorStop(1, '#6fc3ff');
+
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
+
+        c.shadowColor = 'rgba(120,200,255,0.45)';
+        c.shadowBlur = 25;
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    c.restore();
+});
+
+   
 
    if (player.isRaging) {
         maximalnaMana -= 0.5;

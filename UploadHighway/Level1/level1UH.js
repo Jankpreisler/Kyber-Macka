@@ -201,17 +201,19 @@ function drawFog() {
     c.globalCompositeOperation = 'screen';
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(0, 100, 30, 0.1)');
+        grad.addColorStop(0, 'rgba(120,160,220,0.08)');
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
         c.beginPath();
         c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         c.fill();
-        p.x += Math.sin(time + p.r) * 0.2;
+
+        p.x += Math.sin(time + p.r) * 0.15;
     });
     c.restore();
 }
+
 
 function mozeSaPostavit() {
     const buducaVyska = 50;
@@ -366,39 +368,50 @@ function animovanie() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    c.save();
-    c.translate(-Karera.x, 0 - Karera.y);
+let bg = c.createLinearGradient(0, 0, 0, canvas.height);
+bg.addColorStop(0, '#0a0d14');
+bg.addColorStop(1, '#0f1622');
 
-    let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
-    bgGrad.addColorStop(0, '#0a100a');
-    bgGrad.addColorStop(1, '#010501');
-    c.fillStyle = bgGrad;
-    c.fillRect(0, 0, canvas.width, canvas.height);
+c.fillStyle = bg;
+c.fillRect(0, 0, canvas.width, canvas.height);
 
-    c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 30000, 30000);
+
+let glow = c.createRadialGradient(
+    canvas.width / 2, canvas.height / 3, 50,
+    canvas.width / 2, canvas.height / 3, 600
+);
+glow.addColorStop(0, 'rgba(80,120,200,0.15)');
+glow.addColorStop(1, 'transparent');
+
+c.fillStyle = glow;
+c.fillRect(0, 0, canvas.width, canvas.height);
+
+c.save();
+c.globalCompositeOperation = 'screen';
+fogParticles.forEach(p => {
+    let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+    fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
+    fogGrad.addColorStop(1, 'transparent');
+
+    c.fillStyle = fogGrad;
+    c.beginPath();
+    c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    c.fill();
+
+    p.x += Math.sin(time + p.r) * 0.15;
+});
+c.restore();
+
+// AŽ TERAZ POSÚVAME KAMERU
+c.save();
+c.translate(-Karera.x, -Karera.y);
 
     drawFog();
 
     platforms.forEach(p => {
         if (p.visible === false) return;
 
-        if (p.type === 'floor') {
-            c.fillStyle = '#000';
-            c.fillRect(p.x, p.y, p.width, p.height);
-
-            let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
-            sliz.addColorStop(0, '#000000');
-            sliz.addColorStop(1, 'transparent');
-            c.fillStyle = sliz;
-            c.fillRect(p.x, p.y, p.width, 3);
-        } else if (p.type === 'wall') {
-            drawRealServer(p);
-        } else if (p.type === 'pipe_v') {
-            drawRealPipe(p, true);
-        } else if (p.type === 'pipe_h') {
-            drawRealPipe(p, false);
-        } else if (p.type === 'trigger') {
+ else if (p.type === 'trigger') {
             drawStyledButton(p, false, p.isPressed);
         } else if (p.type === 'valve') {
             c.fillStyle = '#400';
@@ -504,56 +517,62 @@ DashTrail.updateRageAura(player.isRaging, player);  //TENTO RIADOK === #1
 
 
     // Logika ventilátora
-    platforms.forEach(p => {
-        if (p.id === 'vetrak') {
-            if (
-                player.x + player.width > p.x &&
-                player.x < p.x + p.width &&
-                player.y + player.height > p.y - p.range &&
-                player.y + player.height <= p.y
-            ) {
-                let vzdialenostOdVetráka = p.y - (player.y + player.height);
-                if (vzdialenostOdVetráka > p.range * 0.8) {
-                    player.dy -= 0.35;
-                } else {
-                    player.dy -= 0.8;
-                }
-                if (player.dy < -5) player.dy = -5;
-            }
-            if (Math.random() > 0.6) {
-                windParticles.push({
-                    x: p.x + Math.random() * p.width,
-                    y: p.y,
-                    speed: Math.random() * 5 + 3,
-                    opacity: 1,
-                    maxHeight: p.y - p.range
-                });
-            }
-        }
+platforms.forEach(p => {
+    if (p.visible === false) return;
 
-        if (p.id === 'vetrak2' && p.zapnuty === true) {
-            const vnutri =
-                player.y + player.height > p.y &&
-                player.y < p.y + p.height &&
-                player.x < p.x &&
-                player.x + player.width > p.x - p.range;
+    const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
+    const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
+    const jeNormalna = p.friction === undefined;
 
-            if (vnutri) {
-                player.dx -= 0.67;
-            }
+    c.save();
 
-            if (Math.random() > 0.4) {
-                windParticles.push({
-                    x: p.x - Math.random() * p.range,
-                    y: p.y + Math.random() * p.height,
-                    speed: Math.random() * 5 + 2,
-                    opacity: Math.random() * 0.5 + 0.5,
-                    direction: 'left',
-                    minX: p.x - p.range
-                });
-            }
-        }
-    });
+    // === NORMALNA PLATFORM — CLEAN DATA HIGHWAY ===
+    if (jeNormalna) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
+        grad.addColorStop(0, '#0b1220');
+        grad.addColorStop(1, '#132544');
+
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
+
+        // jemná žiara
+        c.shadowColor = 'rgba(80,150,255,0.35)';
+        c.shadowBlur = 18;
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    // === SPOMALOVACIA PLATFORM — CLEAN ENERGY ABSORBER ===
+    else if (jeSpomalovacia) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
+        grad.addColorStop(0, '#06080f');
+        grad.addColorStop(1, '#0d1524');
+
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
+
+        // jemné stmavenie (absorbuje energiu)
+        c.fillStyle = 'rgba(0,0,0,0.25)';
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    // === ZRYCHLOVACIA PLATFORM — CLEAN ENERGY BOOST ===
+    else if (jeZrychlovacia) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+        grad.addColorStop(0, '#1a4fff');
+        grad.addColorStop(1, '#6fc3ff');
+
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
+
+        // jemná svetelná aura
+        c.shadowColor = 'rgba(120,200,255,0.45)';
+        c.shadowBlur = 25;
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    c.restore();
+});
+
 
     // Vykreslenie častíc vetra
     c.save();
