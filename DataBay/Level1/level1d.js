@@ -108,8 +108,127 @@ let player = {
     friction: 0.9,
     isdashing: false,
     dashspeed: 35,
-      isRaging: false,
+    isRaging: false,
 };
+
+const utocnici = [
+    {
+        x: 1200,             
+        y: 1850,           
+        width: 50,
+        height: 50,
+        startX: 1200,        
+        range: 300,          
+        speed: 2,            
+        direction: 1,        
+        detectionRange: 250, 
+        isHostile: false,    
+        hp: 50,
+        isDead: false,
+        damage: 15,          
+        color: '#ff0055'     
+    },
+    {
+        x: 2300,
+        y: 1450,
+        width: 50,
+        height: 50,
+        startX: 2300,
+        range: 200,
+        speed: 2.5,
+        direction: -1,
+        detectionRange: 300,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    }
+];
+
+function aktualizujUtocnikov() {
+    utocnici.forEach(en => {
+        if (en.isDead) return; // Mŕtve entity ignorujeme
+
+        // Spočítame vzdialenosť medzi týmto nepriateľom a hráčom (Pythagorova veta)
+        let vzdialenostOdHraca = Math.sqrt((player.x - en.x) ** 2 + (player.y - en.y) ** 2);
+
+        if (vzdialenostOdHraca < en.detectionRange) {
+            // Hráč je blízko -> REŽIM AGRESIVITY (Prenasledovanie)
+            en.isHostile = true;
+
+            if (en.x < player.x) {
+                en.x += en.speed * 1.5; // Pri prenasledovaní môže mierne zrýchliť
+                en.direction = 1;
+            } else if (en.x > player.x) {
+                en.x -= en.speed * 1.5;
+                en.direction = -1;
+            }
+        } else {
+            // Hráč je ďaleko -> REŽIM HLIADKOVANIA (Chodí hore-dole)
+            en.isHostile = false;
+            en.x += en.speed * en.direction;
+
+            // Ak prejde za hranicu hliadky (zľava alebo zprava), otočí sa
+            if (en.x > en.startX + en.range || en.x < en.startX) {
+                en.direction *= -1;
+            }
+        }
+
+        // --- KOLÍZIA S HRÁČOM (Útok) ---
+        if (
+            player.x < en.x + en.width &&
+            player.x + player.width > en.x &&
+            player.y < en.y + en.height &&
+            player.y + player.height > en.y
+        ) {
+            // Tu môžeš volať tvoju funkciu na ubratie života, napr. player.takeDamage(en.damage);
+            // Pre ukážku spustíme tvoju smrť, ak ťa chytí:
+            if (!player.isdashing) { // Ak hráč práve nedashuje (napr. útok dashom)
+                console.log("Nepriateľ ťa dostal!");
+                DashTrail.triggerDeath(player);
+                player.width = 0; player.height = 0;
+                player.dx = 0; player.dy = 0;
+            } else {
+                // Ak hráč do nepriateľa vrazil počas Dashu, môže ho zničiť!
+                en.isDead = true;
+                if (typeof vytvorRozpadNaPixely === 'function') {
+                    vytvorRozpadNaPixely(en.x, en.y, '#ff0055'); // Pixelový rozpad z 1. skriptu
+                }
+            }
+        }
+    });
+}
+function vykresliUtocnikov() {
+    utocnici.forEach(en => {
+        if (en.isDead) return;
+
+        // Vykreslenie vizuálneho okruhu detekcie (voliteľné, super pre debug a sci-fi atmosféru)
+        c.save();
+        c.strokeStyle = en.isHostile ? 'rgba(255, 0, 85, 0.3)' : 'rgba(0, 255, 255, 0.08)';
+        c.lineWidth = 2;
+        c.beginPath();
+        c.arc(en.x + en.width / 2, en.y + en.height / 2, en.detectionRange, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+
+        // Vykreslenie samotného nepriateľa (obrázok alebo fillRect)
+        if (macky.enemy && macky.enemy.complete && macky.enemy.naturalWidth !== 0) {
+            c.drawImage(macky.enemy, en.x, en.y, en.width, en.height);
+        } else {
+            // Ak nemáš asset, vykreslí sa pekne svietiaci obdĺžnik podľa stavu
+            c.fillStyle = en.isHostile ? '#ff0055' : '#8800aa';
+            c.fillRect(en.x, en.y, en.width, en.height);
+        }
+
+        // Malá vychytávka: Výkričník nad hlavou, keď útočí
+        if (en.isHostile) {
+            c.fillStyle = "#ff0055";
+            c.font = "bold 20px Arial";
+            c.fillText("!", en.x + en.width / 2 - 4, en.y - 10);
+        }
+    });
+}
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
 let time = 0;
@@ -333,6 +452,11 @@ function resetPlayer() {
     player.dy = 0;
     player.height = 50;
     actualnaakciacici = macky.dolava;
+    utocnici.forEach(en => {
+        en.x = en.startX;
+        en.isDead = false;
+        en.isHostile = false;
+    });
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -345,6 +469,7 @@ function animovanie() {
     c.save();
     c.translate(-Karera.x, 0 - Karera.y, 0);
 
+    
 
     // 1. Pozadie
     let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
@@ -357,6 +482,9 @@ function animovanie() {
     c.fillRect(0, 0, 30000, 30000);
 
     drawFog();
+    aktualizujUtocnikov();
+    vykresliUtocnikov();
+
 
     // 2. Vykreslenie objektov
     platforms.forEach(p => {
