@@ -157,6 +157,7 @@ let player = {
 
 };
 
+// --- ATMOSFÉRICKÉ EFEKTY ---
 let time = 0;
 let fogParticles = [];
 let windParticles = [];
@@ -169,6 +170,7 @@ for (let i = 0; i < 30; i++) {
     });
 }
 
+// === GRAFICKÉ RUTINY ===
 function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
@@ -240,6 +242,7 @@ function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.restore();
 }
 
+
 function drawRealServer(p) {
     c.save();
     c.fillStyle = '#0d0f12';
@@ -265,14 +268,15 @@ function drawFog() {
     c.globalCompositeOperation = 'screen';
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(0, 100, 30, 0.1)');
+        grad.addColorStop(0, 'rgba(120,160,220,0.08)');
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
         c.beginPath();
         c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         c.fill();
-        p.x += Math.sin(time + p.r) * 0.2;
+
+        p.x += Math.sin(time + p.r) * 0.15;
     });
     c.restore();
 }
@@ -474,7 +478,6 @@ function resetPlayer() {
     player.height = 50;
     actualnaakciacici = macky.dolava;
 }
-
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
     requestAnimationFrame(animovanie);
@@ -482,80 +485,115 @@ function animovanie() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    c.save();
-    c.translate(-Karera.x, 0 - Karera.y);
+let bg = c.createLinearGradient(0, 0, 0, canvas.height);
+bg.addColorStop(0, '#0a0d14');
+bg.addColorStop(1, '#0f1622');
 
-    let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
-    bgGrad.addColorStop(0, '#0a100a');
-    bgGrad.addColorStop(1, '#010501');
-    c.fillStyle = bgGrad;
-    c.fillRect(0, 0, canvas.width, canvas.height);
+c.fillStyle = bg;
+c.fillRect(0, 0, canvas.width, canvas.height);
 
-    c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 30000, 30000);
+
+let glow = c.createRadialGradient(
+    canvas.width / 2, canvas.height / 3, 50,
+    canvas.width / 2, canvas.height / 3, 600
+);
+glow.addColorStop(0, 'rgba(80,120,200,0.15)');
+glow.addColorStop(1, 'transparent');
+
+c.fillStyle = glow;
+c.fillRect(0, 0, canvas.width, canvas.height);
+
+c.save();
+c.globalCompositeOperation = 'screen';
+fogParticles.forEach(p => {
+    let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+    fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
+    fogGrad.addColorStop(1, 'transparent');
+
+    c.fillStyle = fogGrad;
+    c.beginPath();
+    c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    c.fill();
+
+    p.x += Math.sin(time + p.r) * 0.15;
+});
+c.restore();
+
+// AŽ TERAZ POSÚVAME KAMERU
+c.save();
+c.translate(-Karera.x, -Karera.y);
 
     drawFog();
+     // Logika ventilátora
+platforms.forEach(p => {
 
-     if (keys.u && abilityUnlocked && mana > 0) {
-        timeScale = 0.3;
-        mana -= 0.5;
-    } else {
-        timeScale = 1.0;
-        if (mana < maximalnaMana) {
-            mana += 0.1;
+
+    if (p.type === 'valve') {
+        p.y += p.speed * p.direction;
+
+        if (p.y > p.startY + p.range) {
+            p.y = p.startY + p.range;
+            p.direction *= -1;
         }
-        else if (player.isRaging) {
-        maximalnaMana -= 0.5;
-        mana -= 0.5;
+        if (p.y < p.startY) {
+            p.y = p.startY;
+            p.direction *= -1;
         }
     }
 
-    if (mana <= 0) {
-        keys.u = false;
-        timeScale = 1.0;
+
+
+
+    if (p.visible === false) return;
+
+    const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
+    const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
+    const jeNormalna = p.friction === undefined;
+
+    c.save();
+
+    // === NORMALNA PLATFORM ===
+    if (jeNormalna) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
+        grad.addColorStop(0, '#0b1220');
+        grad.addColorStop(1, '#132544');
+
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
+
+        c.shadowColor = 'rgba(80,150,255,0.35)';
+        c.shadowBlur = 18;
+        c.fillRect(p.x, p.y, p.width, p.height);
     }
 
-    platforms.forEach(p => {
-        if (p.visible === false) return;
+    else if (jeSpomalovacia) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
+        grad.addColorStop(0, '#06080f');
+        grad.addColorStop(1, '#0d1524');
 
-        if (p.type === 'floor') {
-            c.fillStyle = '#000';
-            c.fillRect(p.x, p.y, p.width, p.height);
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
 
-            let sliz = c.createLinearGradient(0, p.y, 0, p.y + p.height);
-            sliz.addColorStop(0, '#000000');
-            sliz.addColorStop(1, 'transparent');
-            c.fillStyle = sliz;
-            c.fillRect(p.x, p.y, p.width, 3);
-        } else if (p.type === 'wall') {
-            drawRealServer(p);
-        } else if (p.type === 'pipe_v') {
-            drawRealPipe(p, true);
-        } else if (p.type === 'pipe_h') {
-            drawRealPipe(p, false);
-        } else if (p.type === 'trigger') {
-            drawStyledButton(p, false, p.isPressed);
-        } else if (p.type === 'valve') {
-            if (p.speed !== undefined) {
-                p.y += p.speed * p.direction * timeScale;
+        c.fillStyle = 'rgba(0,0,0,0.25)';
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
 
-                if (p.y > p.startY + p.range || p.y < p.startY) {
-                    p.direction *= -1;
-                }
-            }
-            c.fillStyle = '#400';
-            c.fillRect(p.x, p.y, p.width, p.height);
-            c.fillStyle = '#600';
-            c.fillRect(p.x + 5, p.y + 20, 10, 10);
-        } else if (p.speed) {
-            p.x += p.speed * p.direction * timeScale;
-            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
-            if (p.hasRope) drawRopes(p);
-        } else {
-            c.fillStyle = 'transparent';
-            c.fillRect(p.x, p.y, p.width, p.height);
-        }
-    });
+
+    else if (jeZrychlovacia) {
+        let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+        grad.addColorStop(0, '#1a4fff');
+        grad.addColorStop(1, '#6fc3ff');
+
+        c.fillStyle = grad;
+        c.fillRect(p.x, p.y, p.width, p.height);
+
+        c.shadowColor = 'rgba(120,200,255,0.45)';
+        c.shadowBlur = 25;
+        c.fillRect(p.x, p.y, p.width, p.height);
+    }
+
+    c.restore();
+});
 
     if (mana < maximalnaMana) {
         mana += 0.1;

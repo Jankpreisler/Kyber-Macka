@@ -582,6 +582,7 @@ function animovanie() {
 facingRight = (actualnaakciacici === macky.dolava);
 DashTrail.update(player, player.isdashing, facingRight);
 DashTrail.updateDeath();
+DashTrail.updateRageAura(player.isRaging, player);
 
 
     Karera.x = player.x - canvas.width / 2;
@@ -854,6 +855,7 @@ DashTrail.updateDeath();
 
     DashTrail.draw(c);
 DashTrail.drawDeath(c);
+DashTrail.drawRageAura(c);
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
         c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
