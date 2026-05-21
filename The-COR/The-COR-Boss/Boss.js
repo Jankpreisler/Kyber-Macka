@@ -56,7 +56,7 @@ const jamka = {
 };
 
 const zadavac = {
-    x: 7000,
+    x: 1000000,
     y: 1450,
     width: 60,
     height: 60,
@@ -195,6 +195,8 @@ function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
     p.width = 32;
+     p.height = 16;
+    pc.fillStyle = '#ffffff';
     pc.fillRect(0, 0, 32, 16);
     pc.fillStyle = '#ffffff';
     pc.fillRect(0, 0, 30, 14);
@@ -731,8 +733,8 @@ function animovanie() {
     c.translate(-Karera.x, 0 - Karera.y);
 
     let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
-    bgGrad.addColorStop(0, '#0a100a');
-    bgGrad.addColorStop(1, '#010501');
+    bgGrad.addColorStop(0, '#ffffff');
+    bgGrad.addColorStop(1, '#ffffff');
     c.fillStyle = bgGrad;
     c.fillRect(0, 0, canvas.width, canvas.height);
 

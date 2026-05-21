@@ -504,14 +504,12 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'r' || e.key === 'R') {
         if (mana > 20 && !player.isNahnevany) {
             player.isRaging = true;
-        } else {
-            player.isRaging = false; // Opätovné stlačenie vypne mód
         }
     }
 
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
-        
+
     }
 
     if (e.key.toLowerCase() === 'e' && Mikey.canInteract) {
@@ -581,8 +579,8 @@ window.addEventListener('keyup', (e) => {
         player.dx = 0;
     }
     if (e.key === 'R' || e.key === 'r') {
-        player.isdashing = false;
-        player.dx = 0;
+        player.isRa = false;
+       
     }
 });
 
@@ -679,8 +677,8 @@ function animovanie() {
     });
 
     if (player.isRaging) {
-        maximalnaMana -= 0.1;
-        mana -= 0.1;
+        maximalnaMana -= 0.5;
+        mana -= 0.5;
 
     }
     else if (mana < maximalnaMana) {
@@ -719,11 +717,14 @@ function animovanie() {
 
                 if (isTouchingWall(player, p)) {
                     isClimbing = true;
+                    
                 }
             });
         }
 
         if (isClimbing) {
+            actualnaakciacici = macky.lozenie;   // ← PREPÍŠ OBRAZOK NA LOZENIE
+
             player.dy = 0;
             player.dx = 0;
 
@@ -733,6 +734,11 @@ function animovanie() {
                 player.dy = player.speed * 0.7;
             }
         } else {
+            // keď prestane liezť, vráť normálny obrázok
+            actualnaakciacici = (player.direction === "doprava")
+                ? macky.doprava
+                : macky.dolava;
+
             player.dy += gravitacia;
         }
     }
