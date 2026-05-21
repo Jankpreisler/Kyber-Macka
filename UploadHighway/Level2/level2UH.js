@@ -100,7 +100,7 @@ let player = {
     jeNezranitelny: false,
     casNezranitelnosti: 0,
     isRaging: false,
-    direction: "doprava"  
+    direction: "doprava"
 };
 const utocnici = [
     {
@@ -348,7 +348,7 @@ function drawStyledButton(btn, isHovered = false, isPressed = false) {
 
     c.restore();
 }
-c.restore();
+
 
 
 function drawRealServer(p) {
@@ -427,11 +427,13 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         if (player.isdashing == true) return;
         keys.right = true;
+        player.direction = "doprava";
 
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
+        player.direction = "dolava";
 
     }
 
@@ -973,7 +975,14 @@ function animovanie() {
     aktualizujUtocnikov();
     vykresliUtocnikov();
 
+    let aktImg = ziskajAnimaciu(player, keys);
 
+if (aktImg && aktImg.complete && aktImg.naturalWidth !== 0) {
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+} else {
+    c.fillStyle = "red";
+    c.fillRect(player.x, player.y, player.width, player.height);
+}
 
     c.restore();
 
