@@ -526,7 +526,7 @@ platforms.forEach(p => {
 
     c.save();
 
-    // === NORMALNA PLATFORM — CLEAN DATA HIGHWAY ===
+    // === NORMALNA PLATFORM  ===
     if (jeNormalna) {
         let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
         grad.addColorStop(0, '#0b1220');
@@ -535,13 +535,12 @@ platforms.forEach(p => {
         c.fillStyle = grad;
         c.fillRect(p.x, p.y, p.width, p.height);
 
-        // jemná žiara
         c.shadowColor = 'rgba(80,150,255,0.35)';
         c.shadowBlur = 18;
         c.fillRect(p.x, p.y, p.width, p.height);
     }
 
-    // === SPOMALOVACIA PLATFORM — CLEAN ENERGY ABSORBER ===
+  
     else if (jeSpomalovacia) {
         let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
         grad.addColorStop(0, '#06080f');
@@ -550,12 +549,11 @@ platforms.forEach(p => {
         c.fillStyle = grad;
         c.fillRect(p.x, p.y, p.width, p.height);
 
-        // jemné stmavenie (absorbuje energiu)
+        
         c.fillStyle = 'rgba(0,0,0,0.25)';
         c.fillRect(p.x, p.y, p.width, p.height);
     }
 
-    // === ZRYCHLOVACIA PLATFORM — CLEAN ENERGY BOOST ===
     else if (jeZrychlovacia) {
         let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
         grad.addColorStop(0, '#1a4fff');
@@ -564,7 +562,6 @@ platforms.forEach(p => {
         c.fillStyle = grad;
         c.fillRect(p.x, p.y, p.width, p.height);
 
-        // jemná svetelná aura
         c.shadowColor = 'rgba(120,200,255,0.45)';
         c.shadowBlur = 25;
         c.fillRect(p.x, p.y, p.width, p.height);

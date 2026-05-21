@@ -480,48 +480,52 @@ function resetPlayer() {
     player.dy = 0;
     player.height = 50;
     actualnaakciacici = macky.dolava;
-}
-
-// === HLAVNÁ SMYČKA ===
+}// === HLAVNÁ SMYČKA ===
 function animovanie() {
     requestAnimationFrame(animovanie);
     time += 0.01;
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    c.save();
-    c.translate(-Karera.x, 0 - Karera.y);
+let bg = c.createLinearGradient(0, 0, 0, canvas.height);
+bg.addColorStop(0, '#0a0d14');
+bg.addColorStop(1, '#0f1622');
 
-    let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
-    bgGrad.addColorStop(0, '#0a100a');
-    bgGrad.addColorStop(1, '#010501');
-    c.fillStyle = bgGrad;
-    c.fillRect(0, 0, canvas.width, canvas.height);
+c.fillStyle = bg;
+c.fillRect(0, 0, canvas.width, canvas.height);
 
-    c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 30000, 30000);
+
+let glow = c.createRadialGradient(
+    canvas.width / 2, canvas.height / 3, 50,
+    canvas.width / 2, canvas.height / 3, 600
+);
+glow.addColorStop(0, 'rgba(80,120,200,0.15)');
+glow.addColorStop(1, 'transparent');
+
+c.fillStyle = glow;
+c.fillRect(0, 0, canvas.width, canvas.height);
+
+c.save();
+c.globalCompositeOperation = 'screen';
+fogParticles.forEach(p => {
+    let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+    fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
+    fogGrad.addColorStop(1, 'transparent');
+
+    c.fillStyle = fogGrad;
+    c.beginPath();
+    c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    c.fill();
+
+    p.x += Math.sin(time + p.r) * 0.15;
+});
+c.restore();
+
+// AŽ TERAZ POSÚVAME KAMERU
+c.save();
+c.translate(-Karera.x, -Karera.y);
 
     drawFog();
-
-    // Spomalenie času
-    if (keys.u && abilityUnlocked && mana > 0) {
-        timeScale = 0.3;
-        mana -= 0.5;
-    } else {
-        timeScale = 1.0;
-        if (mana < maximalnaMana) {
-            mana += 0.1;
-        }
-        else if (player.isRaging) {
-        maximalnaMana -= 0.5;
-        mana -= 0.5;
-        }
-    }
-
-    if (mana <= 0) {
-        keys.u = false;
-        timeScale = 1.0;
-    }
 
     platforms.forEach(p => {
         if (p.visible === false) return;
@@ -651,57 +655,61 @@ DashTrail.updateFly(isFlying, player);
 
 DashTrail.updateDeath();
 
-
+    // Logika ventilátora
     platforms.forEach(p => {
-        if (p.id === 'vetrak' && p.zapnuty === true) {
-            if (
-                player.x + player.width > p.x &&
-                player.x < p.x + p.width &&
-                player.y + player.height > p.y - p.range &&
-                player.y + player.height <= p.y
-            ) {
-                let vzdialenostOdVetráka = p.y - (player.y + player.height);
-                if (vzdialenostOdVetráka > p.range * 0.8) {
-                    player.dy -= 0.35 * timeScale;
-                } else {
-                    player.dy -= 0.8 * timeScale;
-                }
-                if (player.dy < -5) player.dy = -5;
-            }
-            if (Math.random() > 0.6) {
-                windParticles.push({
-                    x: p.x + Math.random() * p.width,
-                    y: p.y,
-                    speed: (Math.random() * 5 + 3) * timeScale,
-                    opacity: 1,
-                    maxHeight: p.y - p.range
-                });
-            }
+        if (p.visible === false) return;
+    
+        const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
+        const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
+        const jeNormalna = p.friction === undefined;
+    
+        c.save();
+    
+        // === NORMALNA PLATFORM  ===
+        if (jeNormalna) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
+            grad.addColorStop(0, '#0b1220');
+            grad.addColorStop(1, '#132544');
+    
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
+    
+            c.shadowColor = 'rgba(80,150,255,0.35)';
+            c.shadowBlur = 18;
+            c.fillRect(p.x, p.y, p.width, p.height);
         }
-
-        if (p.id === 'vetrak2' && p.zapnuty === true) {
-            const vnutri =
-                player.y + player.height > p.y &&
-                player.y < p.y + p.height &&
-                player.x < p.x &&
-                player.x + player.width > p.x - p.range;
-
-            if (vnutri) {
-                player.dx -= 0.67 * timeScale;
-            }
-
-            if (Math.random() > 0.4) {
-                windParticles.push({
-                    x: p.x - Math.random() * p.range,
-                    y: p.y + Math.random() * p.height,
-                    speed: (Math.random() * 5 + 2) * timeScale,
-                    opacity: Math.random() * 0.5 + 0.5,
-                    direction: 'left',
-                    minX: p.x - p.range
-                });
-            }
+    
+      
+        else if (jeSpomalovacia) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
+            grad.addColorStop(0, '#06080f');
+            grad.addColorStop(1, '#0d1524');
+    
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
+    
+            
+            c.fillStyle = 'rgba(0,0,0,0.25)';
+            c.fillRect(p.x, p.y, p.width, p.height);
         }
+    
+        else if (jeZrychlovacia) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+            grad.addColorStop(0, '#1a4fff');
+            grad.addColorStop(1, '#6fc3ff');
+    
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
+    
+            c.shadowColor = 'rgba(120,200,255,0.45)';
+            c.shadowBlur = 25;
+            c.fillRect(p.x, p.y, p.width, p.height);
+        }
+    
+        c.restore();
     });
+    
+    
 
     c.save();
     windParticles.forEach((part, index) => {
