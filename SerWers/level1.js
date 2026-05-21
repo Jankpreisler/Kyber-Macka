@@ -36,11 +36,28 @@ const macky = {
     dolava: new Image(),
     doprava: new Image(),
     plazeniedoprava: new Image(),
+
+    pohyb1: new Image(),
+    pohyb2: new Image(),
+    pohyb3: new Image(),
+
+    pohybBack1: new Image(),
+    pohybBack2: new Image(),
+    pohybBack3: new Image(),
 };
 
 macky.dolava.src = 'asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = 'asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = 'asseti/Plaziaca macka.png';
+
+macky.pohyb1.src = 'asseti/pohyb_dopredu_1.png';
+macky.pohyb2.src = 'asseti/pohyb_dopredu_2.png';
+macky.pohyb3.src = 'asseti/pohyb_dopredu_3.png';
+
+macky.pohybBack1.src = 'asseti/pohyb_dozadu_1.png';
+macky.pohybBack2.src = 'asseti/pohyb_dozadu_2.png';
+macky.pohybBack3.src = 'asseti/pohyb_dozadu_3.png';
+
 
 const keys = { right: false, left: false };
 
@@ -81,6 +98,35 @@ function ziskajAktualnuTexturu() {
     // Ak sa pozerá doprava, vráť obrázok 'doprava'
     return (player.direction === 'doprava') ? macky.dolava : macky.doprava;
 }
+
+let frameIndex = 0;
+let frameTimer = 0;
+
+function ziskajPohybovuTexturu() {
+    const frames = [macky.pohyb1, macky.pohyb2, macky.pohyb3];
+    frameTimer++;
+    if (frameTimer > 10) { // každých 10 cyklov sa zmení frame
+        frameIndex = (frameIndex + 1) % frames.length;
+        frameTimer = 0;
+    }
+    return frames[frameIndex];
+}
+
+let frameIndexBack = 0;
+let frameTimerBack = 0;
+
+function ziskajPohybovuTexturuDozadu() {
+    const frames = [macky.pohybBack1, macky.pohybBack2, macky.pohybBack3];
+    frameTimerBack++;
+    if (frameTimerBack > 10) { 
+        frameIndexBack = (frameIndexBack + 1) % frames.length;
+        frameTimerBack = 0;
+    }
+    return frames[frameIndexBack];
+}
+
+
+
 function mozeSaPostavit() {
     const buducaVyska = 50;
     const buduceY = player.y - 25; // Simulujeme posun hlavy hore
@@ -315,22 +361,42 @@ function animovanie() {
         window.location.href = "SerWers/Level2/level2.html";
     }
 
-  // 6. Vykreslenie postavy
-  const aktImg = ziskajAktualnuTexturu();
-    
-  if (aktImg && aktImg.complete && aktImg.naturalWidth !== 0) {
-      if (player.height === 25) {
-          // PLAZENIE: 
-          // Namiesto 50x25 ju vykreslíme napr. 90x30
-          c.drawImage(aktImg, player.x - 20, player.y - 5, 100, 40);
-      } else {
-          // STÁTIE: Klasických 50x50
-          c.drawImage(aktImg, player.x, player.y, player.width, player.height);
-      }
-  } else {
-      c.fillStyle = 'red';
-      c.fillRect(player.x, player.y, player.width, player.height);
-  }
+ // 6. Vykreslenie postavy
+let aktImg;
+
+if (keys.right) {
+    // pohyb dopredu
+    aktImg = ziskajPohybovuTexturu();
+    player.direction = 'doprava';
+}
+else if (keys.left) {
+    // pohyb dozadu
+    aktImg = ziskajPohybovuTexturuDozadu();
+    player.direction = 'dolava';
+}
+else {
+  
+    aktImg = (player.direction === 'doprava')
+        ? macky.pohyb1
+        : macky.pohybBack1;
+}
+
+if (aktImg && aktImg.complete && aktImg.naturalWidth !== 0) {
+    if (player.height === 25) {
+     
+        c.drawImage(aktImg, player.x - 20, player.y - 5, 100, 40);
+    } else {
+   
+        c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+    }
+} else {
+
+    c.fillStyle = 'red';
+    c.fillRect(player.x, player.y, player.width, player.height);
+}
+
+  
+
 }
 
 animovanie();
