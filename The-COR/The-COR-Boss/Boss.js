@@ -32,12 +32,12 @@ const platforms = [
     { x: 7500, y: 1200, width: 1050, height: 230, color: '#333', type: 'pipe_h' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
     { x: 6300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "faza" }, //1 skok
-    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "faza" }, //1 skok
-    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "faza" }, //1 skok
+    { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "fazau" }, //1 skok
+    { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "fazao" }, //1 skok
     { x: 0, y: 1100, width: 3550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
     { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
     { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-    { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v', id:"stenazacorom", visible:true },
+    { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v', id: "stenazacorom", visible: true },
     { x: 0, y: 200, width: 3200, height: 150, color: '#333', type: 'pipe_h' },
 ];
 
@@ -389,23 +389,23 @@ window.addEventListener('keydown', (e) => {
 
             resetPlayer()
         }
-        
+
     }
     if (e.key.toLowerCase() === 'e' && GoodEnding.canInteract) {
         if (!GoodEnding.isTalking) {
             GoodEnding.isTalking = true;
             window.location.href = "/Endingy/Goodending/good.html";
-            
+
         }
     }
-     if (e.key.toLowerCase() === 'e' && BadEnding.canInteract) {
+    if (e.key.toLowerCase() === 'e' && BadEnding.canInteract) {
         if (!BadEnding.isTalking) {
             BadEnding.isTalking = true;
             window.location.href = "/Endingy/Badending/bad.html";
-            
+
         }
     }
-    
+
 
     if (zadavac.jeprinom && !zadavac.jeodomknuty) {
         if (e.key >= '0' && e.key <= '9' && zadavac.kodzadany.length < 5) {
@@ -430,19 +430,19 @@ canvas.addEventListener('click', (e) => {
             Donatelo.isTalking = true;
             boss.jeAktivny = true
             resetPlayer()
-        } 
+        }
     }
     if (GoodEnding.canInteract) {
         if (!GoodEnding.isTalking) {
             GoodEnding.isTalking = true;
             window.location.href = "/Endingy/Goodending/good.html";
-        } 
+        }
     }
     if (BadEnding.canInteract) {
         if (!BadEnding.isTalking) {
             BadEnding.isTalking = true;
             window.location.href = "/Endingy/Badending/bad.html";
-        } 
+        }
     }
 });
 
@@ -550,19 +550,19 @@ function updateBoss() {
             if (boss.isOverheated) {
                 boss.hp--;
                 boss.vlna++;
-                
-                if (boss.vlna < 3 || boss.vlna === 3){
+
+                if (boss.vlna < 3 || boss.vlna === 3) {
                     resetPlayer();
                 }
-                
 
-                if(boss.vlna === 4){
+
+                if (boss.vlna === 4) {
                     console.log("asd");
                     nastavViditelnost("faza", true)
                     nastavViditelnost("stenazacorom", false)
                     pobosssovz();
                 }
-            
+
                 // Ukončenie prehriatia a reset časovačov pre novú fázu
                 boss.isOverheated = false;
                 boss.timerFazy = 0;
@@ -571,7 +571,7 @@ function updateBoss() {
                 // Reset pozície pre istotu
                 boss.x = bossSpawnX;
                 boss.y = bossSpawnY;
-               
+
 
                 if (boss.hp <= 0) {
                     boss.jeAktivny = false; // Definitívna smrť bossa
@@ -604,7 +604,9 @@ function updateBoss() {
         if (boss.vlna === 2) {
             boss.timerUtoku += 1 * timeScale;
             nastavViditelnost("faza", false);
-           boss.jeAktivny = true;
+            nastavViditelnost("fazao", false);
+            nastavViditelnost("fazau", false);
+            boss.jeAktivny = true;
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
                 for (let i = 0; i < 25; i++) {
@@ -624,6 +626,8 @@ function updateBoss() {
         if (boss.vlna === 3) {
             boss.timerUtoku += 1 * timeScale;
             nastavViditelnost("faza", false);
+            nastavViditelnost("fazao", false);
+            nastavViditelnost("fazau", false);
             boss.jeAktivny = true;
             if (boss.timerUtoku > 120) {
                 docasnePlosinky = [];
@@ -1122,7 +1126,7 @@ function animovanie() {
         c.fillText("Stlac E na aktivaciu Boss-a", player.x + 20, player.y - 20);
     }
 
-        // nefunkcne viacere npc
+    // nefunkcne viacere npc
     if (macky.good.complete && macky.good.naturalWidth !== 0) {
         c.drawImage(macky.good, GoodEnding.x, GoodEnding.y, GoodEnding.width, GoodEnding.height);
     } else {
@@ -1156,7 +1160,7 @@ function animovanie() {
         c.fillText("Opustit The Cot", player.x + 20, player.y - 20);
     }
 
-    
+
     function vykonajAkciu(id) {
         const btn = platforms.find(p => p.id === id);
         if (btn) btn.isPressed = true;
@@ -1209,7 +1213,7 @@ function animovanie() {
         const barY = 20;
         const barWidth = 250;
         const barHeight = 30;
-        
+
 
         c.fillStyle = 'rgba(20, 20, 20, 0.8)';
         c.beginPath();
