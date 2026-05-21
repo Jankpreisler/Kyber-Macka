@@ -187,6 +187,7 @@ let player = {
     chceSaPostavit: false,
     dashspeed: 35,
     isRaging: false,
+    direction: "doprava"
 };
 
 // --- ATMOSFÉRA ---
@@ -374,12 +375,12 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         if (player.isdashing == true) return;
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+      
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+
     }
 
     if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
@@ -390,7 +391,7 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
+   
     }
     if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
@@ -430,7 +431,7 @@ window.addEventListener('keyup', (e) => {
                 player.height = 50;
                 player.y -= 25;
                 player.chceSaPostavit = false;
-                actualnaakciacici = macky.doprava;
+            
             } else {
                 player.chceSaPostavit = true;
             }
@@ -455,7 +456,7 @@ function resetPlayer() {
     player.dy = 0;
     player.height = 50;
     player.chceSaPostavit = false;
-    actualnaakciacici = macky.dolava;
+
 
     enemies.forEach(e => {
         e.alive = true;
@@ -826,7 +827,7 @@ DashTrail.updateRageAura(player.isRaging, player);
             player.height = 50;
             player.y -= 25;
             player.chceSaPostavit = false;
-            actualnaakciacici = macky.doprava;
+
         }
     }
 
@@ -853,12 +854,9 @@ DashTrail.drawDeath(c);
 DashTrail.drawRageAura(c); 
 
     // 6. Vykreslenie postavy
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+    let aktImg = ziskajAnimaciu(player, keys);
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+    
 
     c.restore();
 

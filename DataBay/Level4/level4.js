@@ -163,6 +163,7 @@ let player = {
       jeNezranitelny: false,
       casNezranitelnosti: 0,
       isDead: false,
+      direction: "doprava"
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -301,12 +302,12 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         if (player.isdashing == true) return;
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+
     }
 
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
@@ -330,7 +331,8 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
+
+        
     }
     if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
@@ -418,7 +420,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.doprava;
+            
             } else {
                 player.chceSaPostavit = true;
             }
@@ -447,7 +449,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-    actualnaakciacici = macky.dolava;
+
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -841,7 +843,7 @@ DashTrail.updateRageAura(player.isRaging, player);
             player.height = 50;
             player.y -= 25;
             player.chceSaPostavit = false;
-            actualnaakciacici = macky.doprava;
+
         }
     }
 
@@ -866,12 +868,9 @@ DashTrail.updateRageAura(player.isRaging, player);
 DashTrail.drawDeath(c);
 DashTrail.drawRageAura(c);
 
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+let aktImg = ziskajAnimaciu(player, keys);
+c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+
 
     c.restore();
 
