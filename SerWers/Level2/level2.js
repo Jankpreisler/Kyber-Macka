@@ -39,14 +39,14 @@ function drawRopes(p) {
 }
 
 const macky = {
-    dolava: new Image(),
     doprava: new Image(),
+    dolava: new Image(),
     plazeniedoprava: new Image(),
 };
 
-macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
-macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png'
+macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
+macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 
 let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
@@ -399,13 +399,16 @@ DashTrail.updateDeath();
     DashTrail.draw(c);
 DashTrail.drawDeath(c);
 
-    // 6. Vykreslenie postavy
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+   // 6. Vykreslenie postavy – NOVÝ SYSTÉM ANIMÁCIÍ
+let aktImg = ziskajAnimaciu(player, keys);
+
+if (aktImg && aktImg.complete && aktImg.naturalWidth !== 0) {
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+} else {
+    c.fillStyle = "red";
+    c.fillRect(player.x, player.y, player.width, player.height);
+}
+
 }
 
 animovanie();

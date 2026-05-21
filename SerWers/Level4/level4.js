@@ -39,19 +39,8 @@ function drawRopes(p) {
     c.stroke();
 }
 
-const macky = {
-    dolava: new Image(),
-    doprava: new Image(),
-    plazeniedoprava: new Image(),
-    npc: new Image(),
-};
 
-macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
-macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
-macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
-macky.npc.src = '../../asseti/Plaziaca macka.png';
 
-let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
@@ -65,7 +54,9 @@ let player = {
     speed: 5,
     jumpForce: 10,
     grounded: false,
-    friction: 0.5
+    friction: 0.5,
+    direction: "doprava",
+
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -204,12 +195,14 @@ function isTouching(a, b) {
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+        player.direction = "doprava";
+
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+        player.direction = "dolava";
+
     }
 
     if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
@@ -220,7 +213,7 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowDown' || e.key === 's'|| e.key === 'S' || e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
+    
     }
      if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
@@ -228,17 +221,6 @@ window.addEventListener('keydown', (e) => {
 
 });
 
-canvas.addEventListener('click', (e) => {
-    if (npc.canInteract) {
-        if (!npc.isTalking) {
-            npc.isTalking = true;
-            npc.currentLine = 0;
-        } else {
-            npc.currentLine++;
-            if (npc.currentLine >= npc.dialogues.length) npc.isTalking = false;
-        }
-    }
-});
 
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
@@ -250,7 +232,6 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.doprava;
             } else {
                 player.chceSaPostavit = true;
             }
@@ -264,7 +245,6 @@ function resetPlayer() {
     player.dx = 0;   
     player.dy = 0;   
     player.height = 50; 
-    actualnaakciacici = macky.dolava;
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -356,8 +336,9 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
-    facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
+    const facingRight = (player.direction === "doprava");
+    DashTrail.update(player, false, facingRight);
+    
 DashTrail.updateDeath();
 
     // 4. Kolízie
@@ -415,7 +396,6 @@ DashTrail.updateDeath();
                 if (mozeSaPostavit()) {
                     player.height = 50;
                     player.y -= 25;
-                    player.actualnaakciacici = macky.doprava;
                     player.chceSaPostavit = false;
                 }
             }
@@ -433,13 +413,15 @@ DashTrail.updateDeath();
 
     DashTrail.draw(c);
 DashTrail.drawDeath(c);
-    // 6. Vykreslenie postavy
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+let aktImg = ziskajAnimaciu(player, keys);
+
+if (aktImg && aktImg.complete && aktImg.naturalWidth !== 0) {
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+} else {
+    c.fillStyle = "red";
+    c.fillRect(player.x, player.y, player.width, player.height);
+}
+
 }
 
 animovanie();
