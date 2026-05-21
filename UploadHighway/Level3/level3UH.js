@@ -131,7 +131,9 @@ let player = {
     maxhp: 100,
     jeNezranitelny: false,
     casNezranitelnosti: 0,
-    isRaging: false,
+    isRaging: false,    
+    direction: "doprava" 
+
 };
 const utocnici = [
     {
@@ -424,13 +426,13 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
         if (player.isdashing) return;
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         if (player.isdashing) return;
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+      
     }
 
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
@@ -459,8 +461,7 @@ window.addEventListener('keydown', (e) => {
         if (player.isdashing == true) return;
         player.height = 25;
         player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
-    }
+        }
 
     if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
         if (player.isdashing == true) return;
@@ -554,7 +555,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.doprava;
+            
             } else {
                 player.chceSaPostavit = true;
             }
@@ -583,7 +584,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-    actualnaakciacici = macky.dolava;
+
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -1078,12 +1079,9 @@ function animovanie() {
 
 
 
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+let aktImg = ziskajAnimaciu(player, keys);
+c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+
 
     c.restore();
 

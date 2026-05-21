@@ -110,7 +110,8 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction: 0.9 // ZMENENÉ pre plynulosť
+    friction: 0.9,
+    direction: "doprava" 
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -301,12 +302,12 @@ function isTouching(a, b) {
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //doprava
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+
     }
 
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { //dolava
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+
     }
 
     if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) { //skok
@@ -319,7 +320,7 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
+
     }
    if (e.key.toLowerCase() === 'e' && RND.canInteract) {
         if (!RND.isTalking) {
@@ -358,7 +359,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.dolava;
+             
             } else {
                 player.chceSaPostavit = true;
             }
@@ -379,7 +380,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-    actualnaakciacici = macky.dolava;
+
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -695,7 +696,7 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
             player.y -= 25;
             player.chceSaPostavit = false;
             // Opravené: priraďujeme k premennej, ktorú používaš na kreslenie
-            actualnaakciacici = macky.doprava;
+           
         }
     }
 
@@ -720,12 +721,9 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
     DashTrail.draw(c);
 DashTrail.drawDeath(c);
     // 6. Vykreslenie postavy
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+    let aktImg = ziskajAnimaciu(player, keys);
+c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+
 
 
     c.restore();

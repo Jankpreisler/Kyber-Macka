@@ -77,6 +77,7 @@ let player = {
     friction: 0.9,
     isdashing: false,
     dashspeed: 35,
+    direction: "doprava"
 };
 damagesystem(player);
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -269,12 +270,12 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') { // doprava
         if (player.isdashing == true) return;
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+      
     }
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') { //dolava
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+      
     }
 
     if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && player.grounded) { //skok
@@ -286,7 +287,7 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
+       
     }
     if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
@@ -316,7 +317,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.doprava;
+            
             } else {
                 player.chceSaPostavit = true;
             }
@@ -342,7 +343,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-    actualnaakciacici = macky.dolava;
+  
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -670,7 +671,7 @@ DashTrail.updateDeath();
             player.y -= 25;
             player.chceSaPostavit = false;
             // Opravené: priraďujeme k premennej, ktorú používaš na kreslenie
-            actualnaakciacici = macky.doprava;
+           
         }
     }
 
@@ -695,12 +696,9 @@ DashTrail.updateDeath();
     DashTrail.draw(c);
 DashTrail.drawDeath(c);
     // 6. Vykreslenie postavy
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+    let aktImg = ziskajAnimaciu(player, keys);
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+    
 
     c.restore();
 

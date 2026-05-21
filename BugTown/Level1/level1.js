@@ -58,7 +58,7 @@ macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca_macka.png';
 
-let actualnaakciacici = macky.dolava;
+let actualnaakciacici = macky.doprava;
 const keys = { right: false, left: false };
 
 // === Hráč ===
@@ -72,7 +72,9 @@ let player = {
     speed: 4,
     jumpForce: 10,
     grounded: false,
-    friction:  0.9
+    friction:  0.9,
+    direction: "doprava" 
+
 };
 
 let time = 0;
@@ -261,12 +263,12 @@ function isTouching(a, b) {
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') { // doprava
         keys.right = true;
-        actualnaakciacici = macky.dolava;
+    
     }
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') { //dolava
         keys.left = true;
-        actualnaakciacici = macky.doprava;
+       
     }
 
     if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && player.grounded) { //skok
@@ -278,7 +280,7 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
-        actualnaakciacici = macky.plazeniedoprava;
+   
     }
     if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
@@ -294,7 +296,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-                actualnaakciacici = macky.doprava;
+ 
             } else {
                 player.chceSaPostavit = true;
             }
@@ -316,7 +318,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-    actualnaakciacici = macky.dolava;
+
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -593,7 +595,7 @@ DashTrail.updateDeath();
             player.height = 50;
             player.y -= 25;
             player.chceSaPostavit = false;
-            actualnaakciacici = macky.doprava;
+    
         }
     }
 
@@ -621,12 +623,9 @@ DashTrail.updateDeath();
 DashTrail.drawDeath(c);
 
     // === Postava ===
-    if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
-        c.drawImage(actualnaakciacici, player.x, player.y, player.width, player.height);
-    } else {
-        c.fillStyle = 'red';
-        c.fillRect(player.x, player.y, player.width, player.height);
-    }
+    let aktImg = ziskajAnimaciu(player, keys);
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+    
 
     c.restore();
 }
