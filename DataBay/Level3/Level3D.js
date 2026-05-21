@@ -117,12 +117,14 @@ const macky = {
     doprava: new Image(),
     plazeniedoprava: new Image(),
     npc: new Image(),
+    lozenie: new Image(),
 };
 
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 macky.npc.src = '../../asseti/rokwel.png';
+macky.lozenie.src = '../../asseti/cyber-cat main cahrakter - zlava otoceny.png'
 
 let actualnaakciacici = macky.dolava;
 
@@ -509,7 +511,9 @@ window.addEventListener('keydown', (e) => {
 
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
+        
     }
+
     if (e.key.toLowerCase() === 'e' && Mikey.canInteract) {
         if (!Mikey.isTalking) {
             Mikey.isTalking = true;
