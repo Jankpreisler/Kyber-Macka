@@ -31,9 +31,9 @@ const platforms = [
     { x: 0, y: 2900, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
     { x: 0, y: 1900, width: 750, height: 2000, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
-    { x: 850, y: 1900, width: 750, height: 50, color: '#333', type: 'pipe_h', id:"nakocku" },
+    { x: 850, y: 1900, width: 750, height: 50, color: '#333', type: 'pipe_h', id: "nakocku" },
     { x: 1500, y: 1700, width: 250, height: 50, color: '#333', type: 'pipe_h' },
-    
+
     { x: 1500, y: 1700, width: 250, height: 50, color: '#333', type: 'pipe_h' },
     { x: 1800, y: 1700, width: 550, height: 50, color: '#333', type: 'asd' },
     { x: 2500, y: 1600, width: 250, height: 50, color: '#333', type: 'asd' },
@@ -43,12 +43,12 @@ const platforms = [
     { x: 2700, y: 1300, width: 250, height: 50, color: '#333', type: 'pipe_h' },
     { x: 2700, y: 1300, width: 250, height: 50, color: '#333', type: 'asd' },
     { x: 2200, y: 1200, width: 250, height: 50, color: '#333', type: 'pipe_h' },
-    {x: 1700, y: 1100, width: 250, height: 50, color: '#333', type: 'asd' },
-     {x: 1200, y: 1000, width: 250, height: 50, color: '#333', type: 'pipe_h' },
-      {x: 0, y: 1000, width: 1000, height: 50, color: '#333', type: 'asd' },
-   
-   
-    
+    { x: 1700, y: 1100, width: 250, height: 50, color: '#333', type: 'asd' },
+    { x: 1200, y: 1000, width: 250, height: 50, color: '#333', type: 'pipe_h' },
+    { x: 0, y: 1000, width: 1000, height: 50, color: '#333', type: 'asd' },
+
+
+
 ];
 
 const boxy = [
@@ -135,7 +135,7 @@ const brickPattern = getBrickPattern();
 function drawRealPipe(p, isVertical) {
     c.save();
     // Farba dreva (naplavené drevo - Driftwood)
-    let grad = isVertical 
+    let grad = isVertical
         ? c.createLinearGradient(p.x, p.y, p.x + p.width, p.y)
         : c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
 
@@ -181,7 +181,7 @@ function drawFog() {
 
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)'); 
+        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)');
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
@@ -275,7 +275,7 @@ window.addEventListener('keydown', (e) => {
         else smer = (actualnaakciacici === macky.dolava) ? 1 : -1;
         player.dx = smer * player.dashspeed;
     }
-     if (e.key === 'r' || e.key === 'R') {
+    if (e.key === 'r' || e.key === 'R') {
         if (mana > 20 && !player.isNahnevany) {
             player.isRaging = true;
         } else {
@@ -302,7 +302,7 @@ window.addEventListener('keyup', (e) => {
     }
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
     if (e.key === 'R' || e.key === 'r') {
         player.isRaging = false;
@@ -410,8 +410,7 @@ function animovanie() {
             }
         }
     });
-    if (player.isRaging)
-    {
+    if (player.isRaging) {
         maximalnaMana -= 0.1;
         mana -= 0.1;
 
@@ -428,7 +427,7 @@ function animovanie() {
     }
 
     // 3. Pohyb a fyzik
-   if (!player.isdashing) {
+    if (!player.isdashing) {
         if (keys.right) player.dx += 0.8;
         else if (keys.left) player.dx -= 0.8;
     }
@@ -452,9 +451,9 @@ function animovanie() {
     player.grounded = false;
 
     facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateDeath();
-DashTrail.updateRageAura(player.isRaging, player); 
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateDeath();
+    DashTrail.updateRageAura(player.isRaging, player);
 
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
@@ -573,24 +572,24 @@ DashTrail.updateRageAura(player.isRaging, player);
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-          if (platform.type === 'floor') {
+            if (platform.type === 'floor') {
 
-    // === DEATH ANIMATION ===
-    DashTrail.triggerDeath(player);
+                // === DEATH ANIMATION ===
+                DashTrail.triggerDeath(player);
 
-    player.width = 0;
-    player.height = 0;
-    player.dx = 0;
-    player.dy = 0;
+                player.width = 0;
+                player.height = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 350);
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 350);
 
-    return;
-}
+                return;
+            }
 
 
             // dopad zhora
@@ -631,7 +630,7 @@ DashTrail.updateRageAura(player.isRaging, player);
     });
 
     boxy.forEach(box => {
-       
+
         box.dy += gravitacia;
         box.y += box.dy;
         box.x += box.dx;
@@ -660,20 +659,20 @@ DashTrail.updateRageAura(player.isRaging, player);
 
             if (stredKockyX > jamka.x && stredKockyX < jamka.x + jamka.width) {
                 if (box.y + box.height >= jamka.y) {
-        
+
                     jamka.aktivna = true;
                 }
             }
 
             if (jamka.aktivna) {
-                nastavViditelnost('nakocku', true); 
+                nastavViditelnost('nakocku', true);
             }
-            else{
+            else {
                 nastavViditelnost('nakocku', false);
             }
         });
 
-       
+
         c.fillStyle = '#050505';
         c.fillRect(jamka.x, jamka.y, jamka.width, jamka.height);
 
@@ -746,8 +745,8 @@ DashTrail.updateRageAura(player.isRaging, player);
     }
 
     DashTrail.draw(c);
-DashTrail.drawDeath(c);
-DashTrail.drawRageAura(c); 
+    DashTrail.drawDeath(c);
+    DashTrail.drawRageAura(c);
 
 
     // 6. Vykreslenie postavy

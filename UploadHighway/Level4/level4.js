@@ -154,7 +154,8 @@ let player = {
     maxhp: 100,
     jeNezranitelny: false,
     casNezranitelnosti: 0,
-    direction: "doprava"
+    isRaging: false, 
+       direction: "doprava"
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---

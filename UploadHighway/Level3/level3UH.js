@@ -131,9 +131,135 @@ let player = {
     maxhp: 100,
     jeNezranitelny: false,
     casNezranitelnosti: 0,
+    isRaging: false,    
     direction: "doprava" 
 
 };
+const utocnici = [
+    {
+        x: 1150,
+        y: 650,
+        width: 50,
+        height: 50,
+        startX: 3000,
+        range: 300,
+        speed: 2,
+        direction: 1,
+        detectionRange: 250,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
+    {
+        x: 1250,
+        y: 650,
+        width: 50,
+        height: 50,
+        startX: 3000,
+        range: 200,
+        speed: 2.5,
+        direction: -1,
+        detectionRange: 300,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
+
+];
+
+function aktualizujUtocnikov() {
+    utocnici.forEach(en => {
+        if (en.isDead) return;
+
+        let vzdialenostOdHraca = Math.sqrt((player.x - en.x) ** 2 + (player.y - en.y) ** 2);
+
+        if (vzdialenostOdHraca < en.detectionRange) {
+            en.isHostile = true;
+
+            if (en.x < player.x) {
+                en.x += en.speed * 1.5;
+                en.direction = 1;
+            } else if (en.x > player.x) {
+                en.x -= en.speed * 1.5;
+                en.direction = -1;
+            }
+        } else {
+            en.isHostile = false;
+            en.x += en.speed * en.direction;
+            if (en.x > en.startX + en.range || en.x < en.startX) {
+                en.direction *= -1;
+            }
+        }
+
+        if (
+            player.x < en.x + en.width &&
+            player.x + player.width > en.x &&
+            player.y < en.y + en.height &&
+            player.y + player.height > en.y
+        ) {
+            const playerPadal = player.dy > 0;
+            const jeZhora =
+                player.y + player.height - player.dy <= en.y + 10;
+
+            if (playerPadal && jeZhora) {
+                en.hp -= 50;
+                player.dy = -8;
+                player.grounded = false;
+
+                // smrť enemyho
+                if (en.hp <= 0) {
+                    en.isDead = true;
+                    DashTrail.triggerDeath(player);
+                }
+
+                return;
+            }
+            if (!player.jeNezranitelny && !player.isRaging) {
+                player.jeNezranitelny = true;
+                player.casNezranitelnosti = 60;
+                Damageudelovator.uberHP(
+                    player,
+                    en.damage,
+                    resetPlayer,
+                    DashTrail.triggerDeath(player)
+                );
+            }
+            if (player.isRaging && isTouching(player, en)) {
+                en.isDead = true;
+                player.dx *= -0.4;
+                return;
+            }
+        }
+
+    });
+}
+function vykresliUtocnikov() {
+    utocnici.forEach(en => {
+        if (en.isDead) return;
+
+        // Vykreslenie vizuálneho okruhu detekcie (voliteľné, super pre debug a sci-fi atmosféru)
+        c.save();
+        c.strokeStyle = en.isHostile ? 'rgba(255, 0, 85, 0.3)' : 'rgba(0, 255, 255, 0.08)';
+        c.lineWidth = 2;
+        c.beginPath();
+        c.arc(en.x + en.width / 2, en.y + en.height / 2, en.detectionRange, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+
+        // Vykreslenie samotného nepriateľa (obrázok alebo fillRect)
+        if (macky.enemy && macky.enemy.complete && macky.enemy.naturalWidth !== 0) {
+            c.drawImage(macky.enemy, en.x, en.y, en.width, en.height);
+        } else {
+            // Ak nemáš asset, vykreslí sa pekne svietiaci obdĺžnik podľa stavu
+            c.fillStyle = en.isHostile ? '#ff0055' : '#8800aa';
+            c.fillRect(en.x, en.y, en.width, en.height);
+        }
+    });
+}
 
 let time = 0;
 let fogParticles = [];
@@ -199,7 +325,7 @@ function drawStyledButton(btn, isHovered = false, isPressed = false) {
     c.save();
 
     if (isPressed) {
-        c.fillStyle = '#0d1bff'; 
+        c.fillStyle = '#0d1bff';
     } else {
         c.fillStyle = isHovered ? '#1a1d24' : '#0d0f12';
     }
@@ -298,41 +424,41 @@ function isTouchingWall(a, b) {
 
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-        if (player.isdashing ) return;
+        if (player.isdashing) return;
         keys.right = true;
 
     }
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-         if (player.isdashing) return;
+        if (player.isdashing) return;
         keys.left = true;
       
     }
 
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
-         if (player.isdashing == true) return;
+        if (player.isdashing == true) return;
         keys.up = true;
     }
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
-         if (player.isdashing == true) return;
+        if (player.isdashing == true) return;
         keys.down = true;
     }
 
     if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
-         if (player.isdashing == true) return;
+        if (player.isdashing == true) return;
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
 
     if ((e.code === 'Backspace') && player.grounded) {
-         if (player.isdashing == true) return;
+        if (player.isdashing == true) return;
         player.dy = -player.jumpForce;
         player.grounded = false;
     }
 
     if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) {
-         if (player.isdashing == true) return;
+        if (player.isdashing == true) return;
         player.height = 25;
         player.grounded = false;
         }
@@ -361,7 +487,7 @@ window.addEventListener('keydown', (e) => {
             keys.u = true;
         }
     }
-     if ((e.key === 'Tab' || e.code === 'Tab')) {
+    if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
     }
     if (e.key === 'r' || e.key === 'R') {
@@ -438,7 +564,7 @@ window.addEventListener('keyup', (e) => {
 
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
     if (e.key === 'R' || e.key === 'r') {
         player.isRaging = false;
@@ -467,46 +593,46 @@ function animovanie() {
     time += 0.01;
 
     c.clearRect(0, 0, canvas.width, canvas.height);
-let bg = c.createLinearGradient(0, 0, 0, canvas.height);
-bg.addColorStop(0, '#0a0d14');
-bg.addColorStop(1, '#0f1622');
+    let bg = c.createLinearGradient(0, 0, 0, canvas.height);
+    bg.addColorStop(0, '#0a0d14');
+    bg.addColorStop(1, '#0f1622');
 
-c.fillStyle = bg;
-c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillStyle = bg;
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
-let glow = c.createRadialGradient(
-    canvas.width / 2, canvas.height / 3, 50,
-    canvas.width / 2, canvas.height / 3, 600
-);
-glow.addColorStop(0, 'rgba(80,120,200,0.15)');
-glow.addColorStop(1, 'transparent');
+    let glow = c.createRadialGradient(
+        canvas.width / 2, canvas.height / 3, 50,
+        canvas.width / 2, canvas.height / 3, 600
+    );
+    glow.addColorStop(0, 'rgba(80,120,200,0.15)');
+    glow.addColorStop(1, 'transparent');
 
-c.fillStyle = glow;
-c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillStyle = glow;
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
-c.save();
-c.globalCompositeOperation = 'screen';
-fogParticles.forEach(p => {
-    let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-    fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
-    fogGrad.addColorStop(1, 'transparent');
+    c.save();
+    c.globalCompositeOperation = 'screen';
+    fogParticles.forEach(p => {
+        let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
+        fogGrad.addColorStop(1, 'transparent');
 
-    c.fillStyle = fogGrad;
-    c.beginPath();
-    c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    c.fill();
+        c.fillStyle = fogGrad;
+        c.beginPath();
+        c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        c.fill();
 
-    p.x += Math.sin(time + p.r) * 0.15;
-});
-c.restore();
+        p.x += Math.sin(time + p.r) * 0.15;
+    });
+    c.restore();
 
 
     c.save();
     c.translate(-Karera.x, 0 - Karera.y);
 
- 
 
-    
+
+
 
     if (keys.u && abilityUnlocked && mana > 0) {
         timeScale = 0.3;
@@ -517,11 +643,11 @@ c.restore();
             mana += 0.1;
         }
         else if (player.isRaging) {
-        maximalnaMana -= 0.5;
-        mana -= 0.5;
+            maximalnaMana -= 0.5;
+            mana -= 0.5;
         }
     }
-    
+
 
     if (mana <= 0) {
         keys.u = false;
@@ -529,82 +655,82 @@ c.restore();
     }
 
 
-platforms.forEach(p => {
-    if (p.visible === false) return;
-// === TRIGGER BUTTON ===
-if (p.type === 'trigger') {
-    drawStyledButton(p, false, p.isPressed);
-    return;
-}
+    platforms.forEach(p => {
+        if (p.visible === false) return;
+        // === TRIGGER BUTTON ===
+        if (p.type === 'trigger') {
+            drawStyledButton(p, false, p.isPressed);
+            return;
+        }
 
-const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
-const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
-const jeNormalna = p.friction === undefined;
+        const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
+        const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
+        const jeNormalna = p.friction === undefined;
 
-c.save();
+        c.save();
 
-// NORMALNA PLATFORMA
-if (jeNormalna) {
-    let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
-    grad.addColorStop(0, '#0b1220');
-    grad.addColorStop(1, '#132544');
+        // NORMALNA PLATFORMA
+        if (jeNormalna) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
+            grad.addColorStop(0, '#0b1220');
+            grad.addColorStop(1, '#132544');
 
-    c.fillStyle = grad;
-    c.fillRect(p.x, p.y, p.width, p.height);
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
 
-    c.shadowColor = 'rgba(80,150,255,0.35)';
-    c.shadowBlur = 18;
-    c.fillRect(p.x, p.y, p.width, p.height);
-}
+            c.shadowColor = 'rgba(80,150,255,0.35)';
+            c.shadowBlur = 18;
+            c.fillRect(p.x, p.y, p.width, p.height);
+        }
 
-// SPOMALOVACIA
-else if (jeSpomalovacia) {
-    let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
-    grad.addColorStop(0, '#06080f');
-    grad.addColorStop(1, '#0d1524');
+        // SPOMALOVACIA
+        else if (jeSpomalovacia) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
+            grad.addColorStop(0, '#06080f');
+            grad.addColorStop(1, '#0d1524');
 
-    c.fillStyle = grad;
-    c.fillRect(p.x, p.y, p.width, p.height);
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
 
-    c.fillStyle = 'rgba(0,0,0,0.25)';
-    c.fillRect(p.x, p.y, p.width, p.height);
-}
+            c.fillStyle = 'rgba(0,0,0,0.25)';
+            c.fillRect(p.x, p.y, p.width, p.height);
+        }
 
-// ZRYCHLOVACIA
-else if (jeZrychlovacia) {
+        // ZRYCHLOVACIA
+        else if (jeZrychlovacia) {
 
-    let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
-    grad.addColorStop(0, '#1a4fff');   
-    grad.addColorStop(1, '#6fc3ff');   
+            let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+            grad.addColorStop(0, '#1a4fff');
+            grad.addColorStop(1, '#6fc3ff');
 
-    c.fillStyle = grad;
-    c.fillRect(p.x, p.y, p.width, p.height);
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
 
-    c.shadowColor = 'rgba(120,200,255,0.75)';
-    c.shadowBlur = 35;
-    c.fillRect(p.x, p.y, p.width, p.height);
+            c.shadowColor = 'rgba(120,200,255,0.75)';
+            c.shadowBlur = 35;
+            c.fillRect(p.x, p.y, p.width, p.height);
 
-    c.shadowBlur = 0;
-    c.strokeStyle = 'rgba(200,230,255,0.35)';
-    c.lineWidth = 3;
+            c.shadowBlur = 0;
+            c.strokeStyle = 'rgba(200,230,255,0.35)';
+            c.lineWidth = 3;
 
-    for (let i = p.x + 10; i < p.x + p.width - 10; i += 25) {
-        c.beginPath();
-        c.moveTo(i, p.y + 5);
-        c.lineTo(i + 10, p.y + p.height - 5);
-        c.stroke();
-    }
+            for (let i = p.x + 10; i < p.x + p.width - 10; i += 25) {
+                c.beginPath();
+                c.moveTo(i, p.y + 5);
+                c.lineTo(i + 10, p.y + p.height - 5);
+                c.stroke();
+            }
 
-    c.strokeStyle = 'rgba(150,200,255,0.8)';
-    c.lineWidth = 4;
-    c.strokeRect(p.x, p.y, p.width, p.height);
-}
+            c.strokeStyle = 'rgba(150,200,255,0.8)';
+            c.lineWidth = 4;
+            c.strokeRect(p.x, p.y, p.width, p.height);
+        }
 
 
-c.restore();
+        c.restore();
 
-    
-});
+
+    });
 
 
 
@@ -685,9 +811,9 @@ c.restore();
     player.grounded = false;
 
     const facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateDeath();
-DashTrail.updateRageAura(player.isRaging, player);
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateDeath();
+    DashTrail.updateRageAura(player.isRaging, player);
 
 
 
@@ -785,23 +911,23 @@ DashTrail.updateRageAura(player.isRaging, player);
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-         if (platform.type === 'floor') {
+            if (platform.type === 'floor') {
 
-    DashTrail.triggerDeath(player);
+                DashTrail.triggerDeath(player);
 
-    player.width = 0;
-    player.height = 0;
-    player.dx = 0;
-    player.dy = 0;
+                player.width = 0;
+                player.height = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 350);
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 350);
 
-    return;
-}
+                return;
+            }
 
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
@@ -935,7 +1061,7 @@ DashTrail.updateRageAura(player.isRaging, player);
     }
 
     if (isTouching(player, exitZone)) {
-         if (typeof ProgresManazer !== 'undefined') {
+        if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(19);
         }
 
@@ -943,8 +1069,13 @@ DashTrail.updateRageAura(player.isRaging, player);
     }
 
     DashTrail.draw(c);
-DashTrail.drawDeath(c);
-DashTrail.drawRageAura(c);
+    DashTrail.drawDeath(c);
+    DashTrail.drawRageAura(c);
+
+    aktualizujUtocnikov();
+    vykresliUtocnikov();
+
+    Damageudelovator.aktualizujNezranitelnost(player);
 
 
 

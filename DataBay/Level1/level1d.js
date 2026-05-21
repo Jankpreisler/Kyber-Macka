@@ -114,7 +114,6 @@ let player = {
     jeNezranitelny: false,
     casNezranitelnosti: 0,
     isDead: false,
-    direction: "doprava"
    
 };
 
@@ -204,8 +203,6 @@ function aktualizujUtocnikov() {
         } else {
             en.isHostile = false;
             en.x += en.speed * en.direction;
-
-            // Ak prejde za hranicu hliadky (zľava alebo zprava), otočí sa
             if (en.x > en.startX + en.range || en.x < en.startX) {
                 en.direction *= -1;
             }
@@ -234,11 +231,9 @@ function aktualizujUtocnikov() {
                 
                 return;
             }
-            if (!player.jeNezranitelny) {
-
+            if (!player.jeNezranitelny && !player.isRaging) {
                 player.jeNezranitelny = true;
                 player.casNezranitelnosti = 60;
-
                 Damageudelovator.uberHP(
                     player,
                     en.damage,
@@ -246,7 +241,13 @@ function aktualizujUtocnikov() {
                     DashTrail.triggerDeath(player)
                 );
             }
+            if (player.isRaging && isTouching(player, en)) {
+                en.isDead = true;
+                player.dx *= -0.4; 
+                return; 
+            }
         }
+       
     });
 }
 function vykresliUtocnikov() {

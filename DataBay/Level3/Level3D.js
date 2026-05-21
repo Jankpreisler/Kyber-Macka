@@ -157,6 +157,162 @@ let player = {
       isDead: false,
       direction: "doprava" 
 };
+const utocnici = [
+    {
+        x: 2700,
+        y: 1850,
+        width: 50,
+        height: 50,
+        startX: 3000,
+        range: 300,
+        speed: 2,
+        direction: 1,
+        detectionRange: 250,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
+    {
+        x: 2900,
+        y: 1850,
+        width: 50,
+        height: 50,
+        startX: 3000,
+        range: 200,
+        speed: 2.5,
+        direction: -1,
+        detectionRange: 300,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
+    {
+        x: 2850,
+        y: 1850,
+        width: 50,
+        height: 50,
+        startX: 3000,
+        range: 200,
+        speed: 2.5,
+        direction: -1,
+        detectionRange: 300,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
+    {
+        x: 2750,
+        y: 1850,
+        width: 50,
+        height: 50,
+        startX: 3500,
+        range: 200,
+        speed: 2.5,
+        direction: -1,
+        detectionRange: 300,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
+];
+
+function aktualizujUtocnikov() {
+    utocnici.forEach(en => {
+        if (en.isDead) return;
+
+        let vzdialenostOdHraca = Math.sqrt((player.x - en.x) ** 2 + (player.y - en.y) ** 2);
+
+        if (vzdialenostOdHraca < en.detectionRange) {
+            en.isHostile = true;
+
+            if (en.x < player.x) {
+                en.x += en.speed * 1.5;
+                en.direction = 1;
+            } else if (en.x > player.x) {
+                en.x -= en.speed * 1.5;
+                en.direction = -1;
+            }
+        } else {
+            en.isHostile = false;
+            en.x += en.speed * en.direction;
+            if (en.x > en.startX + en.range || en.x < en.startX) {
+                en.direction *= -1;
+            }
+        }
+
+        if (
+            player.x < en.x + en.width &&
+            player.x + player.width > en.x &&
+            player.y < en.y + en.height &&
+            player.y + player.height > en.y
+        ) {
+            const playerPadal = player.dy > 0;
+            const jeZhora =
+                player.y + player.height - player.dy <= en.y + 10;
+
+            if (playerPadal && jeZhora) {
+                en.hp -= 50;
+                player.dy = -8;
+                player.grounded = false;
+
+                // smrť enemyho
+                if (en.hp <= 0) {
+                    en.isDead = true;
+                    DashTrail.triggerDeath(player);
+                }
+                
+                return;
+            }
+            if (!player.jeNezranitelny && !player.isRaging) {
+                player.jeNezranitelny = true;
+                player.casNezranitelnosti = 60;
+                Damageudelovator.uberHP(
+                    player,
+                    en.damage,
+                    resetPlayer,
+                    DashTrail.triggerDeath(player)
+                );
+            }
+            if (player.isRaging && isTouching(player, en)) {
+                en.isDead = true;
+                player.dx *= -0.4; 
+                return; 
+            }
+        }
+       
+    });
+}
+function vykresliUtocnikov() {
+    utocnici.forEach(en => {
+        if (en.isDead) return;
+
+        // Vykreslenie vizuálneho okruhu detekcie (voliteľné, super pre debug a sci-fi atmosféru)
+        c.save();
+        c.strokeStyle = en.isHostile ? 'rgba(255, 0, 85, 0.3)' : 'rgba(0, 255, 255, 0.08)';
+        c.lineWidth = 2;
+        c.beginPath();
+        c.arc(en.x + en.width / 2, en.y + en.height / 2, en.detectionRange, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+
+        // Vykreslenie samotného nepriateľa (obrázok alebo fillRect)
+        if (macky.enemy && macky.enemy.complete && macky.enemy.naturalWidth !== 0) {
+            c.drawImage(macky.enemy, en.x, en.y, en.width, en.height);
+        } else {
+            // Ak nemáš asset, vykreslí sa pekne svietiaci obdĺžnik podľa stavu
+            c.fillStyle = en.isHostile ? '#ff0055' : '#8800aa';
+            c.fillRect(en.x, en.y, en.width, en.height);
+        }
+    });
+}
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
 let time = 0;
@@ -192,7 +348,7 @@ const brickPattern = getBrickPattern();
 function drawRealPipe(p, isVertical) {
     c.save();
     // Farba dreva (naplavené drevo - Driftwood)
-    let grad = isVertical 
+    let grad = isVertical
         ? c.createLinearGradient(p.x, p.y, p.x + p.width, p.y)
         : c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
 
@@ -238,7 +394,7 @@ function drawFog() {
 
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)'); 
+        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)');
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
@@ -418,11 +574,11 @@ window.addEventListener('keyup', (e) => {
     }
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
-     if (e.key === 'R' || e.key === 'r') {
+    if (e.key === 'R' || e.key === 'r') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
 });
 
@@ -457,6 +613,8 @@ function animovanie() {
     bgGrad.addColorStop(1, '#010501');
     c.fillStyle = bgGrad;
     c.fillRect(0, 0, canvas.width, canvas.height);
+
+    
 
     c.fillStyle = brickPattern;
     c.fillRect(0, 0, 30000, 30000);
@@ -516,7 +674,7 @@ function animovanie() {
         }
     });
 
-    if(player.isRaging){
+    if (player.isRaging) {
         maximalnaMana -= 0.1;
         mana -= 0.1;
 
@@ -579,10 +737,10 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
-facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateDeath();
-DashTrail.updateRageAura(player.isRaging, player);
+    facingRight = (actualnaakciacici === macky.dolava);
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateDeath();
+    DashTrail.updateRageAura(player.isRaging, player);
 
 
     Karera.x = player.x - canvas.width / 2;
@@ -691,24 +849,24 @@ DashTrail.updateRageAura(player.isRaging, player);
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-        if (platform.type === 'floor') {
+            if (platform.type === 'floor') {
 
-    // === DEATH ANIMATION ===
-    DashTrail.triggerDeath(player);
+                // === DEATH ANIMATION ===
+                DashTrail.triggerDeath(player);
 
-    player.width = 0;
-    player.height = 0;
-    player.dx = 0;
-    player.dy = 0;
+                player.width = 0;
+                player.height = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 350);
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 350);
 
-    return;
-}
+                return;
+            }
 
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
@@ -836,6 +994,11 @@ DashTrail.updateRageAura(player.isRaging, player);
         }
     }
 
+    aktualizujUtocnikov();
+    vykresliUtocnikov();
+
+    Damageudelovator.aktualizujNezranitelnost(player);
+
     function vykonajAkciu(id) {
         const btn = platforms.find(p => p.id === id);
         if (btn) btn.isPressed = true;
@@ -854,8 +1017,8 @@ DashTrail.updateRageAura(player.isRaging, player);
     }
 
     DashTrail.draw(c);
-DashTrail.drawDeath(c);
-DashTrail.drawRageAura(c);
+    DashTrail.drawDeath(c);
+    DashTrail.drawRageAura(c);
 
 let aktImg = ziskajAnimaciu(player, keys);
 c.drawImage(aktImg, player.x, player.y, player.width, player.height);

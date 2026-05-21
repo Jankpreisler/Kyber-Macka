@@ -52,9 +52,6 @@ const platforms = [
     { x: 2720, y: 460, width: 200, height: 60, type: 'pipe_v' },
 
     // --- VETRÁKY (INŠPIRÁCIA Z LEVELU 4) ---
-
-
-
     // Vetrák 2 – horizontálny ťah doľava pri konci levelu
     {
         x: 2950,

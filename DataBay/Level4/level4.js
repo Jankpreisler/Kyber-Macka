@@ -33,16 +33,16 @@ const platforms = [
 
     { x: 0, y: 2000, width: 150, height: 1500, color: '#333', type: 'pipe_v' }, //spawn
 
-  { x: 400, y: 2000, width: 50, height: 1500, color: '#333', type: 'pipe_v' },
+    { x: 400, y: 2000, width: 50, height: 1500, color: '#333', type: 'pipe_v' },
     { x: 700, y: 2000, width: 50, height: 1500, color: '#333', type: 'pipe_v' },
     { x: 900, y: 1900, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 1100, y: 1900, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 1700, y: 2300, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 2000, y: 2300, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
-  { x: 2200, y: 2300, width: 1000, height: 150, color: '#333', type: 'pipe_h' },
+    { x: 1100, y: 1900, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
+    { x: 1700, y: 2300, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
+    { x: 2000, y: 2300, width: 100, height: 1500, color: '#333', type: 'pipe_v' },
+    { x: 2200, y: 2300, width: 1000, height: 150, color: '#333', type: 'pipe_h' },
 
-{ x: 3400, y: 2000, width: 100, height: 150, color: '#333', type: 'pipe_v' },
-{ x: 3400, y: 2200, width: 100, height: 150, color: '#333', type: 'pipe_v' },
+    { x: 3400, y: 2000, width: 100, height: 150, color: '#333', type: 'pipe_v' },
+    { x: 3400, y: 2200, width: 100, height: 150, color: '#333', type: 'pipe_v' },
 
 
     { x: 0, y: 100, width: 1, height: 2000000, color: '#333', type: 'pipe_v' }, //left border
@@ -157,12 +157,13 @@ let player = {
     isdashing: false,
     dashspeed: 35,
     chceSaPostavit: false,
-      isRaging: false,
-      hp: 100,
-      maxhp: 100,
-      jeNezranitelny: false,
-      casNezranitelnosti: 0,
-      isDead: false,
+    isRaging: false,
+    hp: 100,
+    maxhp: 100,
+    jeNezranitelny: false,
+    casNezranitelnosti: 0,
+    isDead: false,
+    isRaging: false,
       direction: "doprava"
 };
 
@@ -200,7 +201,7 @@ const brickPattern = getBrickPattern();
 function drawRealPipe(p, isVertical) {
     c.save();
     // Farba dreva (naplavené drevo - Driftwood)
-    let grad = isVertical 
+    let grad = isVertical
         ? c.createLinearGradient(p.x, p.y, p.x + p.width, p.y)
         : c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
 
@@ -246,7 +247,7 @@ function drawFog() {
 
     fogParticles.forEach(p => {
         let grad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)'); 
+        grad.addColorStop(0, 'rgba(200, 155, 100, 0.15)');
         grad.addColorStop(1, 'transparent');
 
         c.fillStyle = grad;
@@ -359,7 +360,7 @@ window.addEventListener('keydown', (e) => {
             player.isRaging = false; // Opätovné stlačenie vypne mód
         }
     }
-    
+
 
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
@@ -428,11 +429,11 @@ window.addEventListener('keyup', (e) => {
     }
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
-     if (e.key === 'R' || e.key === 'r') {
+    if (e.key === 'R' || e.key === 'r') {
         player.isRaging = false;
-         
+
     }
 });
 
@@ -529,7 +530,7 @@ function animovanie() {
         }
     });
 
-    if(player.isRaging){
+    if (player.isRaging) {
         maximalnaMana -= 0.1;
         mana -= 0.1;
     }
@@ -546,7 +547,7 @@ function animovanie() {
 
 
     // 3. Pohyb a fyzika
-     if (!player.isdashing) {
+    if (!player.isdashing) {
         if (keys.right) player.dx += 0.8;
         else if (keys.left) player.dx -= 0.8;
     }
@@ -592,9 +593,9 @@ function animovanie() {
     player.grounded = false;
 
     facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateDeath();
-DashTrail.updateRageAura(player.isRaging, player);  
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateDeath();
+    DashTrail.updateRageAura(player.isRaging, player);
 
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
@@ -702,24 +703,24 @@ DashTrail.updateRageAura(player.isRaging, player);
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-          if (platform.type === 'floor') {
+            if (platform.type === 'floor') {
 
-    // === DEATH ANIMATION ===
-    DashTrail.triggerDeath(player);
+                // === DEATH ANIMATION ===
+                DashTrail.triggerDeath(player);
 
-    player.width = 0;
-    player.height = 0;
-    player.dx = 0;
-    player.dy = 0;
+                player.width = 0;
+                player.height = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 350);
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 350);
 
-    return;
-}
+                return;
+            }
 
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
@@ -865,8 +866,8 @@ DashTrail.updateRageAura(player.isRaging, player);
     }
 
     DashTrail.draw(c);
-DashTrail.drawDeath(c);
-DashTrail.drawRageAura(c);
+    DashTrail.drawDeath(c);
+    DashTrail.drawRageAura(c);
 
 let aktImg = ziskajAnimaciu(player, keys);
 c.drawImage(aktImg, player.x, player.y, player.width, player.height);
