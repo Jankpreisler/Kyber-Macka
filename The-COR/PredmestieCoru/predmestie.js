@@ -125,6 +125,7 @@ let player = {
     maxhp: 100,
     jeNezranitelny: false,
     casNezranitelnosti: 0,
+    isRaging: false,
 };
 
 damagesystem(player);
