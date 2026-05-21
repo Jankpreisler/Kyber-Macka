@@ -749,19 +749,7 @@ DashTrail.drawDeath(c);
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
 
-        // --- JEDNODUCHÝ INVENTÁR ---
-        c.fillStyle = "rgba(0, 0, 0, 0.6)";
-        c.beginPath();
-        c.roundRect(barX, barY + 455, 200, 100, 5); //nasjkor vyska sirka height invertara zaoblenie
-        c.fill();
-
-        c.fillStyle = "#aaa";
-        c.font = "11px Arial";
-        c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
-        c.fillText("• Error 404  [LOCKED]", barX + 10, barY + 500);
-        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 520);
-        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
-
+        c.drawImage(abilityImg, barX + 1, barY + 425, 150, 150);
         c.restore();
     }
 }

@@ -149,13 +149,13 @@ let player = {
     isdashing: false,
     dashspeed: 35,
     chceSaPostavit: false,
-      isRaging: false,
-      hp: 100,
-      maxhp: 100,
-      jeNezranitelny: false,
-      casNezranitelnosti: 0,
-      isDead: false,
-      direction: "doprava" 
+    isRaging: false,
+    hp: 100,
+    maxhp: 100,
+    jeNezranitelny: false,
+    casNezranitelnosti: 0,
+    isDead: false,
+    direction: "doprava"
 };
 const utocnici = [
     {
@@ -268,7 +268,7 @@ function aktualizujUtocnikov() {
                     en.isDead = true;
                     DashTrail.triggerDeath(player);
                 }
-                
+
                 return;
             }
             if (!player.jeNezranitelny && !player.isRaging) {
@@ -283,11 +283,11 @@ function aktualizujUtocnikov() {
             }
             if (player.isRaging && isTouching(player, en)) {
                 en.isDead = true;
-                player.dx *= -0.4; 
-                return; 
+                player.dx *= -0.4;
+                return;
             }
         }
-       
+
     });
 }
 function vykresliUtocnikov() {
@@ -455,7 +455,7 @@ window.addEventListener('keydown', (e) => {
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
- 
+
     }
 
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
@@ -566,7 +566,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-        
+
             } else {
                 player.chceSaPostavit = true;
             }
@@ -614,7 +614,7 @@ function animovanie() {
     c.fillStyle = bgGrad;
     c.fillRect(0, 0, canvas.width, canvas.height);
 
-    
+
 
     c.fillStyle = brickPattern;
     c.fillRect(0, 0, 30000, 30000);
@@ -990,7 +990,7 @@ function animovanie() {
             player.height = 50;
             player.y -= 25;
             player.chceSaPostavit = false;
-      
+
         }
     }
 
@@ -1020,8 +1020,8 @@ function animovanie() {
     DashTrail.drawDeath(c);
     DashTrail.drawRageAura(c);
 
-let aktImg = ziskajAnimaciu(player, keys);
-c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+    let aktImg = ziskajAnimaciu(player, keys);
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
 
 
     c.restore();
@@ -1094,25 +1094,13 @@ c.drawImage(aktImg, player.x, player.y, player.width, player.height);
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
 
-        c.fillStyle = "rgba(0, 0, 0, 0.6)";
-        c.beginPath();
-        c.roundRect(barX, barY + 455, 200, 100, 5);
-        c.fill();
 
-        c.fillStyle = "#aaa";
-        c.font = "11px Arial";
-        c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
-        c.fillText("• Cyber Rage  [R]", barX + 10, barY + 500);
-
+        if (!abilityUnlocked) {
+            c.drawImage(ability2Img, barX + 1, barY + 425, 150, 150);
+        }
         if (abilityUnlocked) {
-            c.fillText("• Wall Climb [T + W/S]", barX + 10, barY + 520);
+            c.drawImage(ability3Img, barX + 1, barY + 425, 150, 150);
         }
-        else {
-            c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 520);
-        }
-
-        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
-
         c.restore();
     }
 }

@@ -1018,23 +1018,7 @@ c.translate(-Karera.x, -Karera.y);
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
 
-        c.fillStyle = "rgba(0, 0, 0, 0.6)";
-        c.beginPath();
-        c.roundRect(barX, barY + 455, 200, 100, 5);
-        c.fill();
-
-        c.fillStyle = "#aaa";
-        c.font = "11px Arial";
-        c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
-        c.fillText("• Cyber Rage  [R]", barX + 10, barY + 500);
-        c.fillText("• Wall Climb [T + W/S]", barX + 10, barY + 520);
-
-        if (abilityUnlocked) {
-            c.fillText("• Lietanie [U + W]", barX + 10, barY + 540);
-        } else {
-            c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
-        }
-
+        c.drawImage(ability4Img, barX + 1, barY + 425, 150, 150);
         c.restore();
     }
 }

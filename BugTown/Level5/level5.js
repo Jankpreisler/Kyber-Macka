@@ -901,19 +901,7 @@ DashTrail.drawRageAura(c);
         c.shadowBlur = 0;
 
         // --- JEDNODUCHÝ INVENTÁR ---
-        c.fillStyle = "rgba(0, 0, 0, 0.6)";
-        c.beginPath();
-        c.roundRect(barX, barY + 455, 200, 100, 5); 
-        c.fill();
-
-        c.fillStyle = "#aaa";
-        c.font = "11px Arial";
-        c.fillText("• Cyber Dash [Q]", barX + 10, barY + 480);
-        // Ak je aktívny Rage, vykreslí sa v inventári (zmenené z "Error 404 [LOCKED]" podľa kódu 1)
-        c.fillText(player.isRaging ? "• Cyber Rage  [R]" : "• Cyber Rage  [R]", barX + 10, barY + 500);
-        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 520);
-        c.fillText("• Error 404 [LOCKED]", barX + 10, barY + 540);
-
+       c.drawImage(ability2Img, barX + 1, barY + 425, 150, 150);
         c.restore();
     }
 }
