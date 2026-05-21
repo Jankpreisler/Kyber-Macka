@@ -184,6 +184,11 @@ let player = {
     dashspeed: 35,
     chceSaPostavit: false,
       isRaging: false,
+      hp: 100,
+      maxhp: 100,
+      jeNezranitelny: false,
+      casNezranitelnosti: 0,
+      isDead: false,
 };
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
@@ -927,6 +932,8 @@ DashTrail.drawDeath(c);
         const barY = 20;
         const barWidth = 250;
         const barHeight = 30;
+
+        Damageudelovator.vykresliHPBar(player);
 
         c.fillStyle = 'rgba(20, 20, 20, 0.8)';
         c.beginPath();

@@ -126,7 +126,12 @@ let player = {
     friction: 0.9,
     isdashing: false,
     dashspeed: 35,
-    chceSaPostavit: false
+    chceSaPostavit: false,
+    hp: 100,
+    maxhp: 100,
+    jeNezranitelny: false,
+    casNezranitelnosti: 0,
+
 };
 
 let time = 0;
@@ -984,6 +989,7 @@ DashTrail.drawRageAura(c);
         const barY = 20;
         const barWidth = 250;
         const barHeight = 30;
+        Damageudelovator.vykresliHPBar(player);
 
         c.fillStyle = 'rgba(20, 20, 20, 0.8)';
         c.beginPath();

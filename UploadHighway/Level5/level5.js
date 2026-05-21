@@ -41,22 +41,22 @@ const platforms = [
 
     //platformy
 
-    { x: 3500, y: 0, width: 50, height: 200, color: '#333', type: 'pipe_v'},
-    { x: 3500, y: 0, width: 800, height: 100, color: '#333', type: 'pipe_h'},
+    { x: 3500, y: 0, width: 50, height: 200, color: '#333', type: 'pipe_v' },
+    { x: 3500, y: 0, width: 800, height: 100, color: '#333', type: 'pipe_h' },
 
-    { x: 3500, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v'},
+    { x: 3500, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v' },
     { x: 3500, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v' },
 
 
 
-    { x: 3650, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v'  },
-    { x: 3650, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v'},
-    
+    { x: 3650, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 3650, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v' },
 
 
-    { x: 3800, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v'},
-    { x: 3800, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v'},
-    
+
+    { x: 3800, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 3800, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v' },
+
 
 
     { x: 3950, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v' },
@@ -67,15 +67,15 @@ const platforms = [
     { x: 4100, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v' },
     { x: 4100, y: 100, width: 50, height: 230, color: '#333', type: 'pipe_v' },
 
-    { x: 4300, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v'},
-    { x: 4900, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v'},
+    { x: 4300, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 4900, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v' },
 
-    { x: 5300, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10},
-    { x: 5600, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10},
-    { x: 5900, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10},
-    { x: 6100, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v'},
-    { x: 6500, y: 400, width: 500, height: 230, color: '#333', type: 'pipe_h'},
-    { x: 7000, y: 200, width: 150, height: 230, color: '#333', type: 'pipe_v'},
+    { x: 5300, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 5600, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 5900, y: 400, width: 50, height: 230, color: '#333', type: 'pipe_v', friction: 10 },
+    { x: 6100, y: 400, width: 150, height: 230, color: '#333', type: 'pipe_v' },
+    { x: 6500, y: 400, width: 500, height: 230, color: '#333', type: 'pipe_h' },
+    { x: 7000, y: 200, width: 150, height: 230, color: '#333', type: 'pipe_v' },
 
 ];
 
@@ -163,7 +163,12 @@ let player = {
     friction: 0.9,
     isdashing: false,
     dashspeed: 35,
-    chceSaPostavit: false
+    chceSaPostavit: false,
+    hp: 100,
+    maxhp: 100,
+    jeNezranitelny: false,
+    casNezranitelnosti: 0,
+
 };
 
 let time = 0;
@@ -388,7 +393,7 @@ window.addEventListener('keydown', (e) => {
             keys.u = true;
         }
     }
-     if ((e.key === 'Tab' || e.code === 'Tab')) {
+    if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
     }
 
@@ -458,7 +463,7 @@ window.addEventListener('keyup', (e) => {
 
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
 
     if (e.key === 'R' || e.key === 'r') {
@@ -513,8 +518,8 @@ function animovanie() {
             mana += 0.1;
         }
         else if (player.isRaging) {
-        maximalnaMana -= 0.5;
-        mana -= 0.5;
+            maximalnaMana -= 0.5;
+            mana -= 0.5;
         }
     }
 
@@ -596,7 +601,7 @@ function animovanie() {
         }
     });
 
-   if (!player.isdashing) {
+    if (!player.isdashing) {
         if (keys.right) player.dx += 0.8 * timeScale;
         else if (keys.left) player.dx -= 0.8 * timeScale;
     }
@@ -637,19 +642,19 @@ function animovanie() {
     player.y += player.dy;
     player.grounded = false;
 
-// zistenie smeru mačky
-const facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateRageAura(player.isRaging, player);
+    // zistenie smeru mačky
+    const facingRight = (actualnaakciacici === macky.dolava);
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateRageAura(player.isRaging, player);
 
-if (keys.u) DashTrail.startFly(player);
-
-
-const isFlying = keys.u && abilityUnlocked;
-DashTrail.updateFly(isFlying, player);
+    if (keys.u) DashTrail.startFly(player);
 
 
-DashTrail.updateDeath();
+    const isFlying = keys.u && abilityUnlocked;
+    DashTrail.updateFly(isFlying, player);
+
+
+    DashTrail.updateDeath();
 
 
     platforms.forEach(p => {
@@ -747,33 +752,33 @@ DashTrail.updateDeath();
             player.y + player.height > platform.y
         ) {
 
-            
-if (platform.type === 'floor') {
 
-    // spusti animáciu rozbitia
-    DashTrail.triggerDeath(player);
+            if (platform.type === 'floor') {
 
-    // mačka zmizne
-    player.width = 0;
-    player.height = 0;
+                // spusti animáciu rozbitia
+                DashTrail.triggerDeath(player);
 
-    // mačka sa prestane hýbať
-    player.dx = 0;
-    player.dy = 0;
+                // mačka zmizne
+                player.width = 0;
+                player.height = 0;
 
-    // zamrzne vo vzduchu
-    // (necháme ju na pozícii, kde zomrela)
-    
-    setTimeout(() => {
-        // obnovíme veľkosť mačky
-        player.width = 50;
-        player.height = 50;
+                // mačka sa prestane hýbať
+                player.dx = 0;
+                player.dy = 0;
 
-        resetPlayer();
-    }, 250);
+                // zamrzne vo vzduchu
+                // (necháme ju na pozícii, kde zomrela)
 
-    return;
-}
+                setTimeout(() => {
+                    // obnovíme veľkosť mačky
+                    player.width = 50;
+                    player.height = 50;
+
+                    resetPlayer();
+                }, 250);
+
+                return;
+            }
 
 
 
@@ -908,17 +913,17 @@ if (platform.type === 'floor') {
     }
 
     if (isTouching(player, exitZone)) {
-         if (typeof ProgresManazer !== 'undefined') {
+        if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(20);
         }
 
         window.location.href = "/UploadHighway/Level4/level4.html";
     }
-  
-DashTrail.draw(c);
-DashTrail.drawRageAura(c);
-DashTrail.drawFly(c);
-DashTrail.drawDeath(c);
+
+    DashTrail.draw(c);
+    DashTrail.drawRageAura(c);
+    DashTrail.drawFly(c);
+    DashTrail.drawDeath(c);
 
 
     if (actualnaakciacici && actualnaakciacici.complete && actualnaakciacici.naturalWidth !== 0) {
@@ -962,6 +967,7 @@ DashTrail.drawDeath(c);
         const barY = 20;
         const barWidth = 250;
         const barHeight = 30;
+        Damageudelovator.vykresliHPBar(player);
 
         c.fillStyle = 'rgba(20, 20, 20, 0.8)';
         c.beginPath();

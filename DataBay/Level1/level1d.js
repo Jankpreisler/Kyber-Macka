@@ -149,7 +149,39 @@ const utocnici = [
         isDead: false,
         damage: 15,
         color: '#ff0055'
-    }
+    },
+    {
+        x: 2200,
+        y: 1850,
+        width: 50,
+        height: 50,
+        startX: 3000,
+        range: 200,
+        speed: 2.5,
+        direction: -1,
+        detectionRange: 300,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
+    {
+        x: 2700,
+        y: 1850,
+        width: 50,
+        height: 50,
+        startX: 3500,
+        range: 200,
+        speed: 2.5,
+        direction: -1,
+        detectionRange: 300,
+        isHostile: false,
+        hp: 50,
+        isDead: false,
+        damage: 15,
+        color: '#ff0055'
+    },
 ];
 
 function aktualizujUtocnikov() {

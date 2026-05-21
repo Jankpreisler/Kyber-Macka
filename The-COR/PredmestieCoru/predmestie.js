@@ -120,7 +120,11 @@ let player = {
     isdashing: false,
     dashspeed: 45,
     chceSaPostavit: false,
-    isRaging: false
+    isRaging: false,
+    hp: 100,
+    maxhp: 100,
+    jeNezranitelny: false,
+    casNezranitelnosti: 0,
 };
 
 damagesystem(player);
