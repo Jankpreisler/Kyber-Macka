@@ -554,11 +554,11 @@ function animovanie() {
     });
 
     if (player.isRaging) {
-        maximalnaMana -= 0.1;
-        mana -= 0.1;
+        maximalnaMana -= 0.5;
+        mana -= 0.5;
     }
     else if (mana < maximalnaMana) {
-        mana += 0.1;
+        mana += 0.5;
     }
 
     // --- LOGIKA DASHU ---

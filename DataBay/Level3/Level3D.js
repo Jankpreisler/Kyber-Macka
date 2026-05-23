@@ -579,7 +579,7 @@ window.addEventListener('keyup', (e) => {
         player.dx = 0;
     }
     if (e.key === 'R' || e.key === 'r') {
-        player.isRa = false;
+        player.isRaging = false;
        
     }
 });
