@@ -512,9 +512,10 @@ c.translate(-Karera.x, -Karera.y);
     player.y += player.dy;
     player.grounded = false;
 
-    // DASH TRAIL
+   // DASH TRAIL
 const facingRight = (actualnaakciacici === macky.dolava);
 DashTrail.update(player, player.isdashing, facingRight);
+
 DashTrail.updateDeath();
 DashTrail.updateRageAura(player.isRaging, player);  //TENTO RIADOK === #1
 
