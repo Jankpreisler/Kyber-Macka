@@ -382,10 +382,10 @@ else {
 }
 
 if (aktImg && aktImg.complete && aktImg.naturalWidth !== 0) {
-    if (player.height === 25) {
-     
-        c.drawImage(aktImg, player.x - 20, player.y - 5, 100, 40);
-    } else {
+  if (player.height === 25) {
+    c.drawImage(aktImg, player.x, player.y + 10, 50, 25);
+}
+ else {
    
         c.drawImage(aktImg, player.x, player.y, player.width, player.height);
     }
