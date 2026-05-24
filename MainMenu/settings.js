@@ -55,12 +55,15 @@ if(volumeControl && music){
     }
 
     volumeControl.addEventListener("input", () => {
+        const currentVolume = parseFloat(volumeControl.value);
+        music.volume = currentVolume;
 
-        music.volume = volumeControl.value;
+        if (currentVolume === 0) {
+            music.muted = true;
+        } else {
+            music.muted = false;
+        }
 
-        localStorage.setItem(
-            "gameVolume",
-            volumeControl.value
-        );
+        localStorage.setItem("gameVolume", currentVolume);
     });
 }
