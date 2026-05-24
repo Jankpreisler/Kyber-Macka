@@ -1,9 +1,9 @@
 const obrazky = [
-    "../../asseti/good_1.png",   // Prvý obrázok
-    "../../asseti/good_2.png",            // Druhý obrázok
-    "../../asseti/good_3.png",  // Tretí obrázok
+    "../../asseti/good_1.png",   
+    "../../asseti/good_2.png",           
+    "../../asseti/good_3.png",  
     "../../asseti/good_4.png" , 
-    "../../asseti/good_5.png"                       // Štvrtý obrázok
+    "../../asseti/good_5.png"                       
 ];
 
 let aktualnyIndex = 0;
