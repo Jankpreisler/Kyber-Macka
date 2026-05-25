@@ -1,5 +1,4 @@
 
-
 /* PRECHOD */
 
 function krasneprehadzovanie(url) {
