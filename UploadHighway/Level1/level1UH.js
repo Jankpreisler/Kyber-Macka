@@ -29,15 +29,15 @@ const Karera = {
 // === DEFINÍCIA PLATFORIEM === Pridanie speedMultiho a frictionu
 const platforms = [
     { x: 0, y: 3500, width: 1000750, height: 20, color: '#050505', type: 'floor' }, //kill
-    { x: 0, y: 1900, width: 750, height: 230, color: '#333', type: 'pipe_v'}, //spawn
+    { x: 0, y: 1900, width: 750, height: 230, color: '#333', type: 'pipe_v' }, //spawn
     { x: -150, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     //{ x: 3500, y: 100, width: 150, height: 2000, color: '#333', type: 'pipe_v' }, //left border
     { x: 450, y: 1890, width: 300, height: 50, color: '#333', type: 'pipe_h', friction: 0.3 }, // prvy port
-    { x: 1200, y: 1900, width: 150, height: 200, color: '#333', type: 'pipe_v'}, //prvy skok
-    { x: 1400, y: 1300, width: 150, height: 900, color: '#333', type: 'pipe_v'},
-    { x: 1700, y: 1300, width: 750, height: 50, color: '#333', type: 'pipe_v', speedMultiplier: 20.5},
-    { x: 3000, y: 400, width: 350, height: 600, color: '#333', type: 'pipe_v'},
-    { x: 3400, y: 1800, width: 550, height: 200, color: '#333', type: 'pipe_v'},
+    { x: 1200, y: 1900, width: 150, height: 200, color: '#333', type: 'pipe_v' }, //prvy skok
+    { x: 1400, y: 1300, width: 150, height: 900, color: '#333', type: 'pipe_v' },
+    { x: 1700, y: 1300, width: 750, height: 50, color: '#333', type: 'pipe_v', speedMultiplier: 20.5 },
+    { x: 3000, y: 400, width: 350, height: 600, color: '#333', type: 'pipe_v' },
+    { x: 3400, y: 1800, width: 550, height: 200, color: '#333', type: 'pipe_v' },
 ];
 
 const boxy = [
@@ -287,7 +287,7 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
-      
+
     }
 
     if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
@@ -308,7 +308,7 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 't' || e.key === 'T') {
         keys.t = true;
     }
-     if ((e.key === 'Tab' || e.code === 'Tab')) {
+    if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
     }
     if (e.key === 'r' || e.key === 'R') {
@@ -342,7 +342,7 @@ window.addEventListener('keyup', (e) => {
     }
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
     if (e.key === 'R' || e.key === 'r') {
         player.isRaging = false;
@@ -372,50 +372,50 @@ function animovanie() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-let bg = c.createLinearGradient(0, 0, 0, canvas.height);
-bg.addColorStop(0, '#0a0d14');
-bg.addColorStop(1, '#0f1622');
+    let bg = c.createLinearGradient(0, 0, 0, canvas.height);
+    bg.addColorStop(0, '#0a0d14');
+    bg.addColorStop(1, '#0f1622');
 
-c.fillStyle = bg;
-c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillStyle = bg;
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
 
-let glow = c.createRadialGradient(
-    canvas.width / 2, canvas.height / 3, 50,
-    canvas.width / 2, canvas.height / 3, 600
-);
-glow.addColorStop(0, 'rgba(80,120,200,0.15)');
-glow.addColorStop(1, 'transparent');
+    let glow = c.createRadialGradient(
+        canvas.width / 2, canvas.height / 3, 50,
+        canvas.width / 2, canvas.height / 3, 600
+    );
+    glow.addColorStop(0, 'rgba(80,120,200,0.15)');
+    glow.addColorStop(1, 'transparent');
 
-c.fillStyle = glow;
-c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillStyle = glow;
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
-c.save();
-c.globalCompositeOperation = 'screen';
-fogParticles.forEach(p => {
-    let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-    fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
-    fogGrad.addColorStop(1, 'transparent');
+    c.save();
+    c.globalCompositeOperation = 'screen';
+    fogParticles.forEach(p => {
+        let fogGrad = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        fogGrad.addColorStop(0, 'rgba(120,160,220,0.08)');
+        fogGrad.addColorStop(1, 'transparent');
 
-    c.fillStyle = fogGrad;
-    c.beginPath();
-    c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    c.fill();
+        c.fillStyle = fogGrad;
+        c.beginPath();
+        c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        c.fill();
 
-    p.x += Math.sin(time + p.r) * 0.15;
-});
-c.restore();
+        p.x += Math.sin(time + p.r) * 0.15;
+    });
+    c.restore();
 
-// AŽ TERAZ POSÚVAME KAMERU
-c.save();
-c.translate(-Karera.x, -Karera.y);
+    // AŽ TERAZ POSÚVAME KAMERU
+    c.save();
+    c.translate(-Karera.x, -Karera.y);
 
     drawFog();
 
     platforms.forEach(p => {
         if (p.visible === false) return;
 
- else if (p.type === 'trigger') {
+        else if (p.type === 'trigger') {
             drawStyledButton(p, false, p.isPressed);
         } else if (p.type === 'valve') {
             c.fillStyle = '#400';
@@ -512,68 +512,68 @@ c.translate(-Karera.x, -Karera.y);
     player.y += player.dy;
     player.grounded = false;
 
-   // DASH TRAIL
-const facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
+    // DASH TRAIL
+    const facingRight = (actualnaakciacici === macky.dolava);
+    DashTrail.update(player, player.isdashing, facingRight);
 
-DashTrail.updateDeath();
-DashTrail.updateRageAura(player.isRaging, player);  //TENTO RIADOK === #1
+    DashTrail.updateDeath();
+    DashTrail.updateRageAura(player.isRaging, player);  //TENTO RIADOK === #1
 
 
 
     // Logika ventilátora
-platforms.forEach(p => {
-    if (p.visible === false) return;
+    platforms.forEach(p => {
+        if (p.visible === false) return;
 
-    const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
-    const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
-    const jeNormalna = p.friction === undefined;
+        const jeSpomalovacia = p.friction !== undefined && p.friction < 1;
+        const jeZrychlovacia = p.friction !== undefined && p.friction > 1;
+        const jeNormalna = p.friction === undefined;
 
-    c.save();
+        c.save();
 
-    // === NORMALNA PLATFORM  ===
-    if (jeNormalna) {
-        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
-        grad.addColorStop(0, '#0b1220');
-        grad.addColorStop(1, '#132544');
+        // === NORMALNA PLATFORM  ===
+        if (jeNormalna) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y + p.height);
+            grad.addColorStop(0, '#0b1220');
+            grad.addColorStop(1, '#132544');
 
-        c.fillStyle = grad;
-        c.fillRect(p.x, p.y, p.width, p.height);
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
 
-        c.shadowColor = 'rgba(80,150,255,0.35)';
-        c.shadowBlur = 18;
-        c.fillRect(p.x, p.y, p.width, p.height);
-    }
+            c.shadowColor = 'rgba(80,150,255,0.35)';
+            c.shadowBlur = 18;
+            c.fillRect(p.x, p.y, p.width, p.height);
+        }
 
-  
-    else if (jeSpomalovacia) {
-        let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
-        grad.addColorStop(0, '#06080f');
-        grad.addColorStop(1, '#0d1524');
 
-        c.fillStyle = grad;
-        c.fillRect(p.x, p.y, p.width, p.height);
+        else if (jeSpomalovacia) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x + p.width, p.y);
+            grad.addColorStop(0, '#06080f');
+            grad.addColorStop(1, '#0d1524');
 
-        
-        c.fillStyle = 'rgba(0,0,0,0.25)';
-        c.fillRect(p.x, p.y, p.width, p.height);
-    }
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
 
-    else if (jeZrychlovacia) {
-        let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
-        grad.addColorStop(0, '#1a4fff');
-        grad.addColorStop(1, '#6fc3ff');
 
-        c.fillStyle = grad;
-        c.fillRect(p.x, p.y, p.width, p.height);
+            c.fillStyle = 'rgba(0,0,0,0.25)';
+            c.fillRect(p.x, p.y, p.width, p.height);
+        }
 
-        c.shadowColor = 'rgba(120,200,255,0.45)';
-        c.shadowBlur = 25;
-        c.fillRect(p.x, p.y, p.width, p.height);
-    }
+        else if (jeZrychlovacia) {
+            let grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
+            grad.addColorStop(0, '#1a4fff');
+            grad.addColorStop(1, '#6fc3ff');
 
-    c.restore();
-});
+            c.fillStyle = grad;
+            c.fillRect(p.x, p.y, p.width, p.height);
+
+            c.shadowColor = 'rgba(120,200,255,0.45)';
+            c.shadowBlur = 25;
+            c.fillRect(p.x, p.y, p.width, p.height);
+        }
+
+        c.restore();
+    });
 
 
     // Vykreslenie častíc vetra
@@ -621,28 +621,28 @@ platforms.forEach(p => {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-         if (platform.type === 'floor') {
+            if (platform.type === 'floor') {
 
-    // Spusti animáciu rozbitia
-    if (typeof DashTrail !== "undefined" && DashTrail.triggerDeath) {
-        DashTrail.triggerDeath(player);
-    }
+                // Spusti animáciu rozbitia
+                if (typeof DashTrail !== "undefined" && DashTrail.triggerDeath) {
+                    DashTrail.triggerDeath(player);
+                }
 
 
-    player.width = 0;
-    player.height = 0;
+                player.width = 0;
+                player.height = 0;
 
-    player.dx = 0;
-    player.dy = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 250);
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 250);
 
-    return;
-}
+                return;
+            }
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
                 player.y = platform.y - player.height;
@@ -761,14 +761,14 @@ platforms.forEach(p => {
         }
         window.location.href = "/UploadHighway/Level2/level2UH.html";
     }
-DashTrail.draw(c);
-DashTrail.drawDeath(c);
-DashTrail.drawRageAura(c); // TOTO JE RIADOK === #2
+    DashTrail.draw(c);
+    DashTrail.drawDeath(c);
+    DashTrail.drawRageAura(c); // TOTO JE RIADOK === #2
 
 
 
-let aktImg = ziskajAnimaciu(player, keys);
-c.drawImage(aktImg, player.x, player.y, player.width, player.height);
+    let aktImg = ziskajAnimaciu(player, keys);
+    c.drawImage(aktImg, player.x, player.y, player.width, player.height);
 
 
     c.restore();
@@ -811,7 +811,7 @@ c.drawImage(aktImg, player.x, player.y, player.width, player.height);
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
 
-         c.drawImage(ability3Img, barX + 1, barY + 425, 150, 150);
+        c.drawImage(ability3Img, barX + 1, barY + 425, 150, 150);
         c.restore();
     }
 }
