@@ -7,6 +7,12 @@ canvas.height = 600;
 const gravitacia = 0.4;
 let lastTime = 0;
 
+let zobrazitHUD = true;
+let mana = 100;
+let maximalnaMana = 100;
+let minmana = 0;
+let abilitkos = false;
+
 const exitZone = {
     x: 2950,
     y: 450,
@@ -139,7 +145,8 @@ const RND   = {
     ],
     currentLine: 0,
     isTalking: false,
-    canInteract: false
+    canInteract: false,
+    abilitkos: true,
 };
 
 const macky = {
@@ -160,7 +167,7 @@ const keys = { right: false, left: false };
 // === VLASTNOSTI HRÁČA ===
 // Spawn – bezpečne v šachte nad kill floor
 let player = {
-    x: 60,
+    x: 80,
     y: 1950,
     width: 50,
     height: 50,
@@ -796,6 +803,7 @@ if (platform.type === 'valve') {
     if (RND.isTalking) {
         const dialog = RND.dialogues[RND.currentLine];
         const isCat = dialog.hovori === "MAČKA";
+        abilitkos = true;
 
         c.fillStyle = "rgba(0, 0, 0, 0.85)";
         c.strokeStyle = isCat ? "#00ff41" : "#3c00ff";
@@ -816,6 +824,58 @@ if (platform.type === 'valve') {
         c.fillStyle = "#666";
         c.font = "14px Arial";
         c.fillText("Clikni pre pokračovanie...", 850, 545);
+    }
+
+    if (zobrazitHUD === true) {
+        c.save();
+
+        const barX = 20;
+        const barY = 20;
+        const barWidth = 250;
+        const barHeight = 30;
+
+        // 1. Pozadie baru (tmavý podklad)
+        c.fillStyle = 'rgba(20, 20, 20, 0.8)';
+        c.beginPath();
+        c.roundRect(barX, barY, barWidth, barHeight, 5);
+        c.fill();
+        c.strokeStyle = '#333';
+        c.lineWidth = 4;
+        c.stroke();
+
+        // 2. Samotný Progress (Výplň many)
+        let percento = mana / maximalnaMana;
+        if (percento < 0) percento = 0; 
+
+        let manaGrad = c.createLinearGradient(barX, 0, barX + barWidth, 0);
+        manaGrad.addColorStop(0, '#0044ff'); 
+        manaGrad.addColorStop(1, '#00d4ff'); 
+
+        c.fillStyle = manaGrad;
+        c.beginPath();
+        c.roundRect(barX + 2, barY + 2, (barWidth - 4) * percento, barHeight - 4, 3);
+        c.fill();
+
+        // 3. Efekt "lesku" na bare
+        c.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        c.fillRect(barX + 2, barY + 2, (barWidth - 4) * percento, (barHeight - 4) / 2);
+
+        // 4. Textové info
+        c.fillStyle = "white";
+        c.font = "bold 13px Courier New";
+        c.shadowColor = "black";
+        c.shadowBlur = 4;
+        c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
+        c.shadowBlur = 0;
+
+        if(!abilitkos){
+             c.drawImage(abilityImg, barX + 1, barY + 425, 150, 150);
+        }
+        else  {
+            c.drawImage(ability2Img, barX + 1, barY + 425, 150, 150);
+        }
+       
+        c.restore();
     }
 }
 
