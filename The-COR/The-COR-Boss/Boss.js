@@ -39,9 +39,9 @@ const platforms = [
     { x: 5300, y: 950, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "fazau" }, //1 skok
     { x: 4300, y: 1100, width: 550, height: 50, color: '#333', type: 'pipe_h', visible: true, id: "fazao" }, //1 skok
     { x: 0, y: 1100, width: 3550, height: 50, color: '#333', type: 'pipe_h' }, //1 skok
-    { x: 2300, y: 1000, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-    { x: 2300, y: 200, width: 500, height: 150, color: '#333', type: 'pipe_h' },
-    { x: 2200, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v', id: "stenazacorom", visible: true },
+    { x: 2100, y: 1000, width: 700, height: 150, color: '#333', type: 'pipe_h' },
+    { x: 2300, y: 200, width: 800, height: 150, color: '#333', type: 'pipe_h' },
+    { x: 2000, y: 200, width: 100, height: 900, color: '#333', type: 'pipe_v', id: "stenazacorom", visible: true },
     { x: 0, y: 200, width: 3200, height: 150, color: '#333', type: 'pipe_h' },
 ];
 
@@ -171,7 +171,7 @@ let boss = {
     width: 400,
     height: 400,
     hp: 5,
-    vlna: 2,
+    vlna: 1,
     jeAktivny: true,
     timerUtoku: 0,
     timerFazy: 0,
