@@ -77,11 +77,13 @@ const macky = {
     doprava: new Image(),
     dolava: new Image(),
     plazeniedoprava: new Image(),
+    npc: new Image()
 };
 
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
+macky.npc.src = '../../asseti/josi.png'
 
 
 
@@ -327,6 +329,8 @@ function animovanie() {
     c.fillStyle = brickPattern;
     c.fillRect(0, 0, canvas.width, canvas.height);
 
+    
+
     drawFog();
 
     // 2. Vykreslenie objektov
@@ -376,8 +380,14 @@ function animovanie() {
         }
     });
 
-    c.fillStyle = npc.color;
-    c.fillRect(npc.x, npc.y, npc.width, npc.height);
+    if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
+        c.drawImage(macky.npc, npc.x, npc.y, npc.width, npc.height);
+    } else {
+        c.fillStyle = npc.color; 
+        c.fillRect(npc.x, npc.y, npc.width, npc.height);
+    }
+
+    
     
 
     // 4. Detekcia a interakcia
@@ -402,6 +412,8 @@ function animovanie() {
     player.grounded = false;
 
     // box na hovorenie pre cici
+
+    
 
     if (npc.isTalking) {
         const dialog = npc.dialogues[npc.currentLine];
