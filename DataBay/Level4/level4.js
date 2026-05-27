@@ -183,16 +183,22 @@ for (let i = 0; i < 30; i++) {
 // === GRAFICKÉ RUTINY ===
 
 function getBrickPattern() {
-    const p = document.createElement('canvas');
+     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
-    p.width = 64; p.height = 64;
-    // Základná farba - "Gunmetal Blue" (oceľová)
-    pc.fillStyle = '#ff7300';
-    pc.fillRect(0, 0, 64, 64);
-    pc.fillStyle = 'rgba(243, 151, 59, 0.3)';
-    pc.beginPath();
-    pc.arc(10, 10, 20, 0, Math.PI * 2);
-    pc.fill();
+    p.width = 80; 
+    p.height = 80;
+    
+    pc.fillStyle = '#1a0d02'; 
+    pc.fillRect(0, 0, 80, 80);
+    pc.strokeStyle = 'rgba(255, 115, 0, 0.15)';
+    pc.lineWidth = 1;
+    pc.strokeRect(0, 0, 80, 80);
+    pc.fillStyle = 'rgba(255, 150, 0, 0.4)';
+    pc.fillRect(0, 0, 2, 2);
+    pc.fillRect(78, 0, 2, 2);
+    pc.fillRect(0, 78, 2, 2);
+    pc.fillRect(78, 78, 2, 2);
+    
     return c.createPattern(p, 'repeat');
 }
 

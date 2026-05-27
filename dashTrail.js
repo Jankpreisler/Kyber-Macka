@@ -145,6 +145,49 @@ window.DashTrail = {
 
 })();
 
+(function () {
+    const deathPieces = [];
+    const DEATH_LIFE = 40;
+
+    function triggerDeath(npc) {
+        deathPieces.length = 0;
+
+        for (let i = 0; i < 25; i++) {
+            deathPieces.push({
+                x: npc.x + npc.width / 2,
+                y: npc.y + npc.height / 2,
+                dx: (Math.random() - 0.5) * 12,
+                dy: (Math.random() - 0.5) * 12,
+                life: DEATH_LIFE
+            });
+        }
+    }
+
+    function update() {
+        for (let i = deathPieces.length - 1; i >= 0; i--) {
+            const p = deathPieces[i];
+            p.x += p.dx;
+            p.y += p.dy;
+            p.life--;
+            if (p.life <= 0) deathPieces.splice(i, 1);
+        }
+    }
+
+    function draw(ctx) {
+        deathPieces.forEach(p => {
+            const alpha = p.life / DEATH_LIFE;
+            ctx.fillStyle = `rgba(255, 0, 50, ${alpha})`; // Červená pre NPC
+            ctx.fillRect(p.x, p.y, 6, 6);
+        });
+    }
+
+    window.NpcDeath = {
+        trigger: triggerDeath,
+        update: update,
+        draw: draw
+    };
+})();
+
 //================== RAGE ===================
 
 // AURA
