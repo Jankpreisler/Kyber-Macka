@@ -648,7 +648,7 @@ function updateBoss() {
                         type: 'pipe_h'
                     });
                 }
-                if (boss.timerUtoku > 40) {
+                if (boss.timerUtoku > 39) {
                     let nahodnaVyskaLasera = boss.y + Math.random() * (boss.height - 15);
                     bossLasery.push({
                         x: boss.x + 75,
