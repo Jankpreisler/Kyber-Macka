@@ -690,7 +690,7 @@ DashTrail.updateDeath();
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(9);
         }
-        window.location.href = "/BugTown/Level4/level4.html";
+        window.location.href = "../../BugTown/Level4/level4.html";
     }
 
     DashTrail.draw(c);

@@ -799,7 +799,7 @@ function animovanie() {
             }
             if (isTouching(player, exitZone)) {
                 ProgresManazer.ulozLevel(9);
-                window.location.href = "BugTown/Level3/Level3.html";
+                window.location.href = "../../BugTown/Level3/Level3.html";
             }
         }
     });

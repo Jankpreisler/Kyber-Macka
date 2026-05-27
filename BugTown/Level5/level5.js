@@ -809,7 +809,7 @@ DashTrail.updateRageAura(player.isRaging, player);
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(9);
         }
-        window.location.href = "/DataBay/Level1/level1D.html";
+        window.location.href = "../../DataBay/Level1/level1D.html";
     }
 
 DashTrail.draw(c);

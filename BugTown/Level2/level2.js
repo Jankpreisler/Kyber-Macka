@@ -678,7 +678,7 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
             }
             if (isTouching(player, exitZone)) {
                 ProgresManazer.ulozLevel(8);
-                window.location.href = "BugTown/Level3/Level3.html";
+                window.location.href = "../../BugTown/Level3/Level3.html";
             }
         }
     });

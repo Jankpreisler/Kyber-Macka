@@ -794,7 +794,7 @@ if (p.id === 'vetrak2' && p.zapnuty === true) {
 
     //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/BugTown/Level3/level3.html";
+        window.location.href = "../../BugTown/Level3/level3.html";
     }
     DashTrail.draw(c);
 DashTrail.drawDeath(c);
