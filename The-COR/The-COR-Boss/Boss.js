@@ -101,8 +101,8 @@ const keys = {
 let timeScale = 1.0;
 
 let player = {
-    x: 8200,
-    y: 1150,
+    x: 3000,
+    y: 1000,
     width: 50,
     height: 50,
     dx: 0,
@@ -131,7 +131,7 @@ damagesystem(player);
 
 const Donatelo = {
     x: 2800,
-    y: 950,
+    y: 1000,
     width: 100,
     height: 100,
     color: '#5901a0',
@@ -166,17 +166,17 @@ const BadEnding = {
 };
 
 let boss = {
-    x: 2400,
+    x: 2300,
     y: 700,
-    width: 250,
-    height: 250,
+    width: 400,
+    height: 400,
     hp: 5,
-    vlna: 1,
-    jeAktivny: false,
+    vlna: 2,
+    jeAktivny: true,
     timerUtoku: 0,
     timerFazy: 0,
     maxCasFazy: 6000,
-    farba: '#ff0055'
+    farba: '#0051ff'
 };
 
 let bossLasery = [];
@@ -540,9 +540,9 @@ function updateBoss() {
         boss.farba = '#555555';
     } else {
         // Návrat k pôvodným farbám fáz po reboote alebo postupe
-        if (boss.vlna === 1) boss.farba = '#ff0055';
-        else if (boss.vlna === 2) boss.farba = '#a200ff';
-        else if (boss.vlna === 3) boss.farba = '#ff5500';
+        if (boss.vlna === 1) boss.farba = '#0051ff';
+        else if (boss.vlna === 2) boss.farba = '#0051ff';
+        else if (boss.vlna === 3) boss.farba = '#0051ff';
     }
 
     // Vykreslenie tela bossa
@@ -595,7 +595,7 @@ function updateBoss() {
     if (!boss.isOverheated) {
         if (boss.vlna === 1) {
             boss.timerUtoku += 1 * timeScale;
-            if (boss.timerUtoku > 100) {
+            if (boss.timerUtoku > 60) {
                 let nahodnaVyskaLasera = boss.y + Math.random() * (boss.height - 15);
                 bossLasery.push({
                     x: boss.x + 75,
