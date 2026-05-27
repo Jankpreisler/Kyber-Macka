@@ -350,7 +350,7 @@ function animovanie() {
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 2200, canvas.height); 
+    c.fillRect(0, 0, 7200, canvas.height); 
 
     drawFog();
 

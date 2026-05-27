@@ -31,12 +31,13 @@ const Karera = {
 // === PLATFORMY – UPRAVENÝ, ŤAŽŠÍ LEVEL 5 ===
 const platforms = [
     // hlavná zem – nechávam, ale je to "bezpečná" línia
-    { x: 0, y: 520, width: 3200, height: 80, type: 'ground' },
+    { x: 0, y: 520, width: 200, height: 80, type: 'pipe_h' },
 
     // malé schodíky / skoky – mierne posunuté, aby boli skoky náročnejšie
     { x: 420, y: 470, width: 110, height: 50, type: 'pipe_v' },
     { x: 700, y: 430, width: 130, height: 50, type: 'pipe_v' },
     { x: 1020, y: 390, width: 150, height: 50, type: 'pipe_v' },
+    { x: 0, y: 8090, width: 5000050, height: 50, type: 'floor' },
 
     // vyššia plošina – trochu ďalej, aby bol skok dlhší
     { x: 1380, y: 340, width: 200, height: 60, type: 'pipe_v' },
@@ -111,41 +112,6 @@ const enemies = [
         alive: true,
         startX: 700
     },
-
-    // nový dron – nad vyššou plošinou
-    {
-        x: 50,
-        y: 280,
-        width: 50,
-        height: 50,
-        baseY: 280,
-        phase: 1.9,
-        speed: 2,
-        dir: 1,
-        leftBound: 1380,
-        rightBound: 1680,
-        alive: true,
-        startX: 1450
-    },
-
-    // nový dron – pri vetráku 1 (kombinácia vetrák + enemy)
-    {
-        x: 1750,
-        y: 420,
-        width: 50,
-        height: 50,
-        baseY: 380,
-        phase: 2.7,
-        speed: 1,
-        dir: -1,
-        leftBound: 1750,
-        rightBound: 1850,
-        alive: true,
-        startX: 1750
-    },
-
-    // nový dron – pred koncom, nad poslednými platformami
-    
 ];
 
 const enemak = {
@@ -163,7 +129,7 @@ macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 
-enemak.test.src = '../../asseti/pixil-frame-0.png'
+enemak.test.src = '../../asseti/EvilFujCat.png'
 
 let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
@@ -843,7 +809,7 @@ DashTrail.updateRageAura(player.isRaging, player);
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(9);
         }
-        window.location.href = "/BugTown/Level4/level4.html";
+        window.location.href = "../../DataBay/Level1/level1d.html";
     }
 
 DashTrail.draw(c);
