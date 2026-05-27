@@ -408,7 +408,7 @@ DashTrail.updateDeath();
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(4);
         }
-        window.location.href = "/SerWers/RokvelLabak/Rokvel.html";
+        window.location.href = "../../SerWers/RokvelLabak/Rokvel.html";
     }
 
     DashTrail.draw(c);

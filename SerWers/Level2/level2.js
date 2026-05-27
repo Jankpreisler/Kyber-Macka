@@ -394,7 +394,7 @@ DashTrail.updateDeath();
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(2);
         }
-        window.location.href = "/SerWers/Level3/level3.html";
+        window.location.href = "../../SerWers/Level3/level3.html";
     }
     DashTrail.draw(c);
 DashTrail.drawDeath(c);

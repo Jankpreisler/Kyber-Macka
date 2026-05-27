@@ -449,7 +449,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(6);
         }
-        window.location.href = "/BugTown/Level1/level1.html";
+        window.location.href = "../../BugTown/Level1/level1.html";
     }
 
     // 6. Vykreslenie postavy

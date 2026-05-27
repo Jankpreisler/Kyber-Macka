@@ -496,7 +496,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(3);
         }
-        window.location.href = "/SerWers/Level4/level4.html";
+        window.location.href = "../../SerWers/Level4/level4.html";
     }
 
     // 6. Vykreslenie postavy – NOVÝ SYSTÉM ANIMÁCIÍ

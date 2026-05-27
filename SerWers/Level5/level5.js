@@ -472,7 +472,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(5);
         }
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "../../SerWers/Level6-prechod_do_bugtown/Prechod.html";
     }
 
     // 6. Vykreslenie postavy
