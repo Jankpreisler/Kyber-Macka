@@ -747,7 +747,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(13);
         }
-        window.location.href = "/DataBay/Level3/Level3d.html";
+        window.location.href = "../../DataBay/Level3/Level3d.html";
     }
 
     DashTrail.draw(c);

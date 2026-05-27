@@ -1043,7 +1043,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(12);
         }
-        window.location.href = "/DataBay/Level2/Level2D.html";
+        window.location.href = "../../DataBay/Level2/Level2D.html";
     }
 
     DashTrail.draw(c);
