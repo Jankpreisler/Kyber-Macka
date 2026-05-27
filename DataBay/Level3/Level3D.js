@@ -118,6 +118,7 @@ const macky = {
     plazeniedoprava: new Image(),
     npc: new Image(),
     lozenie: new Image(),
+    test: new Image(),
 };
 
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
@@ -125,6 +126,7 @@ macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 macky.npc.src = '../../asseti/rokwel.png';
 macky.lozenie.src = '../../asseti/cyber-cat main cahrakter - zlava otoceny.png'
+macky.test.src = '../../asseti/EvilFujCat.png'
 
 let actualnaakciacici = macky.dolava;
 
@@ -165,9 +167,9 @@ const utocnici = [
         y: 1850,
         width: 50,
         height: 50,
-        startX: 3000,
+        startX: 2700,
         range: 300,
-        speed: 2,
+        speed: 0.5,
         direction: 1,
         detectionRange: 250,
         isHostile: false,
@@ -181,7 +183,7 @@ const utocnici = [
         y: 1850,
         width: 50,
         height: 50,
-        startX: 3000,
+        startX: 2900,
         range: 200,
         speed: 2.5,
         direction: -1,
@@ -197,9 +199,9 @@ const utocnici = [
         y: 1850,
         width: 50,
         height: 50,
-        startX: 3000,
+        startX: 2850,
         range: 200,
-        speed: 2.5,
+        speed: 1.5,
         direction: -1,
         detectionRange: 300,
         isHostile: false,
@@ -213,7 +215,7 @@ const utocnici = [
         y: 1850,
         width: 50,
         height: 50,
-        startX: 3500,
+        startX: 2750,
         range: 200,
         speed: 2.5,
         direction: -1,
@@ -305,13 +307,19 @@ function vykresliUtocnikov() {
         c.stroke();
         c.restore();
 
-        // Vykreslenie samotného nepriateľa (obrázok alebo fillRect)
-        if (macky.enemy && macky.enemy.complete && macky.enemy.naturalWidth !== 0) {
-            c.drawImage(macky.enemy, en.x, en.y, en.width, en.height);
-        } else {
-            // Ak nemáš asset, vykreslí sa pekne svietiaci obdĺžnik podľa stavu
-            c.fillStyle = en.isHostile ? '#ff0055' : '#8800aa';
-            c.fillRect(en.x, en.y, en.width, en.height);
+       
+
+        if (macky.test && macky.test.complete && macky.test.naturalWidth !== 0) {
+            c.save();
+            if (en.direction === -1) {
+                c.translate(en.x + en.width / 2, en.y);
+                c.scale(-1, 1);
+                c.drawImage(macky.test, -en.width / 2, 0, en.width, en.height);
+            } else {
+                c.drawImage(macky.test, en.x, en.y, en.width, en.height);
+            }
+
+            c.restore();
         }
     });
 }
@@ -580,7 +588,7 @@ window.addEventListener('keyup', (e) => {
     }
     if (e.key === 'R' || e.key === 'r') {
         player.isRaging = false;
-       
+
     }
 });
 
@@ -717,7 +725,7 @@ function animovanie() {
 
                 if (isTouchingWall(player, p)) {
                     isClimbing = true;
-                    
+
                 }
             });
         }
