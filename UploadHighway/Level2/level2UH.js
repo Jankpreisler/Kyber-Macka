@@ -63,12 +63,14 @@ const macky = {
     doprava: new Image(),
     plazeniedoprava: new Image(),
     npc: new Image(),
+    test: new Image(),
 };
 
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 macky.npc.src = '../../asseti/rokwel.png';
+macky.test.src = '../../asseti/EvilFujCat.png'
 
 let actualnaakciacici = macky.dolava;
 
@@ -108,7 +110,7 @@ const utocnici = [
         y: 2250,
         width: 50,
         height: 50,
-        startX: 3000,
+        startX: 1050,
         range: 300,
         speed: 2,
         direction: 1,
@@ -124,7 +126,7 @@ const utocnici = [
         y: 2250,
         width: 50,
         height: 50,
-        startX: 3000,
+        startX: 750,
         range: 200,
         speed: 2.5,
         direction: -1,
@@ -140,7 +142,7 @@ const utocnici = [
         y: 2250,
         width: 50,
         height: 50,
-        startX: 3000,
+        startX: 850,
         range: 200,
         speed: 2.5,
         direction: -1,
@@ -156,7 +158,7 @@ const utocnici = [
         y: 2250,
         width: 50,
         height: 50,
-        startX: 3500,
+        startX: 950,
         range: 200,
         speed: 2.5,
         direction: -1,
@@ -248,13 +250,17 @@ function vykresliUtocnikov() {
         c.stroke();
         c.restore();
 
-        // Vykreslenie samotného nepriateľa (obrázok alebo fillRect)
-        if (macky.enemy && macky.enemy.complete && macky.enemy.naturalWidth !== 0) {
-            c.drawImage(macky.enemy, en.x, en.y, en.width, en.height);
-        } else {
-            // Ak nemáš asset, vykreslí sa pekne svietiaci obdĺžnik podľa stavu
-            c.fillStyle = en.isHostile ? '#ff0055' : '#8800aa';
-            c.fillRect(en.x, en.y, en.width, en.height);
+        if (macky.test && macky.test.complete && macky.test.naturalWidth !== 0) {
+            c.save();
+            if (en.direction === -1) {
+                c.translate(en.x + en.width / 2, en.y);
+                c.scale(-1, 1);
+                c.drawImage(macky.test, -en.width / 2, 0, en.width, en.height);
+            } else {
+                c.drawImage(macky.test, en.x, en.y, en.width, en.height);
+            }
+
+            c.restore();
         }
     });
 }
