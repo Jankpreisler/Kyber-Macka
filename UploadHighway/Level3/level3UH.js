@@ -815,6 +815,10 @@ function animovanie() {
     DashTrail.updateDeath();
     DashTrail.updateRageAura(player.isRaging, player);
 
+    const isFlying = keys.u && keys.up && abilityUnlocked;
+DashTrail.updateFly(isFlying, player);
+
+
 
 
     platforms.forEach(p => {
@@ -1071,6 +1075,8 @@ function animovanie() {
     DashTrail.draw(c);
     DashTrail.drawDeath(c);
     DashTrail.drawRageAura(c);
+    DashTrail.drawFly(c);
+
 
     aktualizujUtocnikov();
     vykresliUtocnikov();

@@ -13,8 +13,8 @@ let abilityUnlocked = true;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 0,
-    y: 1000,
+    x: 6900,
+    y: 300,
     width: 60,
     height: 80
 };
@@ -934,13 +934,19 @@ c.translate(-Karera.x, -Karera.y);
         }
     }
 
+   
+
+
     if (isTouching(player, exitZone)) {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(20);
         }
 
-        window.location.href = "/UploadHighway/Level4/level4.html";
+        window.location.href = "/The-COR/PredmestieCoru/predmestie.html";
     }
+
+
+ 
 
     DashTrail.draw(c);
     DashTrail.drawRageAura(c);

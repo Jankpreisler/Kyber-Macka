@@ -16,8 +16,8 @@ let abilityUnlocked = true;
 const gravitacia = 0.4;
 
 const exitZone = {
-    x: 0,
-    y: 1000,
+    x: 10400,
+    y: 400,
     width: 60,
     height: 80
 };
@@ -930,8 +930,11 @@ DashTrail.updateDeath();
             ProgresManazer.ulozLevel(20);
         }
 
-        window.location.href = "/UploadHighway/Level4/level4.html";
+        window.location.href = "/UploadHighway/Level5/level5.html";
     }
+
+
+
     DashTrail.draw(c);
 DashTrail.drawFly(c);
 DashTrail.drawRageAura(c);
@@ -1009,6 +1012,7 @@ c.drawImage(aktImg, player.x, player.y, player.width, player.height);
         c.shadowBlur = 0;
 
         c.drawImage(ability4Img, barX + 1, barY + 425, 150, 150);
+        
         c.restore();
     }
 }

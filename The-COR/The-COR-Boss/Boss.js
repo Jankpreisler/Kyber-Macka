@@ -9,6 +9,10 @@ let mana = 100;
 let maximalnaMana = 100;
 let minmana = 0;
 let abilityUnlocked = true;
+let isDead = false;
+let deathTimer = 0;
+const DEATH_DURATION = 40; 
+
 
 const gravitacia = 0.4;
 
@@ -319,6 +323,7 @@ window.addEventListener('keydown', (e) => {
         keys.right = true;
 
     }
+  
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
@@ -692,11 +697,14 @@ function updateBoss() {
         c.fillRect(l.x, l.y, l.width, l.height);
         c.shadowBlur = 0;
 
-        if (isTouching(player, l)) {
-            player.x -= 20;
-            resetPlayer();
+      if (isTouching(player, l)) {
+    if (!isDead) {
+        DashTrail.triggerDeath(player);
+        isDead = true;
+        deathTimer = DEATH_DURATION;
+    }
+}
 
-        }
         if (l.x < -1000) bossLasery.splice(i, 1);
     }
 
@@ -724,8 +732,36 @@ function updateBoss() {
 
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
+
+    
     requestAnimationFrame(animovanie);
     time += 0.01;
+
+
+    // === DEATH STATE ===
+if (isDead) {
+    deathTimer--;
+
+    DashTrail.updateDeath();
+
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    c.save();
+    c.translate(-Karera.x, -Karera.y);
+
+    c.fillStyle = brickPattern;
+    c.fillRect(0, 0, 30000, 30000);
+
+    DashTrail.drawDeath(c);
+
+    c.restore();
+    if (deathTimer <= 0) {
+        resetPlayer();
+        isDead = false;
+    }
+
+    return; 
+}
+
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -820,6 +856,8 @@ function animovanie() {
 
 
 
+
+
     let activeFriction = player.friction;
     let activeSpeed = player.speed;
 
@@ -880,6 +918,13 @@ function animovanie() {
 
     player.x += player.dx;
     player.y += player.dy;
+
+    // === UPDATE ANIMÁCIÍ ===
+DashTrail.update(player, player.isdashing, player.dx >= 0);
+DashTrail.updateFly(keys.u && keys.up, player);
+DashTrail.updateDeath();
+DashTrail.updateRageAura(player.isRaging, player);
+
     player.grounded = false;
 
     platforms.forEach(p => {
@@ -963,6 +1008,13 @@ function animovanie() {
             windParticles.splice(index, 1);
         }
     });
+// === DRAW ANIMÁCIÍ ===
+DashTrail.draw(c);
+DashTrail.drawFly(c);
+DashTrail.drawDeath(c);
+DashTrail.drawRageAura(c);
+
+
     c.restore();
 
     platforms.forEach(platform => {
@@ -975,10 +1027,15 @@ function animovanie() {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-            if (platform.type === 'floor') {
-                resetPlayer();
-                return;
-            }
+         if (platform.type === 'floor') {
+    if (!isDead) {
+        DashTrail.triggerDeath(player);
+        isDead = true;
+        deathTimer = DEATH_DURATION;
+    }
+    return;
+}
+
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
                 player.y = platform.y - player.height;
@@ -1244,6 +1301,11 @@ function animovanie() {
         c.shadowBlur = 0;
 
         c.drawImage(ability4Img, barX + 1, barY + 425, 150, 150);
+
+
+
+
+        
         c.restore();
     }
 }

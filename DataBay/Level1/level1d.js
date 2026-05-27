@@ -290,22 +290,37 @@ for (let i = 0; i < 30; i++) {
 }
 
 // === GRAFICKÉ RUTINY ===
-
 function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
-    p.width = 64; p.height = 64;
-    // Základná farba - "Gunmetal Blue" (oceľová)
-    pc.fillStyle = '#ff7300';
-    pc.fillRect(0, 0, 64, 64);
-    pc.fillStyle = 'rgba(243, 151, 59, 0.3)';
-    pc.beginPath();
-    pc.arc(10, 10, 20, 0, Math.PI * 2);
-    pc.fill();
+    p.width = 80; 
+    p.height = 80;
+    
+    pc.fillStyle = '#1a0d02'; 
+    pc.fillRect(0, 0, 80, 80);
+    pc.strokeStyle = 'rgba(255, 115, 0, 0.15)';
+    pc.lineWidth = 1;
+    pc.strokeRect(0, 0, 80, 80);
+    pc.fillStyle = 'rgba(255, 150, 0, 0.4)';
+    pc.fillRect(0, 0, 2, 2);
+    pc.fillRect(78, 0, 2, 2);
+    pc.fillRect(0, 78, 2, 2);
+    pc.fillRect(78, 78, 2, 2);
+    
     return c.createPattern(p, 'repeat');
 }
-
 const brickPattern = getBrickPattern();
+
+let backgroundParticles = [];
+for (let i = 0; i < 50; i++) {
+    backgroundParticles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vyhliadkaSpeed: Math.random() * 0.5 + 0.2, // Rýchlosť pohybu na pozadí
+        velkost: Math.random() * 2 + 1,
+        alpha: Math.random() * 0.5 + 0.2
+    });
+}
 
 function drawRealPipe(p, isVertical) {
     c.save();
@@ -517,16 +532,49 @@ function animovanie() {
 
 
 
-    // 1. Pozadie
-    let bgGrad = c.createRadialGradient(400, 200, 50, 400, 200, 400);
-    bgGrad.addColorStop(0, '#0a100a');
-    bgGrad.addColorStop(1, '#010501');
+  let pulz = Math.sin(time * 2) * 20;
+
+   
+    let bgGrad = c.createRadialGradient(
+        canvas.width / 2 + Karera.x, canvas.height / 2 + Karera.y, 100,
+        canvas.width / 2 + Karera.x, canvas.height / 2 + Karera.y, 800 + pulz
+    );
+    bgGrad.addColorStop(0, '#2b1402'); 
+    bgGrad.addColorStop(0.5, '#120801'); 
+    bgGrad.addColorStop(1, '#020100'); 
     c.fillStyle = bgGrad;
-    c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillRect(Karera.x, Karera.y, canvas.width, canvas.height);
 
+   
+    c.save();
+  
+    c.translate(Karera.x * 0.5, Karera.y * 0.5);
     c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 30000, 30000);
+   
+    c.fillRect(Karera.x * 0.5 - 100, Karera.y * 0.5 - 100, canvas.width + 200, canvas.height + 200);
+    c.restore();
 
+    c.save();
+    backgroundParticles.forEach(p => {
+     
+        p.y += p.vyhliadkaSpeed;
+      
+        if (p.y > Karera.y + canvas.height) {
+            p.y = Karera.y - 10;
+            p.x = Karera.x + Math.random() * canvas.width;
+        }
+     
+        if (p.x < Karera.x) p.x += canvas.width;
+        if (p.x > Karera.x + canvas.width) p.x -= canvas.width;
+
+        c.fillStyle = `rgba(255, 136, 0, ${p.alpha})`;
+        c.shadowColor = '#ff5500';
+        c.shadowBlur = 5;
+        c.fillRect(p.x, p.y, p.velkost, p.velkost * 3); // Mierne pretiahnuté pixelové línie
+    });
+    c.restore();
+
+    // D. Staré rutiny (hmla a nepriatelia) zostávajú na svojom mieste
     drawFog();
     aktualizujUtocnikov();
     vykresliUtocnikov();
