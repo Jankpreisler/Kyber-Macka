@@ -6,8 +6,7 @@ window.addEventListener('click', () => {
     } else {
         music.volume = 0.5;
     }
-
-    // Skontrolujeme, či už náhodou nehrá, a ak nie, spustíme ju
+    
     if (music.paused) {
         music.play().catch(error => {
             console.log("Prehliadač zablokoval zvuk:", error);

@@ -84,6 +84,7 @@ macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 
 
+
 let actualnaakciacici = macky.dolava;
 const keys = { right: false, left: false };
 
