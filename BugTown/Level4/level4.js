@@ -59,29 +59,29 @@ const platforms = [
     { x: 900, y: 1500, width: 200, height: 50, color: '#333', type: 'pipe_v' },
 
     //vertikalna plosina (red)
-        {
-    
-  
+    {
 
-    x: 900,
-    y: 1300,              // začína presne pri medziplošine
-    width: 220,
-    height: 40,
-    color: '#333',
-    type: 'valve',
-    speed: 1.2,
-    direction: 1,
-    startY: 1300,         // musí byť rovnaké ako y
-    range: 300            // 1500 → 1200 → 1500 (perfektné pre skok k NPC)
+
+
+        x: 900,
+        y: 1300,              // začína presne pri medziplošine
+        width: 220,
+        height: 40,
+        color: '#333',
+        type: 'valve',
+        speed: 1.2,
+        direction: 1,
+        startY: 1300,         // musí byť rovnaké ako y
+        range: 300            // 1500 → 1200 → 1500 (perfektné pre skok k NPC)
 
 
 
     },
 
-  
+
 
     // Horné schody – cesta k výstupu
-{ x: 600, y: 1300, width: 280, height: 70, color: '#333', type: 'pipe_v' },
+    { x: 600, y: 1300, width: 280, height: 70, color: '#333', type: 'pipe_v' },
 
     { x: 950, y: 1200, width: 280, height: 70, color: '#333', type: 'pipe_v' },
     { x: 1300, y: 1100, width: 280, height: 70, color: '#333', type: 'pipe_v' },
@@ -92,7 +92,7 @@ const platforms = [
     { x: 2300, y: 750, width: 500, height: 70, color: '#333', type: 'wall' },
 
     // Medziplošina medzi hornými schodmi a serverovým mostom
-{ x: 2150, y: 830, width: 200, height: 50, color: '#333', type: 'pipe_v' },
+    { x: 2150, y: 830, width: 200, height: 50, color: '#333', type: 'pipe_v' },
 
 
     // Medziplošina pred výstupom
@@ -114,7 +114,7 @@ const platforms = [
     { x: 3050, y: 400, width: 150, height: 150, type: 'pipe_h', range: 900, id: 'vetrak2', zapnuty: true, maxForce: 7.2 }
 ];
 
-const RND   = {
+const RND = {
     x: 700,
     y: 1250,
     width: 50,
@@ -132,16 +132,16 @@ const RND   = {
         { hovori: "Leo", text: "Nemame sa o com bavit" },
         { hovori: "Leo", text: "Pre mna je mrtvy" },
         { hovori: "MAČKA", text: "Len mi povedz ako sa dostanem do" },
-         { hovori: "Leo", text: "Cor-u zblaznil si sa" },
-         { hovori: "Leo", text: "S tym ti nepomozem" },
-         { hovori: "MAČKA", text: "Aspon ako sa tam dostanem" },
-         { hovori: "MAČKA", text: "Slubil som to Rokvelovi" },
-         { hovori: "Leo", text: "Najdi mikeyho je databay" },
-         { hovori: "Leo", text: "Len si davaj pozor na orbi" },
-         { hovori: "Leo", text: "Mas neuveritelnu schopnost ich lahko porazit" },
-         { hovori: "MAČKA", text: "Dobre, najdem ho" },
-         { hovori: "Leo", text: "A pozdravuj ho odo mna" },
-        
+        { hovori: "Leo", text: "Cor-u zblaznil si sa" },
+        { hovori: "Leo", text: "S tym ti nepomozem" },
+        { hovori: "MAČKA", text: "Aspon ako sa tam dostanem" },
+        { hovori: "MAČKA", text: "Slubil som to Rokvelovi" },
+        { hovori: "Leo", text: "Najdi mikeyho je databay" },
+        { hovori: "Leo", text: "Len si davaj pozor na orbi" },
+        { hovori: "Leo", text: "Mas neuveritelnu schopnost ich lahko porazit" },
+        { hovori: "MAČKA", text: "Dobre, najdem ho" },
+        { hovori: "Leo", text: "A pozdravuj ho odo mna" },
+
     ],
     currentLine: 0,
     isTalking: false,
@@ -177,6 +177,8 @@ let player = {
     jumpForce: 10,
     grounded: false,
     friction: 0.9,
+    isdashing: false,
+    dashspeed: 35,
     direction: "doprava"
 };
 
@@ -364,30 +366,30 @@ function isTouching(a, b) {
 
 // === OVLÁDANIE ===
 window.addEventListener('keydown', (e) => {
-   if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //doprava
-    if (player.isdashing == true) return;
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { //doprava
+        if (player.isdashing == true) return;
         keys.right = true;
-   
+
     }
 
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { //dolava
         keys.left = true;
 
-        
+
     }
 
-    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S'|| e.key === 'Shift') && player.grounded) { //skok
+    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) { //skok
         player.dy = -player.jumpForce;
         player.grounded = false;
         console.log(e.key);
     }
 
-   
-    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') && player.grounded) { //shift
+
+    if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
 
-        
+
     }
     if (e.key.toLowerCase() === 'e' && RND.canInteract) {
         if (!RND.isTalking) {
@@ -400,6 +402,25 @@ window.addEventListener('keydown', (e) => {
     }
     if ((e.key === 'Tab' || e.code === 'Tab')) {
         window.location.href = "/MenunaTab/tab.html";
+    }
+    if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
+        if (player.isdashing == true) return;
+        mana -= 20;
+        player.isdashing = true;
+
+        let smer = 0;
+        if (keys.right) {
+            smer = 1;
+        }
+        else if (keys.left) {
+            smer = -1;
+        }
+        else {
+            smer = (actualnaakciacici === macky.dolava) ? -1 : 1;
+        }
+
+        player.dx = smer * player.dashspeed;
+        player.dy = 0;
     }
 });
 
@@ -419,13 +440,13 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.right = false; //doprava
     if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.left = false; //dolava
 
-    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W'|| e.code === 'Space') { //shift
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') { //shift
 
         if (player.height === 25) {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-           
+
             } else {
                 player.chceSaPostavit = true;
             }
@@ -433,7 +454,7 @@ window.addEventListener('keyup', (e) => {
     }
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+
     }
 });
 
@@ -450,7 +471,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-    
+
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -506,12 +527,12 @@ function animovanie() {
             c.fillStyle = '#600';
             c.fillRect(p.x + 5, p.y + 20, 10, 10);
         }
-      else if (p.speed && p.type !== 'valve') {
-    // horizontálny pohyb len pre ne-ventilové platformy
-    p.x += p.speed * p.direction;
-    if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
-    if (p.hasRope) drawRopes(p);
-}
+        else if (p.speed && p.type !== 'valve') {
+            // horizontálny pohyb len pre ne-ventilové platformy
+            p.x += p.speed * p.direction;
+            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
+            if (p.hasRope) drawRopes(p);
+        }
 
         else {
             c.fillStyle = 'transparent';
@@ -536,24 +557,50 @@ function animovanie() {
         }
     });
 
-    // 3. Pohyb a fyzika
-    if (!player.isdashing) {
-        if (keys.right) player.dx += 0.8;
-        else if (keys.left) player.dx -= 0.8;
+    if (mana < maximalnaMana) {
+        mana += 0.1;
     }
 
-    player.dx *= player.friction;
 
-    if (player.dx > player.speed) player.dx = player.speed;
-    if (player.dx < -player.speed) player.dx = -player.speed;
 
+    // --- LOGIKA DASHU (DOPLNENIE) ---
+    if (player.isdashing) {
+
+        if (Math.abs(player.dx) < 5) {
+            player.isdashing = false;
+        }
+    }
+
+    // 3. Pohyb a fyzika
+    if (player.isdashing) {
+        player.dx *= 0.88;
+        if (Math.abs(player.dx) < player.speed) {
+            player.isdashing = false;
+        }
+    } else {
+        if (keys.right) player.dx += 0.8;
+        else if (keys.left) player.dx -= 0.8;
+
+        player.dx *= player.friction;
+    }
+
+    // Limit maximálnej rýchlosti hráča
+    if (player.isdashing == true) {
+        if (player.dx > player.dashspeed) player.dx = player.dashspeed;
+        if (player.dx < -player.dashspeed) player.dx = -player.dashspeed;
+    }
+    else {
+        if (player.dx > player.speed) player.dx = player.speed;
+        if (player.dx < -player.speed) player.dx = -player.speed;
+        player.dy += gravitacia; 
+    }
+    
     player.x += player.dx;
-    player.dy += gravitacia;
     player.y += player.dy;
     player.grounded = false;
     facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateDeath();
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateDeath();
 
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
@@ -663,7 +710,7 @@ DashTrail.updateDeath();
         c.fillRect(RND.x, RND.y, RND.width, RND.height);
     }
 
-    let dist = Math.sqrt((player.x - RND.x)**2 + (player.y - RND.y)**2);
+    let dist = Math.sqrt((player.x - RND.x) ** 2 + (player.y - RND.y) ** 2);
     RND.canInteract = dist < 120;
 
     if (RND.canInteract && !RND.isTalking) {
@@ -673,33 +720,33 @@ DashTrail.updateDeath();
     }
 
     // 4. Kolízie
-    
+
     platforms.forEach(platform => {
         // === PLATFORMY NESÚ HRÁČA (VERTIKÁLNE) ===
-if (platform.type === 'valve') {
+        if (platform.type === 'valve') {
 
-    // hráč je nad platformou (stojí na nej alebo je tesne nad ňou)
-    const playerOnPlatform =
-        player.x + player.width > platform.x &&
-        player.x < platform.x + platform.width &&
-        player.y + player.height <= platform.y + 10 &&
-        player.y + player.height >= platform.y - 10;
+            // hráč je nad platformou (stojí na nej alebo je tesne nad ňou)
+            const playerOnPlatform =
+                player.x + player.width > platform.x &&
+                player.x < platform.x + platform.width &&
+                player.y + player.height <= platform.y + 10 &&
+                player.y + player.height >= platform.y - 10;
 
-    if (playerOnPlatform) {
-        // platforma ide hore
-        if (platform.direction === -1) {
-            player.y -= platform.speed;
+            if (playerOnPlatform) {
+                // platforma ide hore
+                if (platform.direction === -1) {
+                    player.y -= platform.speed;
+                }
+
+                // platforma ide dole
+                if (platform.direction === 1) {
+                    player.y += platform.speed;
+                }
+            }
         }
 
-        // platforma ide dole
-        if (platform.direction === 1) {
-            player.y += platform.speed;
-        }
-    }
-}
-
-        if (platform.id === "stienkaprechodna" ) return;
-        if (platform.id === "vetrak2" ) return;
+        if (platform.id === "stienkaprechodna") return;
+        if (platform.id === "vetrak2") return;
         if (platform.visible === false) return;
 
         if (
@@ -708,25 +755,25 @@ if (platform.type === 'valve') {
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-            
-          if (platform.type === 'floor') {
 
-    // === DEATH ANIMATION ===
-    DashTrail.triggerDeath(player);
+            if (platform.type === 'floor') {
 
-    player.width = 0;
-    player.height = 0;
-    player.dx = 0;
-    player.dy = 0;
+                // === DEATH ANIMATION ===
+                DashTrail.triggerDeath(player);
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 350);
+                player.width = 0;
+                player.height = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    return;
-}
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 350);
+
+                return;
+            }
 
 
             if (player.dy > 0 && (player.y + player.height - player.dy) <= platform.y) {
@@ -796,7 +843,7 @@ if (platform.type === 'valve') {
     // 6. Vykreslenie postavy
     let aktImg = ziskajAnimaciu(player, keys);
     c.drawImage(aktImg, player.x, player.y, player.width, player.height);
-    
+
 
     c.restore();
 
@@ -845,11 +892,11 @@ if (platform.type === 'valve') {
 
         // 2. Samotný Progress (Výplň many)
         let percento = mana / maximalnaMana;
-        if (percento < 0) percento = 0; 
+        if (percento < 0) percento = 0;
 
         let manaGrad = c.createLinearGradient(barX, 0, barX + barWidth, 0);
-        manaGrad.addColorStop(0, '#0044ff'); 
-        manaGrad.addColorStop(1, '#00d4ff'); 
+        manaGrad.addColorStop(0, '#0044ff');
+        manaGrad.addColorStop(1, '#00d4ff');
 
         c.fillStyle = manaGrad;
         c.beginPath();
@@ -868,13 +915,13 @@ if (platform.type === 'valve') {
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
 
-        if(!abilitkos){
-             c.drawImage(abilityImg, barX + 1, barY + 425, 150, 150);
+        if (!abilitkos) {
+            c.drawImage(abilityImg, barX + 1, barY + 425, 150, 150);
         }
-        else  {
+        else {
             c.drawImage(ability2Img, barX + 1, barY + 425, 150, 150);
         }
-       
+
         c.restore();
     }
 }
