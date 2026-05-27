@@ -124,7 +124,7 @@ const macky = {
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
-macky.npc.src = '../../asseti/rokwel.png';
+macky.npc.src = '../../asseti/mike.png';
 macky.lozenie.src = '../../asseti/cyber-cat main cahrakter - zlava otoceny.png'
 macky.test.src = '../../asseti/EvilFujCat.png'
 

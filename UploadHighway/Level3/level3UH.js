@@ -98,7 +98,7 @@ const macky = {
 macky.dolava.src = '../../asseti/cyber-cat main cahrakter.png';
 macky.doprava.src = '../../asseti/Cybermacka druhy pohlad.png';
 macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
-macky.npc.src = '../../asseti/rokwel.png';
+macky.npc.src = '../../asseti/rafi.png';
 
 let actualnaakciacici = macky.dolava;
 
