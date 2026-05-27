@@ -971,7 +971,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(18);
         }
-        window.location.href = "/UploadHighway/Level3/level3UH.html";
+        window.location.href = "../../UploadHighway/Level3/level3UH.html";
     }
 
     DashTrail.draw(c);

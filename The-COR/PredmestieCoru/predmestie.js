@@ -1145,7 +1145,7 @@ DashTrail.updateFly(keys.u && keys.up, player);
             ProgresManazer.ulozLevel(22);
         }
 
-        window.location.href = "/SerWers/Level6-prechod_do_bugtown/Prechod.html";
+        window.location.href = "../../The-Cor/The-COR-Boss/Boss.html";
     }
 
     // === VYKRESLENIE EFEKTOV ===

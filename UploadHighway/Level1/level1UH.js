@@ -759,7 +759,7 @@ function animovanie() {
         if (typeof ProgresManazer !== 'undefined') {
             ProgresManazer.ulozLevel(17);
         }
-        window.location.href = "/UploadHighway/Level2/level2UH.html";
+        window.location.href = "../../UploadHighway/Level2/level2UH.html";
     }
     DashTrail.draw(c);
     DashTrail.drawDeath(c);

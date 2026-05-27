@@ -930,7 +930,7 @@ DashTrail.updateDeath();
             ProgresManazer.ulozLevel(20);
         }
 
-        window.location.href = "/UploadHighway/Level5/level5.html";
+        window.location.href = "../../UploadHighway/Level5/level5.html";
     }
 
 

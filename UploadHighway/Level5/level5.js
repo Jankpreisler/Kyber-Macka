@@ -942,7 +942,7 @@ c.translate(-Karera.x, -Karera.y);
             ProgresManazer.ulozLevel(20);
         }
 
-        window.location.href = "/The-COR/PredmestieCoru/predmestie.html";
+        window.location.href = "../../The-COR/PredmestieCoru/predmestie.html";
     }
 
 

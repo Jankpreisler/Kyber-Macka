@@ -1074,7 +1074,7 @@ DashTrail.updateFly(isFlying, player);
             ProgresManazer.ulozLevel(19);
         }
 
-        window.location.href = "/UploadHighway/Level4/level4.html";
+        window.location.href = "../../UploadHighway/Level4/level4.html";
     }
 
     DashTrail.draw(c);
