@@ -11,7 +11,7 @@ let minmana = 0;
 let abilityUnlocked = true;
 let isDead = false;
 let deathTimer = 0;
-const DEATH_DURATION = 40; 
+const DEATH_DURATION = 40;
 
 
 const gravitacia = 0.4;
@@ -115,7 +115,7 @@ let player = {
     dashspeed: 45,
     chceSaPostavit: false,
     isRaging: false,
-    direction: "doprava" 
+    direction: "doprava"
 };
 
 function pobosssovz() {
@@ -124,7 +124,7 @@ function pobosssovz() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-  
+
 }
 
 damagesystem(player);
@@ -171,7 +171,7 @@ let boss = {
     width: 400,
     height: 400,
     hp: 5,
-    vlna: 1,
+    vlna: 3,
     jeAktivny: true,
     timerUtoku: 0,
     timerFazy: 0,
@@ -199,7 +199,7 @@ function getBrickPattern() {
     const p = document.createElement('canvas');
     const pc = p.getContext('2d');
     p.width = 32;
-     p.height = 16;
+    p.height = 16;
     pc.fillStyle = '#ffffff';
     pc.fillRect(0, 0, 32, 16);
     pc.fillStyle = '#ffffff';
@@ -323,7 +323,7 @@ window.addEventListener('keydown', (e) => {
         keys.right = true;
 
     }
-  
+
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
@@ -502,7 +502,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-    
+
 }
 
 function updateBoss() {
@@ -648,15 +648,17 @@ function updateBoss() {
                         type: 'pipe_h'
                     });
                 }
-                let nahodnaVyskaLasera = boss.y + Math.random() * (boss.height - 15);
-                bossLasery.push({
-                    x: boss.x + 75,
-                    y: nahodnaVyskaLasera,
-                    width: 150,
-                    height: 15,
-                    speed: 10,
-                });
-                boss.timerUtoku = 0;
+                if (boss.timerUtoku > 40) {
+                    let nahodnaVyskaLasera = boss.y + Math.random() * (boss.height - 15);
+                    bossLasery.push({
+                        x: boss.x + 75,
+                        y: nahodnaVyskaLasera,
+                        width: 150,
+                        height: 15,
+                        speed: 10,
+                    });
+                    boss.timerUtoku = 0;
+                }
                 boss.timerUtoku = 0;
             }
 
@@ -697,13 +699,13 @@ function updateBoss() {
         c.fillRect(l.x, l.y, l.width, l.height);
         c.shadowBlur = 0;
 
-      if (isTouching(player, l)) {
-    if (!isDead) {
-        DashTrail.triggerDeath(player);
-        isDead = true;
-        deathTimer = DEATH_DURATION;
-    }
-}
+        if (isTouching(player, l)) {
+            if (!isDead) {
+                DashTrail.triggerDeath(player);
+                isDead = true;
+                deathTimer = DEATH_DURATION;
+            }
+        }
 
         if (l.x < -1000) bossLasery.splice(i, 1);
     }
@@ -733,34 +735,34 @@ function updateBoss() {
 // === HLAVNÁ SMYČKA ===
 function animovanie() {
 
-    
+
     requestAnimationFrame(animovanie);
     time += 0.01;
 
 
     // === DEATH STATE ===
-if (isDead) {
-    deathTimer--;
+    if (isDead) {
+        deathTimer--;
 
-    DashTrail.updateDeath();
+        DashTrail.updateDeath();
 
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    c.save();
-    c.translate(-Karera.x, -Karera.y);
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        c.save();
+        c.translate(-Karera.x, -Karera.y);
 
-    c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 30000, 30000);
+        c.fillStyle = brickPattern;
+        c.fillRect(0, 0, 30000, 30000);
 
-    DashTrail.drawDeath(c);
+        DashTrail.drawDeath(c);
 
-    c.restore();
-    if (deathTimer <= 0) {
-        resetPlayer();
-        isDead = false;
+        c.restore();
+        if (deathTimer <= 0) {
+            resetPlayer();
+            isDead = false;
+        }
+
+        return;
     }
-
-    return; 
-}
 
 
     c.clearRect(0, 0, canvas.width, canvas.height);
@@ -920,10 +922,10 @@ if (isDead) {
     player.y += player.dy;
 
     // === UPDATE ANIMÁCIÍ ===
-DashTrail.update(player, player.isdashing, player.dx >= 0);
-DashTrail.updateFly(keys.u && keys.up, player);
-DashTrail.updateDeath();
-DashTrail.updateRageAura(player.isRaging, player);
+    DashTrail.update(player, player.isdashing, player.dx >= 0);
+    DashTrail.updateFly(keys.u && keys.up, player);
+    DashTrail.updateDeath();
+    DashTrail.updateRageAura(player.isRaging, player);
 
     player.grounded = false;
 
@@ -1008,11 +1010,11 @@ DashTrail.updateRageAura(player.isRaging, player);
             windParticles.splice(index, 1);
         }
     });
-// === DRAW ANIMÁCIÍ ===
-DashTrail.draw(c);
-DashTrail.drawFly(c);
-DashTrail.drawDeath(c);
-DashTrail.drawRageAura(c);
+    // === DRAW ANIMÁCIÍ ===
+    DashTrail.draw(c);
+    DashTrail.drawFly(c);
+    DashTrail.drawDeath(c);
+    DashTrail.drawRageAura(c);
 
 
     c.restore();
@@ -1027,14 +1029,14 @@ DashTrail.drawRageAura(c);
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-         if (platform.type === 'floor') {
-    if (!isDead) {
-        DashTrail.triggerDeath(player);
-        isDead = true;
-        deathTimer = DEATH_DURATION;
-    }
-    return;
-}
+            if (platform.type === 'floor') {
+                if (!isDead) {
+                    DashTrail.triggerDeath(player);
+                    isDead = true;
+                    deathTimer = DEATH_DURATION;
+                }
+                return;
+            }
 
 
             if (player.dy >= 0 && (player.y + player.height - player.dy) <= platform.y + 5) {
@@ -1256,7 +1258,7 @@ DashTrail.drawRageAura(c);
     }
     let aktImg = ziskajAnimaciu(player, keys);
     c.drawImage(aktImg, player.x, player.y, player.width, player.height);
-    
+
     updateBoss();
     c.restore();
 
@@ -1305,7 +1307,7 @@ DashTrail.drawRageAura(c);
 
 
 
-        
+
         c.restore();
     }
 }
