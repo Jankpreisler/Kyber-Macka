@@ -289,7 +289,7 @@ window.addEventListener('keydown', (e) => {
         }
     }
      if ((e.key === 'Tab' || e.code === 'Tab')) {
-        window.location.href = "/MenunaTab/tab.html";
+        window.location.href = "../../MenunaTab/tab.html";
     }
 });
 
@@ -493,7 +493,7 @@ function animovanie() {
 
 //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level5/level5.html";
+        window.location.href = "../../SerWers/Level5/level5.html";
     }
 
     // 6. Vykreslenie postavy
