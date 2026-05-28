@@ -224,7 +224,7 @@ window.addEventListener('keydown', (e) => {
         player.chceSaPostavit = false;
     }
      if ((e.key === 'Tab' || e.code === 'Tab')) {
-        window.location.href = "/MenunaTab/tab.html";
+        window.location.href = "../../MenunaTab/tab.html";
     }
 });
 

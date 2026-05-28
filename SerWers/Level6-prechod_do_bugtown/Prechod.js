@@ -230,7 +230,7 @@ window.addEventListener('keydown', (e) => {
 
     }
      if ((e.key === 'Tab' || e.code === 'Tab')) {
-        window.location.href = "/MenunaTab/tab.html";
+        window.location.href = "../../MenunaTab/tab.html";
     }
 
 });
