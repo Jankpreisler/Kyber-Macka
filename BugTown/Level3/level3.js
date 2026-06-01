@@ -270,12 +270,12 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') { // doprava
         if (player.isdashing == true) return;
         keys.right = true;
-      
+
     }
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') { //dolava
         keys.left = true;
-      
+
     }
 
     if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && player.grounded) { //skok
@@ -287,10 +287,10 @@ window.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && player.grounded) { //shift
         player.height = 25;
         player.grounded = false;
-       
+
     }
     if ((e.key === 'Tab' || e.code === 'Tab')) {
-        window.location.href = "/MenunaTab/tab.html";
+        window.location.href = "../../MenunaTab/tab.html";
     }
 
     if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
@@ -317,7 +317,7 @@ window.addEventListener('keyup', (e) => {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-            
+
             } else {
                 player.chceSaPostavit = true;
             }
@@ -326,7 +326,7 @@ window.addEventListener('keyup', (e) => {
 
     if (e.key === 'Q' || e.key === 'q') {
         player.isdashing = false;
-        player.dx = 0; 
+        player.dx = 0;
     }
 });
 
@@ -343,7 +343,7 @@ function resetPlayer() {
     player.dx = 0;
     player.dy = 0;
     player.height = 50;
-  
+
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -477,8 +477,8 @@ function animovanie() {
     player.grounded = false;
 
     facingRight = (actualnaakciacici === macky.dolava);
-DashTrail.update(player, player.isdashing, facingRight);
-DashTrail.updateDeath();
+    DashTrail.update(player, player.isdashing, facingRight);
+    DashTrail.updateDeath();
 
     Karera.x = player.x - canvas.width / 2;
     Karera.y = player.y - canvas.height / 2;
@@ -597,24 +597,24 @@ DashTrail.updateDeath();
             player.y < platform.y + platform.height &&
             player.y + player.height > platform.y
         ) {
-          if (platform.type === 'floor') {
+            if (platform.type === 'floor') {
 
-    // === DEATH ANIMATION ===
-    DashTrail.triggerDeath(player);
+                // === DEATH ANIMATION ===
+                DashTrail.triggerDeath(player);
 
-    player.width = 0;
-    player.height = 0;
-    player.dx = 0;
-    player.dy = 0;
+                player.width = 0;
+                player.height = 0;
+                player.dx = 0;
+                player.dy = 0;
 
-    setTimeout(() => {
-        player.width = 50;
-        player.height = 50;
-        resetPlayer();
-    }, 350);
+                setTimeout(() => {
+                    player.width = 50;
+                    player.height = 50;
+                    resetPlayer();
+                }, 350);
 
-    return;
-}
+                return;
+            }
 
 
             // dopad zhora
@@ -671,7 +671,7 @@ DashTrail.updateDeath();
             player.y -= 25;
             player.chceSaPostavit = false;
             // Opravené: priraďujeme k premennej, ktorú používaš na kreslenie
-           
+
         }
     }
 
@@ -694,11 +694,11 @@ DashTrail.updateDeath();
     }
 
     DashTrail.draw(c);
-DashTrail.drawDeath(c);
+    DashTrail.drawDeath(c);
     // 6. Vykreslenie postavy
     let aktImg = ziskajAnimaciu(player, keys);
     c.drawImage(aktImg, player.x, player.y, player.width, player.height);
-    
+
 
     c.restore();
 
@@ -709,7 +709,7 @@ DashTrail.drawDeath(c);
         const barY = 20;
         const barWidth = 250;
         const barHeight = 30;
-       
+
 
         // 1. Pozadie baru (tmavý podklad)
         c.fillStyle = 'rgba(20, 20, 20, 0.8)';

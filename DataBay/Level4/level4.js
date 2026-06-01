@@ -342,7 +342,7 @@ window.addEventListener('keydown', (e) => {
         
     }
     if ((e.key === 'Tab' || e.code === 'Tab')) {
-        window.location.href = "/MenunaTab/tab.html";
+        window.location.href = "../../MenunaTab/tab.html";
     }
 
     if ((e.key === 'Q' || e.key === 'q') && mana >= 20) {
@@ -948,7 +948,7 @@ c.drawImage(aktImg, player.x, player.y, player.width, player.height);
         c.fillText(`ENERGY: ${Math.floor(mana)} / ${maximalnaMana}`, barX + 10, barY + 20);
         c.shadowBlur = 0;
 
-        c.drawImage(ability3Img, barX + 1, barY + 425, 150, 150);
+        c.drawImage(ability3Img , barX + 1, barY + 425, 150, 150);
         c.restore();
     }
 }
