@@ -21,14 +21,14 @@ const Karera = {
 };
 
 // === DEFINÍCIA PLATFORIEM ===
-const platforms = [ 
+const platforms = [
     { x: 0, y: 2, width: 2200, height: 50, color: '#333', type: 'pipe_h' },
     { x: 0, y: 590, width: 2200, height: 20, color: '#050505', type: 'floor' }, // kill virus
     { x: 0, y: 0, width: 1300, height: 1 },
     { x: 0, y: 0, width: 1, height: 600 },
     { x: 2200, y: 0, width: 1, height: 600 },
-    { x: 0, y: 370, width: 150, height: 350, color: '#333', type: 'pipe_v' },
-    { x: 300, y: 450, width: 20, height: 300, color: '#333', type: 'pipe_v' }, 
+    { x: 0, y: 370, width: 150, height: 350, color: '#333', type: 'pipe_v' }, 
+    { x: 300, y: 450, width: 20, height: 300, color: '#333', type: 'pipe_v' },
     { x: 220, y: 400, width: 200, height: 50, color: '#333', type: 'wall' },
     { x: 700, y: 450, width: 20, height: 300, color: '#333', type: 'pipe_v' },
     { x: 800, y: 450, width: 20, height: 300, color: '#333', type: 'pipe_v' },
@@ -39,8 +39,8 @@ const platforms = [
     { x: 1000, y: 450, width: 20, height: 300, color: '#333', type: 'pipe_v' },
     { x: 1100, y: 400, width: 20, height: 300, color: '#333', type: 'pipe_v' },
     { x: 1200, y: 400, width: 20, height: 300, color: '#333', type: 'pipe_v' },
-    { x: 1500, y: 350, width: 150, height: 400, color: '#333', type: 'wall',startX: 1500, range: 50, speed: 0.5, direction: 1, hasRope: false, },
-    { x: 1700, y: 350, width: 150, height: 400, color: '#333', type: 'wall',startX: 1700, range: 50, speed: 0.5, direction: -1, hasRope: false, },
+    { x: 1500, y: 350, width: 150, height: 400, color: '#333', type: 'wall', startX: 1500, range: 50, speed: 0.5, direction: 1, hasRope: false, },
+    { x: 1700, y: 350, width: 150, height: 400, color: '#333', type: 'wall', startX: 1700, range: 50, speed: 0.5, direction: -1, hasRope: false, },
     { x: 2050, y: 300, width: 150, height: 300, color: '#333', type: 'pipe_v' },
 ];
 
@@ -66,7 +66,7 @@ macky.plazeniedoprava.src = '../../asseti/Plaziaca macka.png';
 macky.npc.src = '../../asseti/rokwel.png';
 
 let actualnaakciacici = macky.dolava;
-    const keys = { right: false, left: false }; 
+const keys = { right: false, left: false };
 
 // === VLASTNOSTI HRÁČA ===
 let player = {
@@ -80,46 +80,46 @@ let player = {
     jumpForce: 10,
     grounded: false,
     friction: 0.5,
-    direction: "doprava"  
+    direction: "doprava"
 };
 
-const Rokvel   = {
-        x: 1050,
-        y: 300,
-        width: 50,
-        height: 50,
-        color: '#5901a0',
-        name: "Dr. Rokvel",
-        
-        dialogues: [
-            { hovori: "MAČKA", text: "Mňau?" },
-            { hovori: "Dr. Rokwel", text: "Kto si cicovy priatel." },
-            { hovori: "MAČKA", text: "Mnau." },
-            { hovori: "Dr. Rokwel", text: "Ano uz to vidime. Mas pokazeny prekladaci cip." },
-            { hovori: "Dr. Rokwel", text: "Uz by to malo byt" },
-            { hovori: "MAČKA", text: "Neviem ci to uplne fungovalo" },
-            { hovori: "MAČKA", text: "Pockaj pocujem hlas. Dakujem Dr." },
-            { hovori: "Dr. Rokwel", text: "A co hladas tu dole. Detekujem ze si jeho dokanaly prototip." },
-            { hovori: "Dr. Rokwel", text: "Lenze si slobodny bez nutnosti ho pocuvat. My sa tu pred nim schovavame" },
-            { hovori: "Dr. Rokwel", text: "Ale neviem nas oslobodit od neho. " },
-            { hovori: "Dr. Rokwel", text: "Keby nas nasiel mohol by z nas urobit svojich otrokov. CO vlastne aj sme" },
-            { hovori: "MAČKA", text: "Ja si nic nepamatam. Prve na co si spominam je ako som lezal v rieke tu dole." },
-             { hovori: "MAČKA", text: "Pockaj nieco sa mi vracia. Pamatam si na svojich bratov a sestry." },
-            { hovori: "Dr. Rokwel", text: "Neboj sa o nich nic horsie sa im uz nemoze stat." },
-            { hovori: "Dr. Rokwel", text: "Kazdopadne vidim ze ty nas zachranis Mesto riadi z The Cor-u." },
-            { hovori: "Dr. Rokwel", text: "Dostan sa tam a oslobod nas." },
-            { hovori: "MAČKA", text: "Ale ja neviem ako" },
-            { hovori: "Dr. Rokwel", text: "Hore mam priatela ten ti pomoze. Vola sa Donatelo a strazi BugTown." },
-            { hovori: "Dr. Rokwel", text: "On ti vsetko vysvetli." },
-            { hovori: "MAČKA", text: "Okej. Urobim co viem" },
-            { hovori: "Dr. Rokwel", text: "Boh nech ta chrani" },
-            { hovori: "Dr. Rokwel", text: "A oslobod nas. Vsetkych" },
+const Rokvel = {
+    x: 1050,
+    y: 300,
+    width: 50,
+    height: 50,
+    color: '#5901a0',
+    name: "Dr. Rokvel",
 
-        ],
-        currentLine: 0,
-        isTalking: false,
-        canInteract: false
-    };
+    dialogues: [
+        { hovori: "MAČKA", text: "Mňau?" },
+        { hovori: "Dr. Rokwel", text: "Kto si cicovy priatel." },
+        { hovori: "MAČKA", text: "Mnau." },
+        { hovori: "Dr. Rokwel", text: "Ano uz to vidime. Mas pokazeny prekladaci cip." },
+        { hovori: "Dr. Rokwel", text: "Uz by to malo byt" },
+        { hovori: "MAČKA", text: "Neviem ci to uplne fungovalo" },
+        { hovori: "MAČKA", text: "Pockaj pocujem hlas. Dakujem Dr." },
+        { hovori: "Dr. Rokwel", text: "A co hladas tu dole. Detekujem ze si jeho dokanaly prototip." },
+        { hovori: "Dr. Rokwel", text: "Lenze si slobodny bez nutnosti ho pocuvat. My sa tu pred nim schovavame" },
+        { hovori: "Dr. Rokwel", text: "Ale neviem nas oslobodit od neho. " },
+        { hovori: "Dr. Rokwel", text: "Keby nas nasiel mohol by z nas urobit svojich otrokov. CO vlastne aj sme" },
+        { hovori: "MAČKA", text: "Ja si nic nepamatam. Prve na co si spominam je ako som lezal v rieke tu dole." },
+        { hovori: "MAČKA", text: "Pockaj nieco sa mi vracia. Pamatam si na svojich bratov a sestry." },
+        { hovori: "Dr. Rokwel", text: "Neboj sa o nich nic horsie sa im uz nemoze stat." },
+        { hovori: "Dr. Rokwel", text: "Kazdopadne vidim ze ty nas zachranis Mesto riadi z The Cor-u." },
+        { hovori: "Dr. Rokwel", text: "Dostan sa tam a oslobod nas." },
+        { hovori: "MAČKA", text: "Ale ja neviem ako" },
+        { hovori: "Dr. Rokwel", text: "Hore mam priatela ten ti pomoze. Vola sa Donatelo a strazi BugTown." },
+        { hovori: "Dr. Rokwel", text: "On ti vsetko vysvetli." },
+        { hovori: "MAČKA", text: "Okej. Urobim co viem" },
+        { hovori: "Dr. Rokwel", text: "Boh nech ta chrani" },
+        { hovori: "Dr. Rokwel", text: "A oslobod nas. Vsetkych" },
+
+    ],
+    currentLine: 0,
+    isTalking: false,
+    canInteract: false
+};
 
 // --- ATMOSFÉRICKÉ EFEKTY ---
 let time = 0;
@@ -264,7 +264,7 @@ window.addEventListener('keydown', (e) => {
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         keys.left = true;
-      
+
     }
 
     if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.code === 'Space') && player.grounded) {
@@ -272,10 +272,10 @@ window.addEventListener('keydown', (e) => {
         player.grounded = false;
     }
 
-    if ((e.key === 'ArrowDown' || e.key === 's'|| e.key === 'S' || e.key === 'Shift') && player.grounded) {
+    if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') && player.grounded) {
         player.height = 25;
         player.grounded = false;
-      
+
 
     }
 
@@ -288,8 +288,8 @@ window.addEventListener('keydown', (e) => {
             if (Rokvel.currentLine >= Rokvel.dialogues.length) Rokvel.isTalking = false;
         }
     }
-     if ((e.key === 'Tab' || e.code === 'Tab')) {
-        window.location.href = "/MenunaTab/tab.html";
+    if ((e.key === 'Tab' || e.code === 'Tab')) {
+        window.location.href = "../../MenunaTab/tab.html";
     }
 });
 
@@ -310,12 +310,12 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
 
     if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S' || e.key === 'Shift') {
-        
+
         if (player.height === 25) {
             if (mozeSaPostavit()) {
                 player.height = 50;
                 player.y -= 25;
-               
+
             } else {
                 player.chceSaPostavit = true;
             }
@@ -324,12 +324,12 @@ window.addEventListener('keyup', (e) => {
 });
 
 function resetPlayer() {
-    player.x = 50;   
-    player.y = 320;  
-    player.dx = 0;   
-    player.dy = 0;   
-    player.height = 50; 
-  
+    player.x = 50;
+    player.y = 320;
+    player.dx = 0;
+    player.dy = 0;
+    player.height = 50;
+
 }
 
 // === HLAVNÁ SMYČKA ===
@@ -339,7 +339,7 @@ function animovanie() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    c.save(); 
+    c.save();
     c.translate(-Karera.x, 0);
 
     // 1. Pozadie
@@ -350,7 +350,7 @@ function animovanie() {
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     c.fillStyle = brickPattern;
-    c.fillRect(0, 0, 7200, canvas.height); 
+    c.fillRect(0, 0, 7200, canvas.height);
 
     drawFog();
 
@@ -381,11 +381,11 @@ function animovanie() {
             c.fillStyle = '#600';
             c.fillRect(p.x + 5, p.y + 20, 10, 10);
         }
-        else if(p.speed){
-                p.x += p.speed * p.direction;
-                if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
-                if (p.hasRope) drawRopes(p);
-              
+        else if (p.speed) {
+            p.x += p.speed * p.direction;
+            if (p.x > p.startX + p.range || p.x < p.startX) p.direction *= -1;
+            if (p.hasRope) drawRopes(p);
+
         }
         else {
             c.fillStyle = 'transparent';
@@ -395,21 +395,21 @@ function animovanie() {
     // Funguje nedotykat sa nikdydw
     platforms.forEach(p => {
         if (p.speed) {
-        if (p.type === 'valve') {
-            // Vertikálny pohyb pre ventil/plošinu
-            p.y += p.speed * p.direction;
-            // Ak narazí na hranicu rozsahu (startY + range), otočí smer
-            if (p.y > p.startY + p.range || p.y < p.startY) {
-                p.direction *= -1;
-            }
-        } else {
-            // Horizontálny pohyb pre ostatné plošiny
-            p.x += p.speed * p.direction;
-            if (p.x > p.startX + p.range || p.x < p.startX) {
-                p.direction *= -1;
+            if (p.type === 'valve') {
+                // Vertikálny pohyb pre ventil/plošinu
+                p.y += p.speed * p.direction;
+                // Ak narazí na hranicu rozsahu (startY + range), otočí smer
+                if (p.y > p.startY + p.range || p.y < p.startY) {
+                    p.direction *= -1;
+                }
+            } else {
+                // Horizontálny pohyb pre ostatné plošiny
+                p.x += p.speed * p.direction;
+                if (p.x > p.startX + p.range || p.x < p.startX) {
+                    p.direction *= -1;
+                }
             }
         }
-    }
     });
 
     // 3. Pohyb a fyzika
@@ -429,18 +429,18 @@ function animovanie() {
     if (macky.npc.complete && macky.npc.naturalWidth !== 0) {
         c.drawImage(macky.npc, Rokvel.x, Rokvel.y, Rokvel.width, Rokvel.height);
     } else {
-        c.fillStyle = Rokvel.color; 
+        c.fillStyle = Rokvel.color;
         c.fillRect(Rokvel.x, Rokvel.y, Rokvel.width, Rokvel.height);
     }
 
     // 4. Detekcia a interakcia
-    let dist = Math.sqrt((player.x - Rokvel.x)**2 + (player.y - Rokvel.y)**2);
+    let dist = Math.sqrt((player.x - Rokvel.x) ** 2 + (player.y - Rokvel.y) ** 2);
     Rokvel.canInteract = dist < 120;
 
     if (Rokvel.canInteract && !Rokvel.isTalking) {
-        c.fillStyle = "#ffff00"; 
+        c.fillStyle = "#ffff00";
         c.font = "bold 15px Arial";
-        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20); 
+        c.fillText("Stlac E na komunikaciu", player.x + 20, player.y - 20);
     }
 
 
@@ -479,7 +479,7 @@ function animovanie() {
                 player.y = platform.y + platform.height;
                 player.dy = 0;
             }
-            
+
             if (player.height === 25 && player.chceSaPostavit) {
                 if (mozeSaPostavit()) {
                     player.height = 50;
@@ -488,18 +488,18 @@ function animovanie() {
                 }
             }
         }
-        
+
     });
 
-//PRECHOD DO ĎALŠIEHO LEVELU
+    //PRECHOD DO ĎALŠIEHO LEVELU
     if (isTouching(player, exitZone)) {
-        window.location.href = "/SerWers/Level5/level5.html";
+        window.location.href = "../../SerWers/Level5/level5.html";
     }
 
     // 6. Vykreslenie postavy
     let aktImg = ziskajAnimaciu(player, keys);
     c.drawImage(aktImg, player.x, player.y, player.width, player.height);
-    
+
 
 
     c.restore();
