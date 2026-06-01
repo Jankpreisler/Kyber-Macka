@@ -1,7 +1,7 @@
 const ProgresManazer = {
             nacitaj: function() {
                 let data = localStorage.getItem('cyber_cat_progres');
-                return data ? JSON.parse(data) : { odomknute: 1 };
+                return data ? JSON.parse(data) : { odomknute: 23 };
             },
             ulozLevel: function(level) {
                 let data = this.nacitaj();

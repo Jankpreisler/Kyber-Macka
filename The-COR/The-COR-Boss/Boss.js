@@ -172,7 +172,7 @@ let boss = {
     height: 400,
     hp: 5,
     vlna: 3,
-    jeAktivny: true,
+    jeAktivny: false,
     timerUtoku: 0,
     timerFazy: 0,
     maxCasFazy: 6000,
