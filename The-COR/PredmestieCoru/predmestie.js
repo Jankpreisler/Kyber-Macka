@@ -474,11 +474,11 @@ function drawRealPipe(p, isVertical) {
         grad = c.createLinearGradient(p.x, p.y, p.x, p.y + p.height);
     }
 
-    grad.addColorStop(0, '#ffffff');
-    grad.addColorStop(0.2, '#f5eae2');
-    grad.addColorStop(0.5, '#ffffff');
-    grad.addColorStop(0.8, '#f5eae2');
-    grad.addColorStop(1, '#ffffff');
+    grad.addColorStop(0, 'rgb(250, 230, 230)');
+    grad.addColorStop(0.2, 'rgb(250, 230, 230)');
+    grad.addColorStop(0.5, 'rgb(250, 230, 230)');
+    grad.addColorStop(0.8, 'rgb(250, 230, 230)');
+    grad.addColorStop(1, 'rgb(250, 230, 230)');
 
     c.fillStyle = grad;
     c.fillRect(p.x, p.y, p.width, p.height);
