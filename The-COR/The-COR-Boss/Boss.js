@@ -101,8 +101,8 @@ const keys = {
 let timeScale = 1.0;
 
 let player = {
-    x: 3000,
-    y: 1000,
+    x: 8200,
+    y: 1100,
     width: 50,
     height: 50,
     dx: 0,
@@ -171,7 +171,7 @@ let boss = {
     width: 400,
     height: 400,
     hp: 5,
-    vlna: 3,
+    vlna: 1,
     jeAktivny: false,
     timerUtoku: 0,
     timerFazy: 0,
